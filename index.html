@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Captura de Servicios</title>
+  <title>App de Tarifa</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,6 +12,7 @@
     }
     h1 {
       color: #333;
+      text-align: center;
     }
     form {
       background: #fff;
@@ -26,7 +27,7 @@
       margin-top: 15px;
       font-weight: bold;
     }
-    input, select, textarea {
+    input, select {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -48,36 +49,45 @@
     .success {
       color: green;
       margin-top: 15px;
+      text-align: center;
     }
     .error {
       color: red;
       margin-top: 15px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Captura de Servicios</h1>
-  <form id="serviceForm">
-    <label for="nombre">Nombre del Servicio</label>
-    <input type="text" id="nombre" name="nombre" required />
+  <h1>Registro de Tarifas</h1>
+  <form id="tarifaForm">
+    <label for="servicio">Servicio</label>
+    <input type="text" id="servicio" name="servicio" required />
 
-    <label for="descripcion">Descripción</label>
-    <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+    <label for="monto">Monto</label>
+    <input type="number" id="monto" name="monto" step="0.01" required />
+
+    <label for="unidad">Unidad</label>
+    <select id="unidad" name="unidad" required>
+      <option value="">Selecciona una</option>
+      <option value="Hora">Hora</option>
+      <option value="Día">Día</option>
+      <option value="Evento">Evento</option>
+    </select>
 
     <label for="categoria">Categoría</label>
     <select id="categoria" name="categoria" required>
       <option value="">Selecciona una</option>
-      <option value="Administrativo">Administrativo</option>
-      <option value="Técnico">Técnico</option>
-      <option value="Otro">Otro</option>
+      <option value="Interno">Interno</option>
+      <option value="Externo">Externo</option>
     </select>
 
-    <button type="submit">Enviar</button>
+    <button type="submit">Guardar Tarifa</button>
     <div id="responseMessage"></div>
   </form>
 
   <script>
-    const form = document.getElementById('serviceForm');
+    const form = document.getElementById('tarifaForm');
     const responseMessage = document.getElementById('responseMessage');
 
     form.addEventListener('submit', async (e) => {
@@ -96,11 +106,11 @@
           body: JSON.stringify(data)
         });
 
-        responseMessage.textContent = '✅ Datos enviados correctamente.';
+        responseMessage.textContent = '✅ Tarifa registrada correctamente.';
         responseMessage.className = 'success';
         form.reset();
       } catch (error) {
-        responseMessage.textContent = '❌ Error al enviar los datos.';
+        responseMessage.textContent = '❌ Error al registrar la tarifa.';
         responseMessage.className = 'error';
         console.error(error);
       }
