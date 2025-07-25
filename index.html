@@ -3,194 +3,146 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestión de Servicios y Tarifas</title>
+  <title>Captura de Servicios</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
+      background-color: #f4f4f4;
+      margin: 0;
       padding: 20px;
     }
+
+    .contenedor {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
     h1 {
       text-align: center;
-      color: #333;
-    }
-    .tabs {
-      display: flex;
-      justify-content: center;
       margin-bottom: 20px;
     }
-    .tab-button {
-      padding: 10px 20px;
-      margin: 0 5px;
-      border: none;
-      background-color: #ccc;
-      cursor: pointer;
-      border-radius: 4px 4px 0 0;
-    }
-    .tab-button.active {
-      background-color: #0078d4;
-      color: white;
-    }
-    .form-container {
-      display: none;
-    }
-    .form-container.active {
-      display: block;
-    }
-    form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    label {
+
+    form label {
+      font-weight: bold;
       display: block;
       margin-top: 15px;
-      font-weight: bold;
     }
-    input, select, textarea {
+
+    form input,
+    form select,
+    form textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      border-radius: 4px;
     }
-    button {
+
+    form button {
       margin-top: 20px;
       padding: 10px 20px;
-      background-color: #0078d4;
+      background-color: #0078D4;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #005ea2;
-    }
-    .success, .error {
-      text-align: center;
-      margin-top: 15px;
+
+    #mensajeExito {
+      margin-top: 20px;
       font-weight: bold;
+      text-align: center;
     }
-    .success { color: green; }
-    .error { color: red; }
   </style>
 </head>
 <body>
-  <h1>Gestión de Servicios y Tarifas</h1>
+  <div class="contenedor">
+    <h1>Captura de Servicios</h1>
 
-  <div class="tabs">
-    <button class="tab-button active" onclick="showTab('servicios')">Captura de Servicios</button>
-    <button class="tab-button" onclick="showTab('tarifas')">Registro de Tarifas</button>
-  </div>
+    <form id="formServicio">
+      <label for="folio">Folio</label>
+      <input type="text" id="folio" />
 
-  <!-- Captura de Servicios -->
-  <div id="servicios" class="form-container active">
-    <form id="serviceForm">
-      <label for="nombre">Nombre del Servicio</label>
-      <input type="text" id="nombre" name="nombre" required />
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" />
 
-      <label for="descripcion">Descripción</label>
-      <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+      <label for="hora">Hora</label>
+      <input type="time" id="hora" />
 
-      <label for="categoria">Categoría</label>
-      <select id="categoria" name="categoria" required>
-        <option value="">Selecciona una</option>
-        <option value="Administrativo">Administrativo</option>
-        <option value="Técnico">Técnico</option>
-        <option value="Otro">Otro</option>
+      <label for="telefonista">Telefonista</label>
+      <input type="text" id="telefonista" />
+
+      <label for="domicilio">Domicilio</label>
+      <input type="text" id="domicilio" />
+
+      <label for="destino">Destino</label>
+      <input type="text" id="destino" />
+
+      <label for="asignado">Asignado a</label>
+      <input type="text" id="asignado" />
+
+      <label for="tipo">Tipo</label>
+      <select id="tipo">
+        <option value="Normal">Normal</option>
+        <option value="Urgente">Urgente</option>
+        <option value="TDC">TDC</option>
       </select>
 
-      <button type="submit">Enviar Servicio</button>
-      <div id="responseService"></div>
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" rows="3"></textarea>
+
+      <button type="submit">Guardar Servicio</button>
     </form>
-  </div>
 
-  <!-- Registro de Tarifas -->
-  <div id="tarifas" class="form-container">
-    <form id="tarifaForm">
-      <label for="servicio">Servicio</label>
-      <input type="text" id="servicio" name="servicio" required />
-
-      <label for="monto">Monto</label>
-      <input type="number" id="monto" name="monto" step="0.01" required />
-
-      <label for="unidad">Unidad</label>
-      <select id="unidad" name="unidad" required>
-        <option value="">Selecciona una</option>
-        <option value="Hora">Hora</option>
-        <option value="Día">Día</option>
-        <option value="Evento">Evento</option>
-      </select>
-
-      <label for="categoriaTarifa">Categoría</label>
-      <select id="categoriaTarifa" name="categoria" required>
-        <option value="">Selecciona una</option>
-        <option value="Interno">Interno</option>
-        <option value="Externo">Externo</option>
-      </select>
-
-      <button type="submit">Guardar Tarifa</button>
-      <div id="responseTarifa"></div>
-    </form>
+    <div id="mensajeExito"></div>
   </div>
 
   <script>
-    function showTab(tabId) {
-      document.querySelectorAll('.form-container').forEach(div => div.classList.remove('active'));
-      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+    document.getElementById('formServicio').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const datos = {
+        folio: document.getElementById('folio').value.trim(),
+        fecha: document.getElementById('fecha').value,
+        hora: document.getElementById('hora').value,
+        telefonista: document.getElementById('telefonista').value.trim(),
+        domicilio: document.getElementById('domicilio').value.trim(),
+        destino: document.getElementById('destino').value.trim(),
+        asignado: document.getElementById('asignado').value.trim(),
+        tipo: document.getElementById('tipo').value,
+        observaciones: document.getElementById('observaciones').value.trim()
+      };
+
+      // Validación básica
+      if (!datos.folio || !datos.fecha || !datos.hora || !datos.telefonista || !datos.destino) {
+        mostrarMensaje("Por favor completa los campos obligatorios.", "red");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/TU_ID_DEL_SCRIPT/exec", {
+        method: "POST",
+        body: JSON.stringify(datos),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.text())
+      .then(msg => {
+        mostrarMensaje("Servicio registrado correctamente.", "green");
+        this.reset();
+      })
+      .catch(err => {
+        mostrarMensaje("Error al registrar servicio.", "red");
+      });
+    });
+
+    function mostrarMensaje(texto, color) {
+      const mensaje = document.getElementById('mensajeExito');
+      mensaje.textContent = texto;
+      mensaje.style.color = color;
     }
-
-    const serviceForm = document.getElementById('serviceForm');
-    const tarifaForm = document.getElementById('tarifaForm');
-    const responseService = document.getElementById('responseService');
-    const responseTarifa = document.getElementById('responseTarifa');
-
-    const endpoint = 'https://script.google.com/macros/s/AKfycbvU8DT6doFHnSQNtv9EyRmpkMk69-0SBP00ClefyN7ofsXV_7izCWTKMRLv91MdZtDdRw/exec';
-
-    serviceForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(serviceForm).entries());
-      try {
-        await fetch(endpoint, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        responseService.textContent = '✅ Servicio enviado correctamente.';
-        responseService.className = 'success';
-        serviceForm.reset();
-      } catch (error) {
-        responseService.textContent = '❌ Error al enviar el servicio.';
-        responseService.className = 'error';
-        console.error(error);
-      }
-    });
-
-    tarifaForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(tarifaForm).entries());
-      try {
-        await fetch(endpoint, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        responseTarifa.textContent = '✅ Tarifa registrada correctamente.';
-        responseTarifa.className = 'success';
-        tarifaForm.reset();
-      } catch (error) {
-        responseTarifa.textContent = '❌ Error al registrar la tarifa.';
-        responseTarifa.className = 'error';
-        console.error(error);
-      }
-    });
   </script>
 </body>
 </html>
