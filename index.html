@@ -100,6 +100,9 @@
     <label for="folio">Folio:</label>
     <input type="text" id="folio" readonly>
 
+    <!-- Campo oculto para fecha y hora -->
+    <input type="hidden" id="timestamp" name="timestamp">
+
     <label for="domicilio">Domicilio:</label>
     <input type="text" id="domicilio" required>
 
@@ -155,6 +158,7 @@
       document.getElementById('login').style.display = "none";
       document.getElementById('formulario').style.display = "block";
       document.getElementById('folio').value = generarFolio();
+      document.getElementById('timestamp').value = new Date().toISOString();
     }
 
     function guardarServicio() {
@@ -168,9 +172,10 @@
       const tipo = document.getElementById('tipo').value.trim();
       const observaciones = document.getElementById('observaciones').value.trim();
       const folio = document.getElementById('folio').value;
+      const timestamp = document.getElementById('timestamp').value;
 
       console.log("Servicio guardado:");
-      console.log({ folio, telefonista, domicilio, destino, asignado, tipo, observaciones });
+      console.log({ folio, telefonista, domicilio, destino, asignado, tipo, observaciones, timestamp });
 
       alert("Servicio registrado correctamente.");
     }
