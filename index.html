@@ -40,6 +40,7 @@
       margin-top: 5px;
       border-radius: 5px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
     form button {
@@ -57,6 +58,11 @@
       font-weight: bold;
       text-align: center;
     }
+
+    .campo-invalido {
+      border: 2px solid red;
+      background-color: #ffe6e6;
+    }
   </style>
 </head>
 <body>
@@ -65,7 +71,7 @@
 
     <form id="formServicio">
       <label for="folio">Folio</label>
-      <input type="text" id="folio" />
+      <input type="text" id="folio" readonly />
 
       <label for="fecha">Fecha</label>
       <input type="date" id="fecha" />
@@ -102,14 +108,59 @@
   </div>
 
   <script>
+    function generarFolio() {
+      const ahora = new Date();
+      const fecha = ahora.toISOString().slice(0,10).replace(/-/g, '');
+      const hora = ahora.toTimeString().slice(0,8).replace(/:/g, '');
+      return `SERV-${fecha}-${hora}`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const telefonistaGuardado = localStorage.getItem('telefonista');
+      if (telefonistaGuardado) {
+        document.getElementById('telefonista').value = telefonistaGuardado;
+      }
+      document.getElementById('folio').value = generarFolio();
+    });
+
+    function validarCamposObligatorios(datos) {
+      let camposInvalidos = [];
+
+      const campos = {
+        fecha: 'Fecha',
+        hora: 'Hora',
+        telefonista: 'Telefonista',
+        destino: 'Destino'
+      };
+
+      for (let campo in campos) {
+        const input = document.getElementById(campo);
+        if (!datos[campo]) {
+          camposInvalidos.push(campos[campo]);
+          input.classList.add('campo-invalido');
+        } else {
+          input.classList.remove('campo-invalido');
+        }
+      }
+
+      return camposInvalidos;
+    }
+
+    function mostrarMensaje(texto, color) {
+      const mensaje = document.getElementById('mensajeExito');
+      mensaje.textContent = texto;
+      mensaje.style.color = color;
+    }
+
     document.getElementById('formServicio').addEventListener('submit', function(e) {
       e.preventDefault();
 
+      const telefonista = document.getElementById('telefonista').value.trim();
       const datos = {
-        folio: document.getElementById('folio').value.trim(),
+        folio: document.getElementById('folio').value,
         fecha: document.getElementById('fecha').value,
         hora: document.getElementById('hora').value,
-        telefonista: document.getElementById('telefonista').value.trim(),
+        telefonista: telefonista,
         domicilio: document.getElementById('domicilio').value.trim(),
         destino: document.getElementById('destino').value.trim(),
         asignado: document.getElementById('asignado').value.trim(),
@@ -117,32 +168,10 @@
         observaciones: document.getElementById('observaciones').value.trim()
       };
 
-      // Validación básica
-      if (!datos.folio || !datos.fecha || !datos.hora || !datos.telefonista || !datos.destino) {
-        mostrarMensaje("Por favor completa los campos obligatorios.", "red");
+      const camposFaltantes = validarCamposObligatorios(datos);
+      if (camposFaltantes.length > 0) {
+        mostrarMensaje(`⚠️ No puedes continuar. Faltan: ${camposFaltantes.join(', ')}.`, "red");
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycbvU8DT6doFHnSQNtv9EyRmpkMk69-0SBP00ClefyN7ofsXV_7izCWTKMRLv91MdZtDdRw/exec", {
-        method: "POST",
-        body: JSON.stringify(datos),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.text())
-      .then(msg => {
-        mostrarMensaje("Servicio registrado correctamente.", "green");
-        this.reset();
-      })
-      .catch(err => {
-        mostrarMensaje("Error al registrar servicio.", "red");
-      });
-    });
-
-    function mostrarMensaje(texto, color) {
-      const mensaje = document.getElementById('mensajeExito');
-      mensaje.textContent = texto;
-      mensaje.style.color = color;
-    }
-  </script>
-</body>
-</html>
+      localStorage.setItem('telefon
