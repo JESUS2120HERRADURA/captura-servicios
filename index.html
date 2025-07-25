@@ -1,207 +1,62 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alta de Servicios – Sitio Herradura</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #e6f0ff;
-      color: #333;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      position: relative;
-    }
-    .logo {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .logo img {
-      max-width: 140px;
-      height: auto;
-    }
-    h2 {
-      text-align: center;
-      color: #005baa;
-      margin-bottom: 10px;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      box-sizing: border-box;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-    }
-    .botones {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .botones button {
-      flex: 1;
-      padding: 12px;
-      background-color: #005baa;
-      color: white;
-      border: none;
-      font-size: 1em;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .botones button:hover {
-      background-color: #003f7d;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.8em;
-      color: #888;
-      margin-top: 40px;
-    }
-    .marca-agua {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      opacity: 0.15;
-      z-index: 0;
-    }
-    .marca-agua img {
-      width: 100px;
-      height: auto;
-    }
-  </style>
-</head>
-<body>
+<script>
+  function guardarServicio() {
+    const folio = document.getElementById('folio').value;
+    const fechaObj = new Date();
+    const fecha = fechaObj.toLocaleDateString();
+    const hora = fechaObj.toLocaleTimeString();
+    const telefonista = document.getElementById('nombre').value.trim();
+    const domicilio = document.getElementById('domicilio').value.trim();
+    const destino = document.getElementById('destino').value.trim();
+    const asignado = document.getElementById('asignado').value.trim();
+    const tipo = document.getElementById('tipo').value.trim();
+    const observaciones = document.getElementById('observaciones').value.trim();
 
-  <div class="logo">
-    <img src="logo_herradura.png" alt="Logotipo Sitio Herradura">
-  </div>
-
-  <h2>📘 Alta de Servicios – Sitio Herradura</h2>
-  <p style="text-align:center;"><strong>Vigencia:</strong> Julio 2025</p>
-
-  <!-- Login -->
-  <div id="login">
-    <label for="nombre">Responsable del registro:</label>
-    <input type="text" id="nombre" required>
-    <button onclick="checarEntrada()">Iniciar jornada</button>
-  </div>
-
-  <!-- Formulario oculto -->
-  <div id="formulario" style="display:none;">
-    <label for="folio">Folio:</label>
-    <input type="text" id="folio" readonly>
-
-    <!-- Campo oculto para fecha y hora -->
-    <input type="hidden" id="timestamp" name="timestamp">
-
-    <label for="domicilio">Domicilio:</label>
-    <input type="text" id="domicilio" required>
-
-    <label for="destino">Destino:</label>
-    <input type="text" id="destino" required>
-
-    <label for="asignado">Asignado a:</label>
-    <input type="text" id="asignado" required>
-
-    <label for="tipo">Tipo de servicio:</label>
-    <input type="text" id="tipo">
-
-    <label for="observaciones">Observaciones:</label>
-    <textarea id="observaciones"></textarea>
-
-    <div class="botones">
-      <button onclick="guardarServicio()">Guardar</button>
-      <button onclick="enviarTelegram()">Enviar</button>
-      <button onclick="checarSalida()">Finalizar</button>
-    </div>
-  </div>
-
-  <footer>
-    <p>Sistema desarrollado por Jesús Sánchez C. & Copilot</p>
-  </footer>
-
-  <div class="marca-agua">
-    <img src="logo_herradura.png" alt="Marca de agua">
-  </div>
-
-  <script>
-    let telefonista = "";
-
-    function generarFolio() {
-      const fecha = new Date();
-      const año = fecha.getFullYear();
-      const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-      const día = String(fecha.getDate()).padStart(2, '0');
-      const hora = String(fecha.getHours()).padStart(2, '0');
-      const min = String(fecha.getMinutes()).padStart(2, '0');
-      const seg = String(fecha.getSeconds()).padStart(2, '0');
-      return `FOL-${año}${mes}${día}-${hora}${min}${seg}`;
-    }
-
-    function checarEntrada() {
-      const nombre = document.getElementById('nombre').value.trim();
-      if (nombre === "") {
-        alert("Por favor ingresa tu nombre.");
-        return;
-      }
-      telefonista = nombre;
-      console.log("Entrada registrada para:", telefonista);
-      document.getElementById('login').style.display = "none";
-      document.getElementById('formulario').style.display = "block";
-      document.getElementById('folio').value = generarFolio();
-      document.getElementById('timestamp').value = new Date().toISOString();
-    }
-
-    function guardarServicio() {
-      const domicilio = document.getElementById('domicilio').value.trim();
-      const destino = document.getElementById('destino').value.trim();
-      const asignado = document.getElementById('asignado').value.trim();
-      if (domicilio === "" || destino === "" || asignado === "") {
-        alert("Domicilio, destino y asignado son obligatorios.");
-        return;
-      }
-      const tipo = document.getElementById('tipo').value.trim();
-      const observaciones = document.getElementById('observaciones').value.trim();
-      const folio = document.getElementById('folio').value;
-      const timestamp = document.getElementById('timestamp').value;
-
-      console.log("Servicio guardado:");
-      console.log({ folio, telefonista, domicilio, destino, asignado, tipo, observaciones, timestamp });
-
+    fetch('TU_URL_DEL_WEBAPP', {
+      method: 'POST',
+      body: JSON.stringify({
+        tipo: "servicio",
+        folio,
+        fecha,
+        hora,
+        telefonista,
+        domicilio,
+        destino,
+        asignado,
+        tipoServicio: tipo,
+        observaciones,
+        timestamp: new Date().toISOString()
+      }),
+      headers: { "Content-Type": "application/json" }
+    }).then(() => {
       alert("Servicio registrado correctamente.");
+    });
+  }
+
+  function checarEntrada() {
+    const nombre = document.getElementById('nombre').value.trim();
+    if (nombre === "") {
+      alert("Por favor ingresa tu nombre.");
+      return;
     }
 
-    function enviarTelegram() {
-      const folio = document.getElementById('folio').value;
-      const domicilio = document.getElementById('domicilio').value.trim();
-      const destino = document.getElementById('destino').value.trim();
-      const asignado = document.getElementById('asignado').value.trim();
-      const tipo = document.getElementById('tipo').value.trim();
-      const observaciones = document.getElementById('observaciones').value.trim();
+    fetch('TU_URL_DEL_WEBAPP', {
+      method: 'POST',
+      body: JSON.stringify({
+        tipo: "asistencia",
+        nombre,
+        entrada: new Date().toISOString()
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
 
-      const mensaje = `🚐 Nuevo servicio\nFolio: ${folio}\nDomicilio: ${domicilio}\nDestino: ${destino}\nAsignado a: ${asignado}\nTipo: ${tipo}\nObs: ${observaciones}`;
-      console.log("Mensaje para Telegram:", mensaje);
+    document.getElementById('login').style.display = "none";
+    document.getElementById('formulario').style.display = "block";
+    document.getElementById('folio').value = generarFolio();
+    document.getElementById('timestamp').value = new Date().toISOString();
+  }
 
-      alert("Mensaje preparado para enviar por Telegram.");
-    }
-
-    function checarSalida() {
-      console.log("Salida registrada para:", telefonista);
-      alert("Jornada finalizada.");
-      document.getElementById('formulario').style.display = "none";
-      document.getElementById('login').style.display = "block";
-      document.getElementById('nombre').value = "";
-    }
-  </script>
-
-</body>
-</html>
+  function generarFolio() {
+    const ahora = new Date();
+    return "F" + ahora.getTime();
+  }
+</script>
