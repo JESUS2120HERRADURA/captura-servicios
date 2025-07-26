@@ -92,7 +92,7 @@
   <!-- Carátula -->
   <div class="container" id="caratula">
     <div class="logo">
-      <img src="URL_DEL_LOGO" alt="Logo Institucional">
+      <img src="https://drive.google.com/uc?export=view&id=TU_ID_DE_IMAGEN" alt="Logo Institucional">
     </div>
     <h2>Captura de Servicios</h2>
     <label for="telefonistaInicio">Nombre del Telefonista</label>
@@ -103,7 +103,7 @@
   <!-- Formulario -->
   <div class="container oculto" id="formulario">
     <div class="logo">
-      <img src="URL_DEL_LOGO" alt="Logo Institucional">
+      <img src="https://drive.google.com/uc?export=view&id=TU_ID_DE_IMAGEN" alt="Logo Institucional">
     </div>
     <h2>Formulario de Captura</h2>
     <form id="formServicio">
@@ -155,6 +155,13 @@
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbxnN9EppNOItjLcWeLsMQES3gqUAh0_6bCE5S6E7gWO4i-KZIKv1UhBpnr832mHOifykA/exec";
+
+    window.onload = () => {
+      // Siempre iniciar en carátula
+      localStorage.removeItem("telefonista");
+      document.getElementById("caratula").classList.remove("oculto");
+      document.getElementById("formulario").classList.add("oculto");
+    };
 
     function generarFolio() {
       const ahora = new Date();
@@ -234,11 +241,4 @@
         body: JSON.stringify(datos),
         headers: { "Content-Type": "application/json" }
       })
-      .then(res => res.text())
-      .then(msg => {
-        mostrarMensaje("✅ Servicio registrado correctamente.", "green");
-        this.reset();
-        document.getElementById("telefonista").value = localStorage.getItem("telefonista");
-        document.getElementById("folio").value = generarFolio();
-      })
-      .catch
+      .then(res
