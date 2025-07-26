@@ -46,9 +46,6 @@
       box-sizing: border-box;
       border: none;
       border-radius: 4px;
-    }
-
-    input, select, textarea {
       background-color: #e6f0ff;
       color: #003366;
     }
@@ -114,6 +111,14 @@
     <h1>Captura de Servicios</h1>
   </header>
 
+  <div class="container" id="desbloqueo">
+    <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
+    <h2>Desbloqueo del Sistema</h2>
+    <label for="nombre">Nombre del Telefonista</label>
+    <input type="text" id="nombre" />
+    <button onclick="iniciarTurno()">Iniciar Captura</button>
+  </div>
+
   <div class="container oculto" id="formularioContainer">
     <form id="formulario">
       <input type="hidden" id="inicioTurno">
@@ -169,14 +174,6 @@
 
       <div id="mensaje"></div>
     </form>
-  </div>
-
-  <div class="container" id="desbloqueo">
-    <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
-    <h2>Desbloqueo del Sistema</h2>
-    <label for="nombre">Nombre del Telefonista</label>
-    <input type="text" id="nombre" />
-    <button onclick="iniciarTurno()">Iniciar Captura</button>
   </div>
 
   <script>
@@ -242,38 +239,4 @@
       })
       .then(res => res.text())
       .then(msg => {
-        mostrarMensaje("✅ Servicio registrado correctamente.", "lightgreen");
-        document.getElementById("formulario").reset();
-        const
-                  const ahora = new Date();
-        document.getElementById('folio').value = 'SERV-' + ahora.getTime();
-        document.getElementById('fecha').value = ahora.toLocaleDateString();
-        document.getElementById('hora').value = ahora.toLocaleTimeString();
-      })
-      .catch(err => {
-        mostrarMensaje("❌ Error al registrar servicio.", "red");
-      });
-    }
-
-    function finDeTurno() {
-      const ahora = new Date();
-      document.getElementById("finTurno").value = ahora.toISOString();
-
-      // Ocultar formulario y mostrar pantalla de desbloqueo
-      document.getElementById("formularioContainer").classList.add("oculto");
-      document.getElementById("desbloqueo").classList.remove("oculto");
-
-      // Limpiar campos
-      document.getElementById("formulario").reset();
-      document.getElementById("nombre").value = "";
-      mostrarMensaje("", "black");
-    }
-
-    function mostrarMensaje(texto, color) {
-      const mensaje = document.getElementById("mensaje");
-      mensaje.textContent = texto;
-      mensaje.style.color = color;
-    }
-  </script>
-</body>
-</html>
+       
