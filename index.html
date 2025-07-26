@@ -6,89 +6,139 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
+      background-color: #e6f0fa;
+      padding: 40px;
     }
     #logo {
-      width: 200px;
+      width: 180px;
       margin-bottom: 20px;
     }
     .hidden {
       display: none;
     }
-    button {
-      margin: 10px 0;
-      padding: 10px 20px;
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #003366;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #003366;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #99c2e6;
+      border-radius: 5px;
       font-size: 16px;
     }
-    textarea {
-      width: 100%;
-      height: 150px;
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    button {
       margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    textarea#resultado {
+      margin-top: 20px;
+      height: 120px;
+      resize: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo institucional -->
-  <img id="logo" src="logo_institucional.png" alt="Logo Institucional">
-
-  <!-- Carátula de inicio de turno -->
-  <div id="caratula">
-    <h2>Inicio de Turno</h2>
-    <label>Nombre del capturista:</label><br>
-    <input type="text" id="capturista"><br><br>
-    <label>Hora de inicio:</label><br>
-    <input type="text" id="horaInicio" readonly><br><br>
-    <button onclick="mostrarFormulario()">Captura de servicio</button>
+  <!-- Carátula de inicio -->
+  <div id="caratula" class="container">
+    <img id="logo" src="logo_institucional.png" alt="Logo Institucional">
+    <h2>Hoja de Checado de Asistencia</h2>
+    <label for="telefonistaInicio">Telefonista</label>
+    <input type="text" id="telefonistaInicio">
+    <button onclick="iniciarTurno()">Iniciar turno</button>
   </div>
 
   <!-- Formulario de captura -->
-  <div id="formulario" class="hidden">
-    <h2>Formulario de Servicio</h2>
-    <label>Servicio:</label><br>
-    <input type="text" id="servicio"><br><br>
-    <label>Responsable:</label><br>
-    <input type="text" id="responsable"><br><br>
-    <label>Fecha:</label><br>
-    <input type="date" id="fecha"><br><br>
-    <label>Observaciones:</label><br>
-    <textarea id="observaciones"></textarea><br>
-    <button onclick="generarTexto()">Enviar</button>
+  <div id="formulario" class="container hidden">
+    <img id="logo" src="logo_institucional.png" alt="Logo Institucional">
+    <h2>Captura de Servicios</h2>
 
-    <!-- Área para copiar texto -->
+    <div class="row">
+      <div>
+        <label for="folio">Folio</label>
+        <input type="text" id="folio" readonly>
+      </div>
+      <div>
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" readonly>
+      </div>
+      <div>
+        <label for="hora">Hora</label>
+        <input type="time" id="hora" readonly>
+      </div>
+      <div>
+        <label for="telefonista">Telefonista</label>
+        <input type="text" id="telefonista" readonly>
+      </div>
+    </div>
+
+    <label for="domicilio">Domicilio</label>
+    <input type="text" id="domicilio" required>
+
+    <label for="destino">Destino</label>
+    <input type="text" id="destino" required>
+
+    <label for="asignado">Asignado a</label>
+    <input type="text" id="asignado" required>
+
+    <label for="tipo">Tipo de servicio</label>
+    <select id="tipo" required>
+      <option value="">Seleccione</option>
+      <option>Normal</option>
+      <option>Carro amplio</option>
+      <option>Pago con transferencia</option>
+      <option>Pago con tarjeta</option>
+      <option>Transporte de mascota</option>
+      <option>Ida y vuelta</option>
+      <option>Por tiempo</option>
+      <option>Cambio de llanta</option>
+      <option>Pasar corriente</option>
+      <option>Carro sin rotular</option>
+      <option>Carro rotulado</option>
+      <option>Mensajería</option>
+      <option>Guía</option>
+    </select>
+
+    <label for="observaciones">Observaciones</label>
+    <textarea id="observaciones"></textarea>
+
+    <button onclick="guardar()">Guardar</button>
+    <button onclick="enviar()">Enviar</button>
+    <button onclick="finalizarTurno()">Finalizar turno</button>
+
     <textarea id="resultado" readonly></textarea>
   </div>
 
   <script>
-    // Mostrar hora actual en carátula
-    document.getElementById('horaInicio').value = new Date().toLocaleTimeString();
+    let folioActual = 1;
 
-    function mostrarFormulario() {
-      document.getElementById('caratula').classList.add('hidden');
-      document.getElementById('formulario').classList.remove('hidden');
-    }
-
-    function generarTexto() {
-      const capturista = document.getElementById('capturista').value.trim();
-      const servicio = document.getElementById('servicio').value.trim();
-      const responsable = document.getElementById('responsable').value.trim();
-      const fecha = document.getElementById('fecha').value;
-      const observaciones = document.getElementById('observaciones').value.trim();
-
-      const texto = 
-`Captura de Servicio
-Capturista: ${capturista}
-Servicio: ${servicio}
-Responsable: ${responsable}
-Fecha: ${fecha}
-Observaciones: ${observaciones}`;
-
-      const resultado = document.getElementById('resultado');
-      resultado.value = texto;
-      resultado.select();
-      document.execCommand('copy');
-    }
-  </script>
-
-</body>
-</html>
+    function
