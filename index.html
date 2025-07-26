@@ -172,8 +172,9 @@
 
     function iniciarTurno() {
       const nombre = document.getElementById("telefonistaInicio").value.trim();
+
       if (!nombre) {
-        alert("Por favor ingresa tu nombre.");
+        alert("⚠️ Por favor ingresa tu nombre para iniciar el turno.");
         return;
       }
 
@@ -239,6 +240,4 @@
       fetch(scriptURL, {
         method: "POST",
         body: JSON.stringify(datos),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res
+        headers: { "Content
