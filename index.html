@@ -2,33 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Captura de Servicios</title>
+  <title>Formato de Alta al Sistema</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #e6f0fa;
+      background-color: #f0f8ff;
       padding: 40px;
-      background-image: url('marca_agua.png'); /* Marca de agua institucional */
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 300px;
-      opacity: 0.98;
-    }
-    #logo {
-      width: 180px;
-      margin-bottom: 20px;
-    }
-    .hidden {
-      display: none;
     }
     .container {
       background-color: #ffffff;
       padding: 30px;
       border-radius: 10px;
-      max-width: 700px;
+      max-width: 600px;
       margin: auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      position: relative;
+    }
+    .hidden {
+      display: none;
     }
     h2 {
       text-align: center;
@@ -38,184 +28,60 @@
       display: block;
       margin-top: 15px;
       font-weight: bold;
-      color: #003366;
     }
-    input, select, textarea {
+    input {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
-      border: 1px solid #99c2e6;
+      border: 1px solid #ccc;
       border-radius: 5px;
-      font-size: 16px;
-    }
-    .row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .row > div {
-      flex: 1;
-      min-width: 150px;
     }
     button {
       margin-top: 20px;
       padding: 10px 20px;
-      font-size: 16px;
       background-color: #003366;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-    textarea#resultado {
-      margin-top: 20px;
-      height: 120px;
-      resize: none;
+    #logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 180px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Carátula de inicio -->
+  <!-- Carátula -->
   <div id="caratula" class="container">
-    <img id="logo" src="logo_institucional.png" alt="Logo Institucional" onerror="this.style.display='none'">
+    <img id="logo" src="logo_institucional.png" alt="Logo" onerror="this.src='https://via.placeholder.com/180x60?text=LOGO';">
     <h2>Formato de Alta al Sistema</h2>
     <label for="telefonistaInicio">Telefonista</label>
     <input type="text" id="telefonistaInicio">
-    <button onclick="iniciarTurno()">Iniciar turno</button>
+    <button id="btnIniciar">Iniciar turno</button>
   </div>
 
-  <!-- Formulario de captura -->
+  <!-- Formulario -->
   <div id="formulario" class="container hidden">
-    <img id="logo" src="logo_institucional.png" alt="Logo Institucional" onerror="this.style.display='none'">
-    <h2>Captura de Servicios</h2>
-
-    <div class="row">
-      <div>
-        <label for="folio">Folio</label>
-        <input type="text" id="folio" readonly>
-      </div>
-      <div>
-        <label for="fecha">Fecha</label>
-        <input type="date" id="fecha" readonly>
-      </div>
-      <div>
-        <label for="hora">Hora</label>
-        <input type="text" id="hora" readonly>
-      </div>
-      <div>
-        <label for="telefonista">Telefonista</label>
-        <input type="text" id="telefonista" readonly>
-      </div>
-    </div>
-
-    <label for="domicilio">Domicilio</label>
-    <input type="text" id="domicilio" required>
-
-    <label for="destino">Destino</label>
-    <input type="text" id="destino" required>
-
-    <label for="asignado">Asignado a</label>
-    <input type="text" id="asignado" required>
-
-    <label for="tipo">Tipo de servicio</label>
-    <select id="tipo" required>
-      <option value="">Seleccione</option>
-      <option value="Normal">Normal</option>
-      <option value="Carro amplio">Carro amplio</option>
-      <option value="Pago con transferencia">Pago con transferencia</option>
-      <option value="Pago con tarjeta">Pago con tarjeta</option>
-      <option value="Transporte de mascota">Transporte de mascota</option>
-      <option value="Ida y vuelta">Ida y vuelta</option>
-      <option value="Por tiempo">Por tiempo</option>
-      <option value="Cambio de llanta">Cambio de llanta</option>
-      <option value="Pasar corriente">Pasar corriente</option>
-      <option value="Carro sin rotular">Carro sin rotular</option>
-      <option value="Carro rotulado">Carro rotulado</option>
-      <option value="Mensajería">Mensajería</option>
-      <option value="Guía">Guía</option>
-    </select>
-
-    <label for="observaciones">Observaciones</label>
-    <textarea id="observaciones"></textarea>
-
-    <button onclick="guardar()">Guardar</button>
-    <button onclick="enviar()">Enviar</button>
-    <button onclick="finalizarTurno()">Finalizar turno</button>
-
-    <textarea id="resultado" readonly></textarea>
+    <h2>Hoja de Captura</h2>
+    <p>Bienvenido, <span id="nombreTelefonista"></span>. Puedes comenzar a capturar los servicios.</p>
   </div>
 
   <script>
-    let folioActual = 1;
-
-    function iniciarTurno() {
+    document.getElementById('btnIniciar').addEventListener('click', function () {
       const nombre = document.getElementById('telefonistaInicio').value.trim();
       if (!nombre) {
-        alert("Ingrese el nombre del telefonista.");
+        alert("Por favor ingresa el nombre del telefonista.");
         return;
       }
 
-      const ahora = new Date();
-      document.getElementById('telefonista').value = nombre;
-      document.getElementById('fecha').value = ahora.toISOString().split('T')[0];
-      document.getElementById('hora').value = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('folio').value = folioActual++;
+      document.getElementById('nombreTelefonista').textContent = nombre;
+      document.getElementById('caratula').style.display = 'none';
+      document.getElementById('formulario').style.display = 'block';
+    });
+  </script>
 
-      document.getElementById('caratula').classList.add('hidden');
-      document.getElementById('formulario').classList.remove('hidden');
-    }
-
-    function guardar() {
-      alert("Documento guardado en la base de datos (simulado).");
-    }
-
-    function enviar() {
-      const datos = {
-        folio: document.getElementById('folio').value,
-        fecha: document.getElementById('fecha').value,
-        hora: document.getElementById('hora').value,
-        telefonista: document.getElementById('telefonista').value,
-        domicilio: document.getElementById('domicilio').value,
-        destino: document.getElementById('destino').value,
-        asignado: document.getElementById('asignado').value,
-        tipo: document.getElementById('tipo').value,
-        observaciones: document.getElementById('observaciones').value
-      };
-
-      const texto = 
-`Captura de Servicio
-Folio: ${datos.folio}
-Fecha: ${datos.fecha}
-Hora: ${datos.hora}
-Telefonista: ${datos.telefonista}
-Domicilio: ${datos.domicilio}
-Destino: ${datos.destino}
-Asignado a: ${datos.asignado}
-Tipo de servicio: ${datos.tipo}
-Observaciones: ${datos.observaciones}`;
-
-      const resultado = document.getElementById('resultado');
-      resultado.value = texto;
-      resultado.select();
-      document.execCommand('copy');
-    }
-
-    function finalizarTurno() {
-      const fin = new Date();
-      const horaFin = fin.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const fechaFin = fin.toISOString().split('T')[0];
-      alert(`Turno finalizado: ${fechaFin} ${horaFin} (simulado en base de datos)`);
-
-      document.getElementById('formulario').classList.add('hidden');
-      document.getElementById('caratula').classList.remove('hidden');
-      document.getElementById('telefonistaInicio').value = "";
-    }
-
-    // Navegación con Enter
-    document.querySelectorAll('input, select, textarea').forEach((element, index, list) => {
-      element.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const next = list[index + 1];
-          if (
+</body>
+</html>
