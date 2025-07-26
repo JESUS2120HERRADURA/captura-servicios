@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Captura de Servicios</title>
   <style>
     body {
@@ -12,13 +11,22 @@
       padding: 0;
     }
 
-    .formulario-container {
-      background-color: #e3f2fd; /* Azul claro institucional */
-      max-width: 600px;
+    .container {
+      max-width: 700px;
       margin: 40px auto;
+      background-color: #e3f2fd;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      max-height: 80px;
     }
 
     h2 {
@@ -56,64 +64,181 @@
     button:hover {
       background-color: #1565c0;
     }
+
+    .botones {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    .campo-invalido {
+      border: 2px solid red;
+      background-color: #ffebee;
+    }
+
+    #mensajeExito {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <div class="formulario-container">
+
+  <!-- Carátula -->
+  <div class="container" id="caratula">
+    <div class="logo">
+      <img src="URL_DEL_LOGO" alt="Logo Institucional">
+    </div>
     <h2>Captura de Servicios</h2>
-    <form id="formulario">
+    <label for="telefonistaInicio">Nombre del Telefonista</label>
+    <input type="text" id="telefonistaInicio">
+    <button onclick="iniciarTurno()">Iniciar Turno</button>
+  </div>
+
+  <!-- Formulario -->
+  <div class="container oculto" id="formulario">
+    <div class="logo">
+      <img src="URL_DEL_LOGO" alt="Logo Institucional">
+    </div>
+    <h2>Formulario de Captura</h2>
+    <form id="formServicio">
+      <label for="folio">Folio</label>
+      <input type="text" id="folio" readonly>
+
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha">
+
+      <label for="hora">Hora</label>
+      <input type="time" id="hora">
+
+      <label for="telefonista">Telefonista</label>
+      <input type="text" id="telefonista" readonly>
+
       <label for="domicilio">Domicilio</label>
-      <input type="text" id="domicilio" required />
+      <input type="text" id="domicilio">
 
       <label for="destino">Destino</label>
-      <input type="text" id="destino" required />
+      <input type="text" id="destino">
 
       <label for="asignado">Asignado a</label>
-      <input type="text" id="asignado" required />
+      <input type="text" id="asignado">
 
-      <label for="tipoServicio">Tipo de Servicio</label>
-      <select id="tipoServicio" required>
-        <option value="">Selecciona</option>
-        <option value="Traslado">Traslado</option>
-        <option value="Consulta">Consulta</option>
-        <option value="Otro">Otro</option>
+      <label for="tipo">Tipo de servicio</label>
+      <select id="tipo">
+        <option value="">Selecciona una opción</option>
+        <option value="Normal">Normal</option>
+        <option value="Carro amplio">Carro amplio</option>
+        <option value="Pago con tarjeta">Pago con tarjeta</option>
+        <option value="Pago con transferencia">Pago con transferencia</option>
+        <option value="Carro rotulado">Carro rotulado</option>
+        <option value="Carro sin rotular">Carro sin rotular</option>
+        <option value="Mensajería">Mensajería</option>
+        <option value="Transporte de mascota">Transporte de mascota</option>
       </select>
 
       <label for="observaciones">Observaciones</label>
       <textarea id="observaciones" rows="3"></textarea>
 
-      <button type="button" onclick="enviarDatos()">Enviar</button>
-      <button type="button" onclick="iniciarNuevaCaptura()">Nueva Captura</button>
+      <div class="botones">
+        <button type="button" onclick="guardarLocal()">Guardar</button>
+        <button type="submit">Enviar</button>
+        <button type="button" onclick="finTurno()">Fin de turno</button>
+      </div>
+      <div id="mensajeExito"></div>
     </form>
   </div>
 
   <script>
-    let copiaTemporal = null;
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxnN9EppNOItjLcWeLsMQES3gqUAh0_6bCE5S6E7gWO4i-KZIKv1UhBpnr832mHOifykA/exec";
 
-    function enviarDatos() {
+    function generarFolio() {
+      const ahora = new Date();
+      const fecha = ahora.toISOString().slice(0,10).replace(/-/g, '');
+      const hora = ahora.toTimeString().slice(0,8).replace(/:/g, '');
+      return `SERV-${fecha}-${hora}`;
+    }
+
+    function iniciarTurno() {
+      const nombre = document.getElementById("telefonistaInicio").value.trim();
+      if (!nombre) {
+        alert("Por favor ingresa tu nombre.");
+        return;
+      }
+
+      localStorage.setItem("telefonista", nombre);
+      document.getElementById("telefonista").value = nombre;
+      document.getElementById("folio").value = generarFolio();
+
+      const ahora = new Date();
+      document.getElementById("fecha").value = ahora.toISOString().slice(0,10);
+      document.getElementById("hora").value = ahora.toTimeString().slice(0,5);
+
+      document.getElementById("caratula").classList.add("oculto");
+      document.getElementById("formulario").classList.remove("oculto");
+    }
+
+    function validarCamposObligatorios(datos) {
+      let camposInvalidos = [];
+      const campos = {
+        fecha: 'Fecha',
+        hora: 'Hora',
+        telefonista: 'Telefonista',
+        destino: 'Destino'
+      };
+      for (let campo in campos) {
+        const input = document.getElementById(campo);
+        if (!datos[campo]) {
+          camposInvalidos.push(campos[campo]);
+          input.classList.add("campo-invalido");
+        } else {
+          input.classList.remove("campo-invalido");
+        }
+      }
+      return camposInvalidos;
+    }
+
+    function mostrarMensaje(texto, color) {
+      const mensaje = document.getElementById("mensajeExito");
+      mensaje.textContent = texto;
+      mensaje.style.color = color;
+    }
+
+    document.getElementById("formServicio").addEventListener("submit", function(e) {
+      e.preventDefault();
+
       const datos = {
+        folio: document.getElementById("folio").value,
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
         domicilio: document.getElementById("domicilio").value,
         destino: document.getElementById("destino").value,
         asignado: document.getElementById("asignado").value,
-        tipoServicio: document.getElementById("tipoServicio").value,
+        tipo: document.getElementById("tipo").value,
         observaciones: document.getElementById("observaciones").value
       };
 
-      copiaTemporal = datos;
-
-      const textoTelegram = `📋 *Servicio Capturado*\n🏠 Domicilio: ${datos.domicilio}\n📍 Destino: ${datos.destino}\n👤 Asignado a: ${datos.asignado}\n🚗 Tipo: ${datos.tipoServicio}\n📝 Observaciones: ${datos.observaciones}`;
-      alert("Copia lista para pegar en Telegram:\n\n" + textoTelegram);
-    }
-
-    function iniciarNuevaCaptura() {
-      if (copiaTemporal) {
-        const confirmar = confirm("Hay una captura pendiente que no se pegó en Telegram. ¿Deseas descartarla?");
-        if (!confirmar) return;
+      const faltantes = validarCamposObligatorios(datos);
+      if (faltantes.length > 0) {
+        mostrarMensaje(`⚠️ Faltan: ${faltantes.join(', ')}`, "red");
+        return;
       }
 
-      copiaTemporal = null;
-      document.getElementById("formulario").reset();
-    }
-  </script>
-</body>
-</html>
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(datos),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.text())
+      .then(msg => {
+        mostrarMensaje("✅ Servicio registrado correctamente.", "green");
+        this.reset();
+        document.getElementById("telefonista").value = localStorage.getItem("telefonista");
+        document.getElementById("folio").value = generarFolio();
+      })
+      .catch
