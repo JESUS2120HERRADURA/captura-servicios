@@ -12,7 +12,7 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 600px;
       margin: 40px auto;
       background-color: #e3f2fd;
       padding: 30px;
@@ -41,13 +41,12 @@
       color: #0d47a1;
     }
 
-    input, select, textarea {
+    input {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
       border: 1px solid #90caf9;
       border-radius: 6px;
-      box-sizing: border-box;
     }
 
     button {
@@ -61,29 +60,8 @@
       font-size: 16px;
     }
 
-    button:hover {
-      background-color: #1565c0;
-    }
-
-    .botones {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
     .oculto {
       display: none;
-    }
-
-    .campo-invalido {
-      border: 2px solid red;
-      background-color: #ffebee;
-    }
-
-    #mensajeExito {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
     }
   </style>
 </head>
@@ -92,7 +70,7 @@
   <!-- Carátula -->
   <div class="container" id="caratula">
     <div class="logo">
-      <img src="https://drive.google.com/uc?export=view&id=TU_ID_DE_IMAGEN" alt="Logo Institucional">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png" alt="Logo Institucional">
     </div>
     <h2>Captura de Servicios</h2>
     <label for="telefonistaInicio">Nombre del Telefonista</label>
@@ -102,85 +80,26 @@
 
   <!-- Formulario -->
   <div class="container oculto" id="formulario">
-    <div class="logo">
-      <img src="https://drive.google.com/uc?export=view&id=TU_ID_DE_IMAGEN" alt="Logo Institucional">
-    </div>
     <h2>Formulario de Captura</h2>
-    <form id="formServicio">
-      <label for="folio">Folio</label>
-      <input type="text" id="folio" readonly>
+    <label for="telefonista">Telefonista</label>
+    <input type="text" id="telefonista" readonly>
 
-      <label for="fecha">Fecha</label>
-      <input type="date" id="fecha">
+    <label for="fecha">Fecha</label>
+    <input type="date" id="fecha">
 
-      <label for="hora">Hora</label>
-      <input type="time" id="hora">
-
-      <label for="telefonista">Telefonista</label>
-      <input type="text" id="telefonista" readonly>
-
-      <label for="domicilio">Domicilio</label>
-      <input type="text" id="domicilio">
-
-      <label for="destino">Destino</label>
-      <input type="text" id="destino">
-
-      <label for="asignado">Asignado a</label>
-      <input type="text" id="asignado">
-
-      <label for="tipo">Tipo de servicio</label>
-      <select id="tipo">
-        <option value="">Selecciona una opción</option>
-        <option value="Normal">Normal</option>
-        <option value="Carro amplio">Carro amplio</option>
-        <option value="Pago con tarjeta">Pago con tarjeta</option>
-        <option value="Pago con transferencia">Pago con transferencia</option>
-        <option value="Carro rotulado">Carro rotulado</option>
-        <option value="Carro sin rotular">Carro sin rotular</option>
-        <option value="Mensajería">Mensajería</option>
-        <option value="Transporte de mascota">Transporte de mascota</option>
-      </select>
-
-      <label for="observaciones">Observaciones</label>
-      <textarea id="observaciones" rows="3"></textarea>
-
-      <div class="botones">
-        <button type="button" onclick="guardarLocal()">Guardar</button>
-        <button type="submit">Enviar</button>
-        <button type="button" onclick="finTurno()">Fin de turno</button>
-      </div>
-      <div id="mensajeExito"></div>
-    </form>
+    <label for="hora">Hora</label>
+    <input type="time" id="hora">
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxnN9EppNOItjLcWeLsMQES3gqUAh0_6bCE5S6E7gWO4i-KZIKv1UhBpnr832mHOifykA/exec";
-
-    window.onload = () => {
-      // Siempre iniciar en carátula
-      localStorage.removeItem("telefonista");
-      document.getElementById("caratula").classList.remove("oculto");
-      document.getElementById("formulario").classList.add("oculto");
-    };
-
-    function generarFolio() {
-      const ahora = new Date();
-      const fecha = ahora.toISOString().slice(0,10).replace(/-/g, '');
-      const hora = ahora.toTimeString().slice(0,8).replace(/:/g, '');
-      return `SERV-${fecha}-${hora}`;
-    }
-
     function iniciarTurno() {
       const nombre = document.getElementById("telefonistaInicio").value.trim();
-
       if (!nombre) {
-        alert("⚠️ Por favor ingresa tu nombre para iniciar el turno.");
+        alert("⚠️ Por favor ingresa tu nombre.");
         return;
       }
 
-      localStorage.setItem("telefonista", nombre);
       document.getElementById("telefonista").value = nombre;
-      document.getElementById("folio").value = generarFolio();
 
       const ahora = new Date();
       document.getElementById("fecha").value = ahora.toISOString().slice(0,10);
@@ -189,55 +108,7 @@
       document.getElementById("caratula").classList.add("oculto");
       document.getElementById("formulario").classList.remove("oculto");
     }
+  </script>
 
-    function validarCamposObligatorios(datos) {
-      let camposInvalidos = [];
-      const campos = {
-        fecha: 'Fecha',
-        hora: 'Hora',
-        telefonista: 'Telefonista',
-        destino: 'Destino'
-      };
-      for (let campo in campos) {
-        const input = document.getElementById(campo);
-        if (!datos[campo]) {
-          camposInvalidos.push(campos[campo]);
-          input.classList.add("campo-invalido");
-        } else {
-          input.classList.remove("campo-invalido");
-        }
-      }
-      return camposInvalidos;
-    }
-
-    function mostrarMensaje(texto, color) {
-      const mensaje = document.getElementById("mensajeExito");
-      mensaje.textContent = texto;
-      mensaje.style.color = color;
-    }
-
-    document.getElementById("formServicio").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const datos = {
-        folio: document.getElementById("folio").value,
-        fecha: document.getElementById("fecha").value,
-        hora: document.getElementById("hora").value,
-        telefonista: document.getElementById("telefonista").value,
-        domicilio: document.getElementById("domicilio").value,
-        destino: document.getElementById("destino").value,
-        asignado: document.getElementById("asignado").value,
-        tipo: document.getElementById("tipo").value,
-        observaciones: document.getElementById("observaciones").value
-      };
-
-      const faltantes = validarCamposObligatorios(datos);
-      if (faltantes.length > 0) {
-        mostrarMensaje(`⚠️ Faltan: ${faltantes.join(', ')}`, "red");
-        return;
-      }
-
-      fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(datos),
-        headers: { "Content
+</body>
+</html>
