@@ -1,3 +1,16 @@
+Gracias por el diagnóstico, Jesús. Vamos a resolverlo punto por punto para que el formulario funcione como esperas y esté alineado con tu visión institucional.
+
+✅ Correcciones que aplicaremos
+- 🕒 La hora no se presenta
+→ Usaremos toLocaleTimeString() correctamente y nos aseguraremos de que el campo esté visible y actualizado.
+- 📋 La lista desplegable no funciona
+→ Verificaremos que el <select> tenga opciones válidas y que no haya errores de sintaxis.
+- 💧 Falta la marca de agua de copropiedad
+→ Añadiremos una marca de agua institucional en el fondo del formulario.
+- 🖼️ Falta el logo
+→ Aseguraremos que el logo se cargue correctamente desde una ruta válida o lo simularemos si no está disponible.
+
+🛠️ Código actualizado con todas las correcciones
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +21,11 @@
       font-family: Arial, sans-serif;
       background-color: #e6f0fa;
       padding: 40px;
+      background-image: url('marca_agua.png'); /* Marca de agua institucional */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 300px;
+      opacity: 0.98;
     }
     #logo {
       width: 180px;
@@ -23,6 +41,7 @@
       max-width: 700px;
       margin: auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
     }
     h2 {
       text-align: center;
@@ -45,9 +64,11 @@
     .row {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
     .row > div {
       flex: 1;
+      min-width: 150px;
     }
     button {
       margin-top: 20px;
@@ -70,7 +91,7 @@
 
   <!-- Carátula de inicio -->
   <div id="caratula" class="container">
-    <img id="logo" src="logo_institucional.png" alt="Logo Institucional">
+    <img id="logo" src="logo_institucional.png" alt="Logo Institucional" onerror="this.style.display='none'">
     <h2>Formato de Alta al Sistema</h2>
     <label for="telefonistaInicio">Telefonista</label>
     <input type="text" id="telefonistaInicio">
@@ -79,7 +100,7 @@
 
   <!-- Formulario de captura -->
   <div id="formulario" class="container hidden">
-    <img id="logo" src="logo_institucional.png" alt="Logo Institucional">
+    <img id="logo" src="logo_institucional.png" alt="Logo Institucional" onerror="this.style.display='none'">
     <h2>Captura de Servicios</h2>
 
     <div class="row">
@@ -93,7 +114,7 @@
       </div>
       <div>
         <label for="hora">Hora</label>
-        <input type="time" id="hora" readonly>
+        <input type="text" id="hora" readonly>
       </div>
       <div>
         <label for="telefonista">Telefonista</label>
@@ -113,19 +134,19 @@
     <label for="tipo">Tipo de servicio</label>
     <select id="tipo" required>
       <option value="">Seleccione</option>
-      <option>Normal</option>
-      <option>Carro amplio</option>
-      <option>Pago con transferencia</option>
-      <option>Pago con tarjeta</option>
-      <option>Transporte de mascota</option>
-      <option>Ida y vuelta</option>
-      <option>Por tiempo</option>
-      <option>Cambio de llanta</option>
-      <option>Pasar corriente</option>
-      <option>Carro sin rotular</option>
-      <option>Carro rotulado</option>
-      <option>Mensajería</option>
-      <option>Guía</option>
+      <option value="Normal">Normal</option>
+      <option value="Carro amplio">Carro amplio</option>
+      <option value="Pago con transferencia">Pago con transferencia</option>
+      <option value="Pago con tarjeta">Pago con tarjeta</option>
+      <option value="Transporte de mascota">Transporte de mascota</option>
+      <option value="Ida y vuelta">Ida y vuelta</option>
+      <option value="Por tiempo">Por tiempo</option>
+      <option value="Cambio de llanta">Cambio de llanta</option>
+      <option value="Pasar corriente">Pasar corriente</option>
+      <option value="Carro sin rotular">Carro sin rotular</option>
+      <option value="Carro rotulado">Carro rotulado</option>
+      <option value="Mensajería">Mensajería</option>
+      <option value="Guía">Guía</option>
     </select>
 
     <label for="observaciones">Observaciones</label>
@@ -148,9 +169,10 @@
         return;
       }
 
+      const ahora = new Date();
       document.getElementById('telefonista').value = nombre;
-      document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
-      document.getElementById('hora').value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('fecha').value = ahora.toISOString().split('T')[0];
+      document.getElementById('hora').value = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       document.getElementById('folio').value = folioActual++;
 
       document.getElementById('caratula').classList.add('hidden');
@@ -203,17 +225,12 @@ Observaciones: ${datos.observaciones}`;
       document.getElementById('telefonistaInicio').value = "";
     }
 
-    // Función para avanzar al siguiente campo con Enter
+    // Navegación con Enter
     document.querySelectorAll('input, select, textarea').forEach((element, index, list) => {
       element.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
           e.preventDefault();
           const next = list[index + 1];
-          if (next) next.focus();
-        }
-      });
-    });
-  </script>
+          if (
 
-</body>
-</html>
+
