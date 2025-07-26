@@ -1,80 +1,146 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Captura de Servicios</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
-    label, input, select, textarea, button { display: block; margin: 10px 0; width: 100%; max-width: 400px; }
-    button { padding: 10px; font-weight: bold; }
-    .watermark { font-size: 0.8em; color: #888; margin-top: 30px; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f0ff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    header img {
+      max-height: 80px;
+      margin-bottom: 10px;
+    }
+    form {
+      background-color: white;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+      margin-right: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #003366;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0055aa;
+    }
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
-  <h2>📋 Captura de Servicios</h2>
+  <header>
+    <img src="logo.png" alt="Logo institucional" />
+    <h1>Captura de Servicios</h1>
+  </header>
 
-  <label>Telefonista</label>
-  <input type="text" id="telefonista">
+  <form id="servicioForm">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="folio">Folio *</label>
+        <input type="text" id="folio" name="folio" required />
+      </div>
+      <div class="form-group">
+        <label for="fecha">Fecha *</label>
+        <input type="date" id="fecha" name="fecha" required />
+      </div>
+      <div class="form-group">
+        <label for="hora">Hora *</label>
+        <input type="time" id="hora" name="hora" required />
+      </div>
+      <div class="form-group">
+        <label for="telefonista">Telefonista *</label>
+        <input type="text" id="telefonista" name="telefonista" required />
+      </div>
+    </div>
 
-  <label>Domicilio</label>
-  <input type="text" id="domicilio">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="domicilio">Domicilio *</label>
+        <input type="text" id="domicilio" name="domicilio" required />
+      </div>
+      <div class="form-group">
+        <label for="destino">Destino *</label>
+        <input type="text" id="destino" name="destino" required />
+      </div>
+    </div>
 
-  <label>Destino</label>
-  <input type="text" id="destino">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="asignado">Asignado a *</label>
+        <input type="text" id="asignado" name="asignado" required />
+      </div>
+      <div class="form-group">
+        <label for="tipo">Tipo de servicio *</label>
+        <select id="tipo" name="tipo" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Traslado programado">Traslado programado</option>
+          <option value="Urgencia">Urgencia</option>
+          <option value="Consulta externa">Consulta externa</option>
+          <option value="Alta hospitalaria">Alta hospitalaria</option>
+          <option value="Interhospitalario">Interhospitalario</option>
+          <option value="Apoyo institucional">Apoyo institucional</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+    </div>
 
-  <label>Asignado a</label>
-  <input type="text" id="asignado">
+    <div class="form-row">
+      <div class="form-group" style="flex: 1;">
+        <label for="observaciones">Observaciones</label>
+        <textarea id="observaciones" name="observaciones" rows="3"></textarea>
+      </div>
+    </div>
 
-  <label>Tipo</label>
-  <select id="tipo">
-    <option value="Traslado">Traslado</option>
-    <option value="Consulta">Consulta</option>
-    <option value="Otro">Otro</option>
-  </select>
+    <button type="submit">Registrar servicio</button>
+  </form>
 
-  <label>Observación</label>
-  <textarea id="observacion"></textarea>
+  <footer>
+    Solución institucional creada por Jesús Sánchez C. con inteligencia asistida por Copilot.
+  </footer>
 
-  <button onclick="guardarServicio()">Guardar</button>
-  <button onclick="finalizarTurno()">Finalizar turno</button>
-  <button onclick="copiarTelegram()">Enviar (Telegram)</button>
-
-  <div class="watermark">Solución institucional creada por Jesús Sánchez C. con inteligencia asistida por Copilot.</div>
-
-  <script>
-    const scriptURL =https://script.google.com/macros/s/AKfycbYzEM1sMkomA2gURrhekroLVw7Ge7qDp0RXjvPIQXWwijNRSNcdVogOty2xOVqPAxw5Xg/exec';
-
-    function guardarServicio() {
-      const data = {
-        accion: 'guardar',
-        telefonista: document.getElementById('telefonista').value,
-        domicilio: document.getElementById('domicilio').value,
-        destino: document.getElementById('destino').value,
-        asignado: document.getElementById('asignado').value,
-        tipo: document.getElementById('tipo').value,
-        observacion: document.getElementById('observacion').value
-      };
-      fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      }).then(() => alert('Servicio guardado'));
-    }
-
-    function finalizarTurno() {
-      const data = {
-        accion: 'finalizar',
-        telefonista: document.getElementById('telefonista').value
-      };
-      fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      }).then(() => alert('Turno finalizado'));
-    }
-
-    function copiarTelegram() {
-      const texto = `🚑 Servicio\n👤 Telefonista: ${document.getElementById('telefonista').value}\n🏠 Domicilio: ${document.getElementById('domicilio').value}\n📍 Destino: ${document.getElementById('destino').value}\n🚗 Asignado: ${document.getElementById('asignado').value}\n🧾 Tipo: ${document.getElementById('tipo').value}\n📝 Obs: ${document.getElementById('observacion').value}`;
-      navigator.clipboard.writeText(texto).then(() => alert('Texto copiado para Telegram'));
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
