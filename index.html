@@ -1,177 +1,139 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Captura de Servicios</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #e6f0ff; /* Azul institucional */
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-
-    .contenedor {
-      max-width: 700px;
-      margin: auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    h1 {
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 10px;
       text-align: center;
-      margin-bottom: 20px;
     }
-
-    form label {
-      font-weight: bold;
+    header img {
+      height: 50px;
+      vertical-align: middle;
+    }
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
       display: block;
       margin-top: 15px;
+      font-weight: bold;
     }
-
-    form input,
-    form select,
-    form textarea {
+    input, select, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
       box-sizing: border-box;
     }
-
-    form button {
+    button {
       margin-top: 20px;
       padding: 10px 20px;
-      background-color: #0078D4;
+      background-color: #003366;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       cursor: pointer;
     }
-
-    #mensajeExito {
-      margin-top: 20px;
-      font-weight: bold;
-      text-align: center;
+    button:hover {
+      background-color: #0055aa;
     }
-
-    .campo-invalido {
-      border: 2px solid red;
-      background-color: #ffe6e6;
+    #mensaje {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="contenedor">
+  <header>
+    <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
     <h1>Captura de Servicios</h1>
+  </header>
 
-    <form id="formServicio">
+  <div class="container">
+    <form id="formulario">
       <label for="folio">Folio</label>
-      <input type="text" id="folio" readonly />
-
-      <label for="fecha">Fecha</label>
-      <input type="date" id="fecha" />
-
-      <label for="hora">Hora</label>
-      <input type="time" id="hora" />
+      <input type="text" id="folio" name="folio" readonly>
 
       <label for="telefonista">Telefonista</label>
-      <input type="text" id="telefonista" />
+      <input type="text" id="telefonista" name="telefonista" readonly>
 
-      <label for="domicilio">Domicilio</label>
-      <input type="text" id="domicilio" />
+      <label for="fecha">Fecha</label>
+      <input type="text" id="fecha" name="fecha" readonly>
 
-      <label for="destino">Destino</label>
-      <input type="text" id="destino" />
+      <label for="hora">Hora</label>
+      <input type="text" id="hora" name="hora" readonly>
 
-      <label for="asignado">Asignado a</label>
-      <input type="text" id="asignado" />
-
-      <label for="tipo">Tipo</label>
-      <select id="tipo">
-        <option value="Normal">Normal</option>
-        <option value="Urgente">Urgente</option>
-        <option value="TDC">TDC</option>
-      </select>
+      <label for="servicio">Servicio</label>
+      <input type="text" id="servicio" name="servicio" required>
 
       <label for="observaciones">Observaciones</label>
-      <textarea id="observaciones" rows="3"></textarea>
+      <textarea id="observaciones" name="observaciones"></textarea>
 
-      <button type="submit">Guardar Servicio</button>
+      <button type="button" onclick="guardarServicio()">Enviar</button>
+      <button type="button" onclick="finTurno()">Fin de turno</button>
+
+      <div id="mensaje"></div>
     </form>
-
-    <div id="mensajeExito"></div>
   </div>
 
   <script>
-    function generarFolio() {
-      const ahora = new Date();
-      const fecha = ahora.toISOString().slice(0,10).replace(/-/g, '');
-      const hora = ahora.toTimeString().slice(0,8).replace(/:/g, '');
-      return `SERV-${fecha}-${hora}`;
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const telefonistaGuardado = localStorage.getItem('telefonista');
-      if (telefonistaGuardado) {
-        document.getElementById('telefonista').value = telefonistaGuardado;
-      }
-      document.getElementById('folio').value = generarFolio();
+    // Evitar envío automático con Enter y mover al siguiente campo
+    document.querySelectorAll('input, select, textarea').forEach((element, index, elements) => {
+      element.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const next = elements[index + 1];
+          if (next) next.focus();
+        }
+      });
     });
 
-    function validarCamposObligatorios(datos) {
-      let camposInvalidos = [];
+    // Simulación de datos automáticos
+    document.getElementById('folio').value = 'AUTO-' + Date.now();
+    document.getElementById('telefonista').value = 'Jesús';
+    const now = new Date();
+    document.getElementById('fecha').value = now.toLocaleDateString();
+    document.getElementById('hora').value = now.toLocaleTimeString();
 
-      const campos = {
-        fecha: 'Fecha',
-        hora: 'Hora',
-        telefonista: 'Telefonista',
-        destino: 'Destino'
-      };
-
-      for (let campo in campos) {
-        const input = document.getElementById(campo);
-        if (!datos[campo]) {
-          camposInvalidos.push(campos[campo]);
-          input.classList.add('campo-invalido');
-        } else {
-          input.classList.remove('campo-invalido');
-        }
-      }
-
-      return camposInvalidos;
-    }
-
-    function mostrarMensaje(texto, color) {
-      const mensaje = document.getElementById('mensajeExito');
-      mensaje.textContent = texto;
-      mensaje.style.color = color;
-    }
-
-    document.getElementById('formServicio').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const telefonista = document.getElementById('telefonista').value.trim();
-      const datos = {
-        folio: document.getElementById('folio').value,
-        fecha: document.getElementById('fecha').value,
-        hora: document.getElementById('hora').value,
-        telefonista: telefonista,
-        domicilio: document.getElementById('domicilio').value.trim(),
-        destino: document.getElementById('destino').value.trim(),
-        asignado: document.getElementById('asignado').value.trim(),
-        tipo: document.getElementById('tipo').value,
-        observaciones: document.getElementById('observaciones').value.trim()
-      };
-
-      const camposFaltantes = validarCamposObligatorios(datos);
-      if (camposFaltantes.length > 0) {
-        mostrarMensaje(`⚠️ No puedes continuar. Faltan: ${camposFaltantes.join(', ')}.`, "red");
+    function guardarServicio() {
+      const servicio = document.getElementById('servicio').value.trim();
+      if (!servicio) {
+        alert('Por favor ingresa el servicio.');
         return;
       }
 
-      localStorage.setItem('telefon
+      // Aquí iría el fetch() al script de Google Apps
+      // Simulación de éxito
+      document.getElementById('mensaje').textContent = 'Servicio registrado correctamente.';
+      document.getElementById('formulario').reset();
+
+      // Restaurar campos automáticos
+      document.getElementById('folio').value = 'AUTO-' + Date.now();
+      document.getElementById('telefonista').value = 'Jesús';
+      const now = new Date();
+      document.getElementById('fecha').value = now.toLocaleDateString();
+      document.getElementById('hora').value = now.toLocaleTimeString();
+    }
+
+    function finTurno() {
+      alert('Turno finalizado. El sistema se bloqueará.');
+      // Aquí puedes redirigir o bloquear el sistema
+    }
+  </script>
+</body>
+</html>
