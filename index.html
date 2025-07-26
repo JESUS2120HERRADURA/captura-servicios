@@ -7,27 +7,43 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4 url('logo.png') no-repeat center top;
-      background-size: 120px;
-      padding-top: 140px;
+      background: #f4f4f4;
       margin: 0;
+      padding: 0;
     }
     .container {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 20px;
+      max-width: 700px;
+      margin: 40px auto;
+      background: #e3f2fd; /* Fondo azul institucional */
+      padding: 30px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
     }
     h2 {
       text-align: center;
-      color: #333;
+      color: #003366;
+      margin-bottom: 20px;
+    }
+    #logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 180px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .row > div {
+      flex: 1;
+      min-width: 150px;
     }
     label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
+      color: #003366;
     }
     input, select, textarea {
       width: 100%;
@@ -35,6 +51,7 @@
       margin-top: 4px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      font-size: 14px;
     }
     textarea {
       resize: vertical;
@@ -63,23 +80,40 @@
       border-radius: 4px;
       white-space: pre-wrap;
     }
+    .marca-agua {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <img id="logo" src="logo_institucional.png" alt="Logo Institucional" onerror="this.src='https://via.placeholder.com/180x60?text=LOGO';">
     <h2>Captura de Servicios</h2>
+
     <form id="serviceForm">
-      <label for="folio">Folio</label>
-      <input type="text" id="folio" name="folio" required />
-
-      <label for="fecha">Fecha</label>
-      <input type="date" id="fecha" name="fecha" required />
-
-      <label for="hora">Hora</label>
-      <input type="time" id="hora" name="hora" required />
-
-      <label for="telefonista">Telefonista</label>
-      <input type="text" id="telefonista" name="telefonista" required />
+      <div class="row">
+        <div>
+          <label for="folio">Folio</label>
+          <input type="text" id="folio" name="folio" required />
+        </div>
+        <div>
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" name="fecha" required />
+        </div>
+        <div>
+          <label for="hora">Hora</label>
+          <input type="time" id="hora" name="hora" required />
+        </div>
+        <div>
+          <label for="telefonista">Telefonista</label>
+          <input type="text" id="telefonista" name="telefonista" required />
+        </div>
+      </div>
 
       <label for="domicilio">Domicilio</label>
       <input type="text" id="domicilio" name="domicilio" required />
@@ -93,9 +127,19 @@
       <label for="tipo">Tipo de servicio</label>
       <select id="tipo" name="tipo" required>
         <option value="">Selecciona</option>
-        <option value="Traslado">Traslado</option>
-        <option value="Urgencia">Urgencia</option>
-        <option value="Programado">Programado</option>
+        <option value="Normal">Normal</option>
+        <option value="Carro amplio">Carro amplio</option>
+        <option value="Pago con transferencia">Pago con transferencia</option>
+        <option value="Pago con tarjeta">Pago con tarjeta</option>
+        <option value="Transporte de mascota">Transporte de mascota</option>
+        <option value="Ida y vuelta">Ida y vuelta</option>
+        <option value="Por tiempo">Por tiempo</option>
+        <option value="Cambio de llanta">Cambio de llanta</option>
+        <option value="Pasar corriente">Pasar corriente</option>
+        <option value="Carro sin rotular">Carro sin rotular</option>
+        <option value="Carro rotulado">Carro rotulado</option>
+        <option value="Mensajería">Mensajería</option>
+        <option value="Guía">Guía</option>
       </select>
 
       <label for="observaciones">Observaciones</label>
@@ -109,10 +153,13 @@
     </form>
 
     <div id="telegramText"></div>
+
+    <div class="marca-agua">
+      Sistema institucional en copropiedad. Uso exclusivo autorizado.
+    </div>
   </div>
 
   <script>
-    // Navegación con Enter
     document.querySelectorAll('input, select, textarea').forEach((el, i, arr) => {
       el.addEventListener('keydown', e => {
         if (e.key === 'Enter') {
@@ -129,9 +176,9 @@
     function enviar() {
       const form = document.getElementById('serviceForm');
       const data = new FormData(form);
-      let mensaje = `🚑 *Servicio Capturado*\n`;
+      let mensaje = `Captura de Servicio\n`;
       for (let [key, value] of data.entries()) {
-        mensaje += `*${key}:* ${value}\n`;
+        mensaje += `${key}: ${value}\n`;
       }
       document.getElementById('telegramText').textContent = mensaje;
       navigator.clipboard.writeText(mensaje);
