@@ -2,241 +2,73 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Captura de Servicios</title>
+  <title>Prueba de Captura</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       background-color: white;
       margin: 0;
       padding: 0;
     }
 
-    header {
-      background-color: #003366;
-      color: white;
-      padding: 10px;
-      text-align: center;
-    }
-
-    header img {
-      height: 50px;
-      vertical-align: middle;
-    }
-
     .container {
-      padding: 20px;
-      max-width: 700px;
+      max-width: 600px;
       margin: auto;
+      padding: 20px;
       background-color: #003366;
       color: white;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      box-sizing: border-box;
-      border: none;
-      border-radius: 4px;
-      background-color: #e6f0ff;
-      color: #003366;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: white;
-      color: #003366;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #cce0ff;
-    }
-
-    #mensaje {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
+      margin-top: 50px;
     }
 
     .oculto {
       display: none;
     }
 
-    .campo-invalido {
-      border: 2px solid red;
-      background-color: #ffe6e6;
+    input, button {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
     }
 
-    .fila-horizontal {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .fila-horizontal > div {
-      flex: 1;
-    }
-
-    #desbloqueo {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    #desbloqueo img {
-      height: 80px;
-      margin-bottom: 20px;
-    }
-
-    #desbloqueo input {
-      max-width: 300px;
-      margin: auto;
+    button {
+      background-color: white;
+      color: #003366;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
-    <h1>Captura de Servicios</h1>
-  </header>
 
   <div class="container" id="desbloqueo">
-    <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
-    <h2>Desbloqueo del Sistema</h2>
-    <label for="nombre">Nombre del Telefonista</label>
-    <input type="text" id="nombre" />
+    <h2>Desbloqueo</h2>
+    <input type="text" id="nombre" placeholder="Nombre del telefonista">
     <button onclick="iniciarTurno()">Iniciar Captura</button>
   </div>
 
   <div class="container oculto" id="formularioContainer">
-    <form id="formulario">
-      <input type="hidden" id="inicioTurno">
-      <input type="hidden" id="finTurno">
-
-      <label for="folio">Folio</label>
-      <input type="text" id="folio" readonly>
-
-      <label for="telefonista">Telefonista</label>
-      <input type="text" id="telefonista" readonly>
-
-      <div class="fila-horizontal">
-        <div>
-          <label for="fecha">Fecha</label>
-          <input type="text" id="fecha" readonly>
-        </div>
-        <div>
-          <label for="hora">Hora</label>
-          <input type="text" id="hora" readonly>
-        </div>
-      </div>
-
-      <label for="domicilio">Domicilio</label>
-      <input type="text" id="domicilio" required>
-
-      <label for="destino">Destino</label>
-      <input type="text" id="destino" required>
-
-      <label for="asignado">Asignado a</label>
-      <input type="text" id="asignado" required>
-
-      <label for="tipoServicio">Tipo de Servicio</label>
-      <select id="tipoServicio">
-        <option value="">Selecciona una opción</option>
-        <option value="Normal">Normal</option>
-        <option value="Carro amplio">Carro amplio</option>
-        <option value="Pago con tarjeta">Pago con tarjeta</option>
-        <option value="Pago con transferencia">Pago con transferencia</option>
-        <option value="Carro rotulado">Carro rotulado</option>
-        <option value="Carro sin rotular">Carro sin rotular</option>
-        <option value="Mensajería">Mensajería</option>
-        <option value="Transporte de mascota">Transporte de mascota</option>
-      </select>
-
-      <label for="observaciones">Observaciones</label>
-      <textarea id="observaciones"></textarea>
-
-      <div style="display: flex; gap: 1rem;">
-        <button type="button" onclick="guardarDatos()">Guardar</button>
-        <button type="button" onclick="enviarDatos()">Enviar</button>
-        <button type="button" onclick="finDeTurno()">Fin de turno</button>
-      </div>
-
-      <div id="mensaje"></div>
-    </form>
+    <h2>Formulario de Captura</h2>
+    <p>Bienvenido, <span id="nombreMostrado"></span></p>
+    <!-- Aquí iría el resto del formulario -->
   </div>
 
   <script>
     function iniciarTurno() {
-      const nombre = document.getElementById('nombre').value.trim();
+      const nombre = document.getElementById("nombre").value.trim();
       if (!nombre) {
-        alert('Por favor ingresa tu nombre.');
+        alert("Por favor ingresa tu nombre.");
         return;
       }
 
-      const ahora = new Date();
-      document.getElementById('inicioTurno').value = ahora.toISOString();
-      document.getElementById('telefonista').value = nombre;
-      document.getElementById('folio').value = 'SERV-' + ahora.getTime();
-      document.getElementById('fecha').value = ahora.toLocaleDateString();
-      document.getElementById('hora').value = ahora.toLocaleTimeString();
-
-      document.getElementById('desbloqueo').classList.add('oculto');
-      document.getElementById('formularioContainer').classList.remove('oculto');
+      document.getElementById("nombreMostrado").textContent = nombre;
+      document.getElementById("desbloqueo").classList.add("oculto");
+      document.getElementById("formularioContainer").classList.remove("oculto");
     }
+  </script>
 
-    function guardarDatos() {
-      mostrarMensaje("📝 Datos guardados localmente (simulado).", "white");
-    }
-
-    function enviarDatos() {
-      const datos = {
-        folio: document.getElementById("folio").value,
-        telefonista: document.getElementById("telefonista").value,
-        fecha: document.getElementById("fecha").value,
-        hora: document.getElementById("hora").value,
-        domicilio: document.getElementById("domicilio").value.trim(),
-        destino: document.getElementById("destino").value.trim(),
-        asignado: document.getElementById("asignado").value.trim(),
-        tipoServicio: document.getElementById("tipoServicio").value,
-        observaciones: document.getElementById("observaciones").value.trim(),
-        inicioTurno: document.getElementById("inicioTurno").value,
-        finTurno: document.getElementById("finTurno").value
-      };
-
-      const camposObligatorios = ["domicilio", "destino", "asignado"];
-      let faltantes = [];
-
-      camposObligatorios.forEach(id => {
-        const campo = document.getElementById(id);
-        if (!campo.value.trim()) {
-          campo.classList.add("campo-invalido");
-          faltantes.push(id);
-        } else {
-          campo.classList.remove("campo-invalido");
-        }
-      });
-
-      if (faltantes.length > 0) {
-        mostrarMensaje("⚠️ Faltan campos obligatorios: " + faltantes.join(", "), "yellow");
-        return;
-      }
-
-      fetch("https://script.google.com/macros/s/TU_ID_DEL_SCRIPT/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => {
-       
+</body>
+</html>
