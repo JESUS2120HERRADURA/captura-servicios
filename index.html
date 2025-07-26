@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #e6f0ff;
+      background-color: white;
       margin: 0;
       padding: 0;
     }
@@ -27,9 +27,10 @@
       padding: 20px;
       max-width: 700px;
       margin: auto;
-      background-color: white;
+      background-color: #003366;
+      color: white;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     label {
@@ -43,20 +44,28 @@
       padding: 8px;
       margin-top: 5px;
       box-sizing: border-box;
+      border: none;
+      border-radius: 4px;
+    }
+
+    input, select, textarea {
+      background-color: #e6f0ff;
+      color: #003366;
     }
 
     button {
       margin-top: 20px;
       padding: 10px 20px;
-      background-color: #003366;
-      color: white;
+      background-color: white;
+      color: #003366;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
-      background-color: #0055aa;
+      background-color: #cce0ff;
     }
 
     #mensaje {
@@ -82,6 +91,21 @@
     .fila-horizontal > div {
       flex: 1;
     }
+
+    #desbloqueo {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    #desbloqueo img {
+      height: 80px;
+      margin-bottom: 20px;
+    }
+
+    #desbloqueo input {
+      max-width: 300px;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
@@ -89,13 +113,6 @@
     <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
     <h1>Captura de Servicios</h1>
   </header>
-
-  <div class="container" id="desbloqueo">
-    <h2>Desbloqueo del Sistema</h2>
-    <label for="nombre">Nombre del Telefonista</label>
-    <input type="text" id="nombre" />
-    <button onclick="iniciarTurno()">Iniciar Captura</button>
-  </div>
 
   <div class="container oculto" id="formularioContainer">
     <form id="formulario">
@@ -154,6 +171,14 @@
     </form>
   </div>
 
+  <div class="container" id="desbloqueo">
+    <img src="https://ruta-del-logo/logo-herradura.png" alt="Logo Herradura">
+    <h2>Desbloqueo del Sistema</h2>
+    <label for="nombre">Nombre del Telefonista</label>
+    <input type="text" id="nombre" />
+    <button onclick="iniciarTurno()">Iniciar Captura</button>
+  </div>
+
   <script>
     function iniciarTurno() {
       const nombre = document.getElementById('nombre').value.trim();
@@ -174,7 +199,7 @@
     }
 
     function guardarDatos() {
-      mostrarMensaje("📝 Datos guardados localmente (simulado).", "blue");
+      mostrarMensaje("📝 Datos guardados localmente (simulado).", "white");
     }
 
     function enviarDatos() {
@@ -206,11 +231,10 @@
       });
 
       if (faltantes.length > 0) {
-        mostrarMensaje("⚠️ Faltan campos obligatorios: " + faltantes.join(", "), "red");
+        mostrarMensaje("⚠️ Faltan campos obligatorios: " + faltantes.join(", "), "yellow");
         return;
       }
 
-      // Reemplaza con tu URL real del script
       fetch("https://script.google.com/macros/s/TU_ID_DEL_SCRIPT/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -218,9 +242,10 @@
       })
       .then(res => res.text())
       .then(msg => {
-        mostrarMensaje("✅ Servicio registrado correctamente.", "green");
+        mostrarMensaje("✅ Servicio registrado correctamente.", "lightgreen");
         document.getElementById("formulario").reset();
-        const ahora = new Date();
+        const
+                  const ahora = new Date();
         document.getElementById('folio').value = 'SERV-' + ahora.getTime();
         document.getElementById('fecha').value = ahora.toLocaleDateString();
         document.getElementById('hora').value = ahora.toLocaleTimeString();
@@ -233,7 +258,15 @@
     function finDeTurno() {
       const ahora = new Date();
       document.getElementById("finTurno").value = ahora.toISOString();
-      mostrarMensaje("🔒 Turno finalizado. Puedes cerrar la sesión.", "black");
+
+      // Ocultar formulario y mostrar pantalla de desbloqueo
+      document.getElementById("formularioContainer").classList.add("oculto");
+      document.getElementById("desbloqueo").classList.remove("oculto");
+
+      // Limpiar campos
+      document.getElementById("formulario").reset();
+      document.getElementById("nombre").value = "";
+      mostrarMensaje("", "black");
     }
 
     function mostrarMensaje(texto, color) {
