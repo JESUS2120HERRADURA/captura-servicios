@@ -1,87 +1,149 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Formato de Alta al Sistema</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Captura de Servicios</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-      padding: 40px;
+      background: #f4f4f4 url('logo.png') no-repeat center top;
+      background-size: 120px;
+      padding-top: 140px;
+      margin: 0;
     }
     .container {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 10px;
       max-width: 600px;
       margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .hidden {
-      display: none;
     }
     h2 {
       text-align: center;
-      color: #003366;
+      color: #333;
     }
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 10px;
       font-weight: bold;
     }
-    input {
+    input, select, textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+      padding: 8px;
+      margin-top: 4px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 4px;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
     }
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #003366;
-      color: white;
+      padding: 10px 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
+      background-color: #0078D4;
+      color: white;
       cursor: pointer;
     }
-    #logo {
-      display: block;
-      margin: 0 auto 20px auto;
-      width: 180px;
+    button:hover {
+      background-color: #005a9e;
+    }
+    #telegramText {
+      margin-top: 20px;
+      font-size: 0.9em;
+      background: #eef;
+      padding: 10px;
+      border-radius: 4px;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h2>Captura de Servicios</h2>
+    <form id="serviceForm">
+      <label for="folio">Folio</label>
+      <input type="text" id="folio" name="folio" required />
 
-  <!-- Carátula -->
-  <div id="caratula" class="container">
-    <img id="logo" src="logo_institucional.png" alt="Logo" onerror="this.src='https://via.placeholder.com/180x60?text=LOGO';">
-    <h2>Formato de Alta al Sistema</h2>
-    <label for="telefonistaInicio">Telefonista</label>
-    <input type="text" id="telefonistaInicio">
-    <button id="btnIniciar">Iniciar turno</button>
-  </div>
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" name="fecha" required />
 
-  <!-- Formulario -->
-  <div id="formulario" class="container hidden">
-    <h2>Hoja de Captura</h2>
-    <p>Bienvenido, <span id="nombreTelefonista"></span>. Puedes comenzar a capturar los servicios.</p>
+      <label for="hora">Hora</label>
+      <input type="time" id="hora" name="hora" required />
+
+      <label for="telefonista">Telefonista</label>
+      <input type="text" id="telefonista" name="telefonista" required />
+
+      <label for="domicilio">Domicilio</label>
+      <input type="text" id="domicilio" name="domicilio" required />
+
+      <label for="destino">Destino</label>
+      <input type="text" id="destino" name="destino" required />
+
+      <label for="asignado">Asignado a</label>
+      <input type="text" id="asignado" name="asignado" required />
+
+      <label for="tipo">Tipo de servicio</label>
+      <select id="tipo" name="tipo" required>
+        <option value="">Selecciona</option>
+        <option value="Traslado">Traslado</option>
+        <option value="Urgencia">Urgencia</option>
+        <option value="Programado">Programado</option>
+      </select>
+
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" name="observaciones" rows="3"></textarea>
+
+      <div class="buttons">
+        <button type="button" onclick="guardar()">Guardar</button>
+        <button type="button" onclick="enviar()">Enviar</button>
+        <button type="button" onclick="finalizar()">Finalizar turno</button>
+      </div>
+    </form>
+
+    <div id="telegramText"></div>
   </div>
 
   <script>
-    document.getElementById('btnIniciar').addEventListener('click', function () {
-      const nombre = document.getElementById('telefonistaInicio').value.trim();
-      if (!nombre) {
-        alert("Por favor ingresa el nombre del telefonista.");
-        return;
-      }
-
-      document.getElementById('nombreTelefonista').textContent = nombre;
-      document.getElementById('caratula').style.display = 'none';
-      document.getElementById('formulario').style.display = 'block';
+    // Navegación con Enter
+    document.querySelectorAll('input, select, textarea').forEach((el, i, arr) => {
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          arr[i + 1]?.focus();
+        }
+      });
     });
-  </script>
 
+    function guardar() {
+      alert("Datos guardados localmente.");
+    }
+
+    function enviar() {
+      const form = document.getElementById('serviceForm');
+      const data = new FormData(form);
+      let mensaje = `🚑 *Servicio Capturado*\n`;
+      for (let [key, value] of data.entries()) {
+        mensaje += `*${key}:* ${value}\n`;
+      }
+      document.getElementById('telegramText').textContent = mensaje;
+      navigator.clipboard.writeText(mensaje);
+      alert("Texto copiado para Telegram.");
+    }
+
+    function finalizar() {
+      if (confirm("¿Deseas finalizar el turno?")) {
+        document.getElementById('serviceForm').reset();
+        document.getElementById('telegramText').textContent = "";
+      }
+    }
+  </script>
 </body>
 </html>
