@@ -1,74 +1,119 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Prueba de Captura</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captura de Servicios</title>
   <style>
     body {
-      font-family: Arial;
-      background-color: white;
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
       margin: 0;
       padding: 0;
     }
 
-    .container {
+    .formulario-container {
+      background-color: #e3f2fd; /* Azul claro institucional */
       max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      background-color: #003366;
-      color: white;
-      border-radius: 8px;
-      margin-top: 50px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    .oculto {
-      display: none;
+    h2 {
+      text-align: center;
+      color: #1565c0;
     }
 
-    input, button {
+    label {
       display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #0d47a1;
+    }
+
+    input, select, textarea {
       width: 100%;
-      margin-top: 10px;
       padding: 10px;
-      border: none;
-      border-radius: 4px;
+      margin-top: 5px;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      box-sizing: border-box;
     }
 
     button {
-      background-color: white;
-      color: #003366;
-      font-weight: bold;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #1565c0;
     }
   </style>
 </head>
 <body>
+  <div class="formulario-container">
+    <h2>Captura de Servicios</h2>
+    <form id="formulario">
+      <label for="domicilio">Domicilio</label>
+      <input type="text" id="domicilio" required />
 
-  <div class="container" id="desbloqueo">
-    <h2>Desbloqueo</h2>
-    <input type="text" id="nombre" placeholder="Nombre del telefonista">
-    <button onclick="iniciarTurno()">Iniciar Captura</button>
-  </div>
+      <label for="destino">Destino</label>
+      <input type="text" id="destino" required />
 
-  <div class="container oculto" id="formularioContainer">
-    <h2>Formulario de Captura</h2>
-    <p>Bienvenido, <span id="nombreMostrado"></span></p>
-    <!-- Aquí iría el resto del formulario -->
+      <label for="asignado">Asignado a</label>
+      <input type="text" id="asignado" required />
+
+      <label for="tipoServicio">Tipo de Servicio</label>
+      <select id="tipoServicio" required>
+        <option value="">Selecciona</option>
+        <option value="Traslado">Traslado</option>
+        <option value="Consulta">Consulta</option>
+        <option value="Otro">Otro</option>
+      </select>
+
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" rows="3"></textarea>
+
+      <button type="button" onclick="enviarDatos()">Enviar</button>
+      <button type="button" onclick="iniciarNuevaCaptura()">Nueva Captura</button>
+    </form>
   </div>
 
   <script>
-    function iniciarTurno() {
-      const nombre = document.getElementById("nombre").value.trim();
-      if (!nombre) {
-        alert("Por favor ingresa tu nombre.");
-        return;
+    let copiaTemporal = null;
+
+    function enviarDatos() {
+      const datos = {
+        domicilio: document.getElementById("domicilio").value,
+        destino: document.getElementById("destino").value,
+        asignado: document.getElementById("asignado").value,
+        tipoServicio: document.getElementById("tipoServicio").value,
+        observaciones: document.getElementById("observaciones").value
+      };
+
+      copiaTemporal = datos;
+
+      const textoTelegram = `📋 *Servicio Capturado*\n🏠 Domicilio: ${datos.domicilio}\n📍 Destino: ${datos.destino}\n👤 Asignado a: ${datos.asignado}\n🚗 Tipo: ${datos.tipoServicio}\n📝 Observaciones: ${datos.observaciones}`;
+      alert("Copia lista para pegar en Telegram:\n\n" + textoTelegram);
+    }
+
+    function iniciarNuevaCaptura() {
+      if (copiaTemporal) {
+        const confirmar = confirm("Hay una captura pendiente que no se pegó en Telegram. ¿Deseas descartarla?");
+        if (!confirmar) return;
       }
 
-      document.getElementById("nombreMostrado").textContent = nombre;
-      document.getElementById("desbloqueo").classList.add("oculto");
-      document.getElementById("formularioContainer").classList.remove("oculto");
+      copiaTemporal = null;
+      document.getElementById("formulario").reset();
     }
   </script>
-
 </body>
 </html>
