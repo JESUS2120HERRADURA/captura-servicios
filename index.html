@@ -71,7 +71,7 @@
   <!-- Carátula de inicio -->
   <div id="caratula" class="container">
     <img id="logo" src="logo_institucional.png" alt="Logo Institucional">
-    <h2>Hoja de Checado de Asistencia</h2>
+    <h2>Formato de Alta al Sistema</h2>
     <label for="telefonistaInicio">Telefonista</label>
     <input type="text" id="telefonistaInicio">
     <button onclick="iniciarTurno()">Iniciar turno</button>
@@ -141,4 +141,79 @@
   <script>
     let folioActual = 1;
 
-    function
+    function iniciarTurno() {
+      const nombre = document.getElementById('telefonistaInicio').value.trim();
+      if (!nombre) {
+        alert("Ingrese el nombre del telefonista.");
+        return;
+      }
+
+      document.getElementById('telefonista').value = nombre;
+      document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+      document.getElementById('hora').value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('folio').value = folioActual++;
+
+      document.getElementById('caratula').classList.add('hidden');
+      document.getElementById('formulario').classList.remove('hidden');
+    }
+
+    function guardar() {
+      alert("Documento guardado en la base de datos (simulado).");
+    }
+
+    function enviar() {
+      const datos = {
+        folio: document.getElementById('folio').value,
+        fecha: document.getElementById('fecha').value,
+        hora: document.getElementById('hora').value,
+        telefonista: document.getElementById('telefonista').value,
+        domicilio: document.getElementById('domicilio').value,
+        destino: document.getElementById('destino').value,
+        asignado: document.getElementById('asignado').value,
+        tipo: document.getElementById('tipo').value,
+        observaciones: document.getElementById('observaciones').value
+      };
+
+      const texto = 
+`Captura de Servicio
+Folio: ${datos.folio}
+Fecha: ${datos.fecha}
+Hora: ${datos.hora}
+Telefonista: ${datos.telefonista}
+Domicilio: ${datos.domicilio}
+Destino: ${datos.destino}
+Asignado a: ${datos.asignado}
+Tipo de servicio: ${datos.tipo}
+Observaciones: ${datos.observaciones}`;
+
+      const resultado = document.getElementById('resultado');
+      resultado.value = texto;
+      resultado.select();
+      document.execCommand('copy');
+    }
+
+    function finalizarTurno() {
+      const fin = new Date();
+      const horaFin = fin.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const fechaFin = fin.toISOString().split('T')[0];
+      alert(`Turno finalizado: ${fechaFin} ${horaFin} (simulado en base de datos)`);
+
+      document.getElementById('formulario').classList.add('hidden');
+      document.getElementById('caratula').classList.remove('hidden');
+      document.getElementById('telefonistaInicio').value = "";
+    }
+
+    // Función para avanzar al siguiente campo con Enter
+    document.querySelectorAll('input, select, textarea').forEach((element, index, list) => {
+      element.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const next = list[index + 1];
+          if (next) next.focus();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
