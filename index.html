@@ -1,150 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Captura de Servicios</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
-      padding: 40px;
-      color: #333;
+      background: url('marca-de-agua.png') no-repeat center center fixed;
+      background-size: contain;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 20px;
     }
-
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #0074D9;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    header img {
+      height: 60px;
+    }
     h1 {
-      text-align: center;
-      color: #005288;
-      margin-bottom: 30px;
+      color: #0074D9;
+      font-size: 24px;
     }
-
-    form {
-      max-width: 700px;
-      margin: auto;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
     label {
       display: block;
-      margin-top: 20px;
+      margin-top: 10px;
       font-weight: bold;
     }
-
     input, select, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-size: 14px;
     }
-
-    textarea {
-      resize: vertical;
-      height: 80px;
-    }
-
     button {
-      margin-top: 30px;
-      padding: 12px 20px;
-      background-color: #005288;
+      background-color: #0074D9;
       color: white;
       border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-
-    #mensaje {
+      padding: 10px 20px;
       margin-top: 20px;
-      text-align: center;
-      color: #d32f2f;
-      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Captura de Servicios</h1>
+  <header>
+    <img src="logo.png" alt="Logotipo institucional" />
+    <h1>Captura de Servicios - Sitio de Taxis</h1>
+  </header>
 
-  <form id="formulario-servicio">
-    <label>Nombre del telefonista:</label>
-    <input type="text" id="nombre" disabled>
+  <form id="servicioForm">
+    <label for="folio">Folio</label>
+    <input type="text" id="folio" name="folio" placeholder="Folio del servicio" />
 
-    <label>Nombre del cliente:</label>
-    <input type="text" id="cliente" required>
+    <label for="fecha">Fecha</label>
+    <input type="date" id="fecha" name="fecha" />
 
-    <label>Domicilio de origen:</label>
-    <input type="text" id="origen" required>
+    <label for="hora">Hora</label>
+    <input type="time" id="hora" name="hora" />
 
-    <label>Domicilio de destino:</label>
-    <input type="text" id="destino" required>
+    <label for="solicitante">Solicitante</label>
+    <input type="text" id="solicitante" name="solicitante" placeholder="¿Quién solicita el servicio?" />
 
-    <label>Tipo de servicio:</label>
-    <select id="tipo-servicio" required>
-      <option value="">Seleccione</option>
-      <option value="Consulta">Consulta</option>
-      <option value="Urgencia">Urgencia</option>
-      <option value="Traslado programado">Traslado programado</option>
+    <label for="personal">Personal Asignado</label>
+    <input type="text" id="personal" name="personal" placeholder="Nombre del conductor o responsable" />
+
+    <label for="horaEstimada">Hora Estimada</label>
+    <input type="time" id="horaEstimada" name="horaEstimada" />
+
+    <label for="tipoServicio">Tipo de Servicio</label>
+    <select id="tipoServicio" name="tipoServicio">
+      <option value="">Selecciona una opción</option>
+      <option value="Normal">Normal</option>
+      <option value="Carro amplio">Carro amplio</option>
+      <option value="Mensajería">Mensajería</option>
+      <option value="Mensajería compras">Mensajería compras</option>
+      <option value="Guía">Guía</option>
+      <option value="Cambio de llanta">Cambio de llanta</option>
+      <option value="Pasar corriente">Pasar corriente</option>
+      <option value="Carro sin rotular">Carro sin rotular</option>
+      <option value="Carro rotulado">Carro rotulado</option>
+      <option value="Transporte de mascota">Transporte de mascota</option>
+      <option value="Otro">Otro</option>
     </select>
 
-    <label>Tipo de unidad:</label>
-    <input type="text" id="unidad" required>
+    <label for="observaciones">Observaciones</label>
+    <textarea id="observaciones" name="observaciones" rows="4" placeholder="Detalles adicionales..."></textarea>
 
-    <label>Personal asignado / Acompañantes:</label>
-    <input type="text" id="acompanantes">
-
-    <label>Hora estimada:</label>
-    <input type="time" id="hora-estimada">
-
-    <label>Observaciones:</label>
-    <textarea id="observaciones"></textarea>
-
-    <button type="submit" id="btn-enviar">Registrar servicio</button>
-    <div id="mensaje"></div>
+    <div class="button-group">
+      <button type="submit">Guardar</button>
+      <button type="button" onclick="enviarFormulario()">Enviar</button>
+      <button type="button" onclick="finTurno()">Fin de Turno</button>
+    </div>
   </form>
 
   <script>
-    function cargarEstado() {
-      google.script.run.withSuccessHandler(function(nombre) {
-        if (nombre) {
-          document.getElementById("nombre").value = nombre;
-        } else {
-          document.getElementById("mensaje").textContent = "⚠️ El sistema está bloqueado. Debe iniciar turno antes de capturar servicios.";
-          document.getElementById("formulario-servicio").querySelectorAll("input, select, textarea, button")
-            .forEach(el => el.disabled = true);
-        }
-      }).validarAcceso();
+    function enviarFormulario() {
+      alert("Formulario enviado.");
+      // Aquí iría la lógica para enviar a Google Sheets
     }
 
-    document.getElementById("formulario-servicio").addEventListener("submit", function(e) {
+    function finTurno() {
+      alert("Turno finalizado.");
+      // Aquí iría la lógica para cerrar sesión o registrar fin de turno
+    }
+
+    document.getElementById("servicioForm").addEventListener("submit", function(e) {
       e.preventDefault();
-
-      const datos = {
-        cliente: document.getElementById("cliente").value,
-        origen: document.getElementById("origen").value,
-        destino: document.getElementById("destino").value,
-        tipo: document.getElementById("tipo-servicio").value,
-        unidad: document.getElementById("unidad").value,
-        acompanantes: document.getElementById("acompanantes").value,
-        horaEstimada: document.getElementById("hora-estimada").value,
-        observaciones: document.getElementById("observaciones").value
-      };
-
-      google.script.run.withSuccessHandler(function() {
-        document.getElementById("mensaje").textContent = "✅ Servicio registrado correctamente.";
-        document.getElementById("formulario-servicio").reset();
-        document.getElementById("nombre").value = datos.nombre;
-      }).registrarServicioCompleto(datos);
+      alert("Datos guardados.");
+      // Aquí iría la lógica para guardar en Google Sheets
     });
-
-    window.onload = cargarEstado;
   </script>
 </body>
 </html>
