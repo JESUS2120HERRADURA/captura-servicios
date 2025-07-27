@@ -1,162 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Captura de Servicios</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: url('marca-de-agua.png') no-repeat bottom right fixed;
-      background-size: 120px;
-      background-color: #f4faff;
       margin: 0;
-      padding: 10px;
+      font-family: Arial, sans-serif;
+      background-color: #1C3D5A;
+      color: white;
+      background-image: url('marca-de-agua.png'); /* Reemplaza con la ruta del logo institucional */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 400px;
+      background-attachment: fixed;
     }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      border-bottom: 2px solid #0074D9;
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 30px;
     }
-    header img {
-      height: 40px;
-    }
-    h2 {
+
+    .logo {
       text-align: center;
-      color: #0074D9;
-      margin-top: 10px;
-      font-size: 18px;
+      margin-bottom: 20px;
     }
-    form {
-      max-width: 100%;
-      margin: auto;
-      padding: 10px;
+
+    .logo img {
+      height: 80px;
     }
-    .row {
-      display: flex;
-      gap: 10px;
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 30px;
     }
-    .row input {
-      flex: 1;
-    }
+
     label {
       display: block;
-      margin-top: 8px;
+      margin-top: 15px;
       font-weight: bold;
-      font-size: 14px;
     }
+
     input, select, textarea {
       width: 100%;
-      padding: 6px;
-      margin-top: 3px;
-      font-size: 14px;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      font-size: 14px;
     }
-    .button-group {
+
+    .buttons {
       display: flex;
       justify-content: space-between;
-      margin-top: 15px;
+      margin-top: 30px;
     }
-    button {
-      background-color: #0074D9;
+
+    .buttons button {
+      background-color: #1C3D5A;
       color: white;
       border: none;
-      padding: 8px 12px;
-      font-size: 14px;
-      border-radius: 4px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #005fa3;
-    }
-    #mensaje {
-      text-align: center;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #0074D9;
+
+    .buttons button:hover {
+      background-color: #16324a;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logotipo institucional" />
-  </header>
-
-  <h2>Captura de Servicios</h2>
-  <div id="mensaje">Bienvenido, turno iniciado correctamente.</div>
-
-  <form id="servicioForm">
-    <label>Folio / Fecha / Hora</label>
-    <div class="row">
-      <input type="text" id="folio" readonly />
-      <input type="date" id="fecha" readonly />
-      <input type="time" id="hora" readonly />
+  <div class="container">
+    <div class="logo">
+      <img src="logo-sitio-herradura.png" alt="Sitio Herradura"> <!-- Reemplaza con tu logo -->
     </div>
+    <h1>CAPTURA DE SERVICIOS</h1>
 
-    <label for="telefonista">Telefonista</label>
-    <input type="text" id="telefonista" placeholder="Nombre del telefonista" />
+    <label>FOLIO *</label>
+    <input type="text" name="folio">
 
-    <label for="direccion">Dirección</label>
-    <input type="text" id="direccion" placeholder="¿Dónde se recoge al cliente?" />
+    <label>FECHA *</label>
+    <input type="date" name="fecha">
 
-    <label for="destino">Destino</label>
-    <input type="text" id="destino" placeholder="¿A dónde se lleva al cliente?" />
+    <label>HORA *</label>
+    <input type="time" name="hora">
 
-    <label for="asignado">Asignado a</label>
-    <input type="text" id="asignado" placeholder="Nombre del conductor o responsable" />
+    <label>TELEFONISTA *</label>
+    <input type="text" name="telefonista">
 
-    <label for="telefono">Teléfono</label>
-    <input type="text" id="telefono" placeholder="Teléfono del cliente" />
+    <label>DIRECCIÓN *</label>
+    <input type="text" name="direccion">
 
-    <label for="tipoServicio">Tipo de Servicio</label>
-    <select id="tipoServicio">
+    <label>DESTINO *</label>
+    <input type="text" name="destino">
+
+    <label>ASIGNADO A *</label>
+    <input type="text" name="asignado">
+
+    <label>TIPO DE SERVICIO *</label>
+    <select name="tipo_servicio">
       <option value="">Selecciona una opción</option>
-      <option value="Normal">Normal</option>
-      <option value="Carro amplio">Carro amplio</option>
-      <option value="Mensajería">Mensajería</option>
-      <option value="Mensajería compras">Mensajería compras</option>
-      <option value="Guía">Guía</option>
-      <option value="Cambio de llanta">Cambio de llanta</option>
-      <option value="Pasar corriente">Pasar corriente</option>
-      <option value="Carro sin rotular">Carro sin rotular</option>
-      <option value="Carro rotulado">Carro rotulado</option>
-      <option value="Transporte de mascota">Transporte de mascota</option>
-      <option value="Otro">Otro</option>
+      <option value="PASAR CORRIENTE">PASAR CORRIENTE</option>
+      <option value="TRASLADO">TRASLADO</option>
+      <option value="ESPERA">ESPERA</option>
     </select>
 
-    <label for="observaciones">Observaciones</label>
-    <textarea id="observaciones" rows="3" placeholder="Detalles adicionales..."></textarea>
+    <label>OBSERVACIONES</label>
+    <textarea name="observaciones" rows="3"></textarea>
 
-    <div class="button-group">
-      <button type="submit">Guardar</button>
-      <button type="button" onclick="enviarFormulario()">Enviar</button>
-      <button type="button" onclick="finTurno()">Fin de Turno</button>
+    <div class="buttons">
+      <button>GUARDAR</button>
+      <button>ENVIAR</button>
+      <button>FIN DE TURNO</button>
     </div>
-  </form>
-
-  <script>
-    window.onload = function() {
-      const now = new Date();
-      document.getElementById("fecha").value = now.toISOString().split("T")[0];
-      document.getElementById("hora").value = now.toTimeString().slice(0,5);
-      document.getElementById("folio").value = "F-" + now.getTime();
-    };
-
-    function enviarFormulario() {
-      alert("Formulario enviado.");
-    }
-
-    function finTurno() {
-      document.getElementById("mensaje").textContent = "Gracias por tu servicio. Turno finalizado.";
-    }
-
-    document.getElementById("servicioForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      alert("Datos guardados.");
-    });
-  </script>
+  </div>
 </body>
 </html>
