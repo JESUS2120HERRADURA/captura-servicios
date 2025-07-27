@@ -7,7 +7,6 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f6f8;
-      margin: 0;
       padding: 40px;
       color: #333;
     }
@@ -19,9 +18,9 @@
     }
 
     form {
-      max-width: 600px;
+      max-width: 700px;
       margin: auto;
-      background-color: #ffffff;
+      background-color: #fff;
       padding: 30px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -33,9 +32,7 @@
       font-weight: bold;
     }
 
-    input[type="text"],
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -77,21 +74,39 @@
   <h1>Captura de Servicios</h1>
 
   <form id="formulario-servicio">
-    <label for="nombre">Nombre del telefonista:</label>
-    <input type="text" id="nombre" name="nombre" disabled>
+    <label>Nombre del telefonista:</label>
+    <input type="text" id="nombre" disabled>
 
-    <label for="tipo-servicio">Tipo de servicio:</label>
-    <select id="tipo-servicio" name="tipo-servicio" disabled>
+    <label>Nombre del cliente:</label>
+    <input type="text" id="cliente" required>
+
+    <label>Domicilio de origen:</label>
+    <input type="text" id="origen" required>
+
+    <label>Domicilio de destino:</label>
+    <input type="text" id="destino" required>
+
+    <label>Tipo de servicio:</label>
+    <select id="tipo-servicio" required>
       <option value="">Seleccione</option>
       <option value="Consulta">Consulta</option>
       <option value="Urgencia">Urgencia</option>
-      <option value="Seguimiento">Seguimiento</option>
+      <option value="Traslado programado">Traslado programado</option>
     </select>
 
-    <label for="observaciones">Observaciones:</label>
-    <textarea id="observaciones" name="observaciones" disabled></textarea>
+    <label>Tipo de unidad:</label>
+    <input type="text" id="unidad" required>
 
-    <button type="submit" id="btn-enviar" disabled>Registrar servicio</button>
+    <label>Personal asignado / Acompañantes:</label>
+    <input type="text" id="acompanantes">
+
+    <label>Hora estimada:</label>
+    <input type="time" id="hora-estimada">
+
+    <label>Observaciones:</label>
+    <textarea id="observaciones"></textarea>
+
+    <button type="submit" id="btn-enviar">Registrar servicio</button>
     <div id="mensaje"></div>
   </form>
 
@@ -100,24 +115,33 @@
       google.script.run.withSuccessHandler(function(nombre) {
         if (nombre) {
           document.getElementById("nombre").value = nombre;
-          document.querySelectorAll("#formulario-servicio input, #formulario-servicio select, #formulario-servicio textarea, #btn-enviar")
-            .forEach(el => el.disabled = false);
         } else {
           document.getElementById("mensaje").textContent = "⚠️ El sistema está bloqueado. Debe iniciar turno antes de capturar servicios.";
+          document.getElementById("formulario-servicio").querySelectorAll("input, select, textarea, button")
+            .forEach(el => el.disabled = true);
         }
       }).validarAcceso();
     }
 
     document.getElementById("formulario-servicio").addEventListener("submit", function(e) {
       e.preventDefault();
-      const tipo = document.getElementById("tipo-servicio").value;
-      const observaciones = document.getElementById("observaciones").value;
+
+      const datos = {
+        cliente: document.getElementById("cliente").value,
+        origen: document.getElementById("origen").value,
+        destino: document.getElementById("destino").value,
+        tipo: document.getElementById("tipo-servicio").value,
+        unidad: document.getElementById("unidad").value,
+        acompanantes: document.getElementById("acompanantes").value,
+        horaEstimada: document.getElementById("hora-estimada").value,
+        observaciones: document.getElementById("observaciones").value
+      };
 
       google.script.run.withSuccessHandler(function() {
         document.getElementById("mensaje").textContent = "✅ Servicio registrado correctamente.";
-        document.getElementById("tipo-servicio").value = "";
-        document.getElementById("observaciones").value = "";
-      }).registrarServicio(tipo, observaciones);
+        document.getElementById("formulario-servicio").reset();
+        document.getElementById("nombre").value = datos.nombre;
+      }).registrarServicioCompleto(datos);
     });
 
     window.onload = cargarEstado;
