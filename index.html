@@ -7,8 +7,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: url('marca-de-agua.png') no-repeat center center fixed;
-      background-size: 250px;
+      background: url('marca-de-agua.png') no-repeat bottom right fixed;
+      background-size: 120px;
       background-color: #f4faff;
       margin: 0;
       padding: 10px;
@@ -16,15 +16,30 @@
     header {
       display: flex;
       align-items: center;
-      padding: 5px 10px;
+      justify-content: center;
+      padding: 10px;
       border-bottom: 2px solid #0074D9;
     }
     header img {
       height: 40px;
     }
+    h2 {
+      text-align: center;
+      color: #0074D9;
+      margin-top: 10px;
+      font-size: 18px;
+    }
     form {
-      max-width: 500px;
+      max-width: 100%;
       margin: auto;
+      padding: 10px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    .row input {
+      flex: 1;
     }
     label {
       display: block;
@@ -57,6 +72,12 @@
     button:hover {
       background-color: #005fa3;
     }
+    #mensaje {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #0074D9;
+    }
   </style>
 </head>
 <body>
@@ -64,33 +85,34 @@
     <img src="logo.png" alt="Logotipo institucional" />
   </header>
 
+  <h2>Captura de Servicios</h2>
+  <div id="mensaje">Bienvenido, turno iniciado correctamente.</div>
+
   <form id="servicioForm">
-    <label for="folio">Folio</label>
-    <input type="text" id="folio" name="folio" readonly />
-
-    <label for="fecha">Fecha</label>
-    <input type="date" id="fecha" name="fecha" readonly />
-
-    <label for="hora">Hora</label>
-    <input type="time" id="hora" name="hora" readonly />
+    <label>Folio / Fecha / Hora</label>
+    <div class="row">
+      <input type="text" id="folio" readonly />
+      <input type="date" id="fecha" readonly />
+      <input type="time" id="hora" readonly />
+    </div>
 
     <label for="telefonista">Telefonista</label>
-    <input type="text" id="telefonista" name="telefonista" placeholder="Nombre del telefonista" />
+    <input type="text" id="telefonista" placeholder="Nombre del telefonista" />
 
     <label for="direccion">Dirección</label>
-    <input type="text" id="direccion" name="direccion" placeholder="Dirección de recogida" />
+    <input type="text" id="direccion" placeholder="¿Dónde se recoge al cliente?" />
 
     <label for="destino">Destino</label>
-    <input type="text" id="destino" name="destino" placeholder="Destino del cliente" />
+    <input type="text" id="destino" placeholder="¿A dónde se lleva al cliente?" />
 
-    <label for="personal">Personal Asignado</label>
-    <input type="text" id="personal" name="personal" placeholder="Nombre del conductor" />
+    <label for="asignado">Asignado a</label>
+    <input type="text" id="asignado" placeholder="Nombre del conductor o responsable" />
 
     <label for="telefono">Teléfono</label>
-    <input type="text" id="telefono" name="telefono" placeholder="Teléfono del cliente" />
+    <input type="text" id="telefono" placeholder="Teléfono del cliente" />
 
     <label for="tipoServicio">Tipo de Servicio</label>
-    <select id="tipoServicio" name="tipoServicio">
+    <select id="tipoServicio">
       <option value="">Selecciona una opción</option>
       <option value="Normal">Normal</option>
       <option value="Carro amplio">Carro amplio</option>
@@ -106,7 +128,7 @@
     </select>
 
     <label for="observaciones">Observaciones</label>
-    <textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalles adicionales..."></textarea>
+    <textarea id="observaciones" rows="3" placeholder="Detalles adicionales..."></textarea>
 
     <div class="button-group">
       <button type="submit">Guardar</button>
@@ -128,7 +150,7 @@
     }
 
     function finTurno() {
-      alert("Turno finalizado.");
+      document.getElementById("mensaje").textContent = "Gracias por tu servicio. Turno finalizado.";
     }
 
     document.getElementById("servicioForm").addEventListener("submit", function(e) {
