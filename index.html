@@ -20,10 +20,13 @@
       background-position: center;
       background-size: 400px;
       background-attachment: fixed;
+      overflow-x: hidden; /* ✅ Evita desplazamiento horizontal */
     }
 
     .container {
       max-width: 800px;
+      width: 100%; /* ✅ Se adapta al ancho de pantalla */
+      box-sizing: border-box; /* ✅ Incluye padding en el ancho total */
       margin: 0 auto;
       padding: 20px;
     }
