@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Servicios</title>
+  <title>Registro Institucional</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-color: #e5e5e5; /* Color institucional */
+      background-image: url('marca-agua.png'); /* Marca de agua */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 300px;
     }
 
     .seccion {
@@ -17,7 +21,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       padding: 20px;
       text-align: center;
     }
@@ -30,8 +34,14 @@
       margin: 10px 0;
       padding: 10px;
       width: 90%;
-      max-width: 400px;
+      max-width: 500px;
       font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
     }
 
     button {
@@ -82,10 +92,11 @@
     <input type="text" id="asignado" placeholder="Asignado a">
     <select id="tipoServicio">
       <option value="">Selecciona tipo de servicio</option>
-      <option value="Emergencia">Emergencia</option>
-      <option value="Traslado Programado">Traslado Programado</option>
-      <option value="Urgencia Médica">Urgencia Médica</option>
-      <option value="Apoyo Logístico">Apoyo Logístico</option>
+      <option value="Supervisión">Supervisión</option>
+      <option value="Entrega de material">Entrega de material</option>
+      <option value="Revisión técnica">Revisión técnica</option>
+      <option value="Atención ciudadana">Atención ciudadana</option>
+      <option value="Otro">Otro</option>
     </select>
     <textarea id="observaciones" placeholder="Observaciones"></textarea>
     <button onclick="guardarDatos()">Guardar</button>
