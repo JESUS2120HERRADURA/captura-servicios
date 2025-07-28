@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Captura de Servicios</title>
   <style>
     :root {
@@ -15,16 +16,11 @@
       font-family: Arial, sans-serif;
       background-color: var(--azul-fondo);
       color: var(--blanco);
-      background-image: url('marca-de-agua.png'); /* Reemplaza con tu imagen */
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 400px;
-      background-attachment: fixed;
       overflow-x: hidden;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 420px;
       width: 100%;
       box-sizing: border-box;
       margin: 0 auto;
@@ -37,7 +33,7 @@
     }
 
     .logo img {
-      height: 70px;
+      height: 60px;
     }
 
     .bienvenida, .despedida {
@@ -49,8 +45,8 @@
 
     h1 {
       text-align: center;
-      font-size: 22px;
-      margin-bottom: 25px;
+      font-size: 20px;
+      margin-bottom: 20px;
     }
 
     .fila-horizontal {
@@ -68,6 +64,7 @@
       display: block;
       margin-top: 15px;
       font-weight: bold;
+      font-size: 13px;
     }
 
     input, select, textarea {
@@ -118,12 +115,6 @@
       transform: scale(1.02);
     }
 
-    @media (max-width: 600px) {
-      .fila-horizontal {
-        flex-direction: column;
-      }
-    }
-
     .caratula {
       text-align: center;
       margin-top: 50px;
@@ -151,6 +142,13 @@
     .hidden {
       display: none;
     }
+
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
@@ -158,10 +156,11 @@
 
     <!-- Carátula de inicio -->
     <div id="caratula" class="caratula">
-      <h2>Registro de Asistencia</h2>
+      <h2>Inicio de labores</h2>
+      <p>Por favor regístrate para desbloquear el sistema.</p>
       <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
       <br>
-      <button onclick="registrarAsistencia()">Registrar Asistencia</button>
+      <button onclick="registrarAsistencia()">Iniciar jornada</button>
     </div>
 
     <!-- Mensaje de bienvenida -->
@@ -233,6 +232,11 @@
 
     <!-- Mensaje de despedida -->
     <div id="despedida" class="despedida">✅ Turno finalizado. Gracias por tu servicio.</div>
+
+    <!-- Marca de agua institucional -->
+    <footer>
+      Propiedad y diseño de JESÚS SÁNCHEZ C. con la asesoría de Microsoft Copilot
+    </footer>
   </div>
 
   <script>
@@ -245,15 +249,14 @@
       document.getElementById('caratula').style.display = 'none';
       document.getElementById('formulario').classList.remove('hidden');
       document.getElementById('bienvenida').style.display = 'block';
-      document.getElementById('bienvenida').innerText = `Bienvenido, ${nombre} | Sitio Herradura`;
+      document.getElementById('bienvenida').innerText = `¡Bienvenido, ${nombre}! Tu jornada ha comenzado.`;
+
+      setTimeout(() => {
+        document.getElementById('bienvenida').style.display = 'none';
+      }, 3000);
     }
 
     function finalizarTurno() {
       document.getElementById('formulario').classList.add('hidden');
       document.getElementById('despedida').style.display = 'block';
-      document.getElementById('caratula').style.display = 'block';
-      document.getElementById('bienvenida').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+      document.get
