@@ -1,107 +1,80 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de Servicios - Sitio Herradura</title>
+  <meta charset="UTF-8">
+  <title>Registro de Servicios</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: url('marca-de-agua.png') no-repeat center center fixed;
+      background-image: url('marca-de-agua.png');
       background-size: cover;
-      color: #333;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-bottom: 2px solid #ccc;
-    }
-
-    header img {
-      height: 60px;
-      margin-right: 15px;
-    }
-
-    header h1 {
-      font-size: 1.5em;
+      background-repeat: no-repeat;
+      background-position: center;
       margin: 0;
+      padding: 0;
     }
-
-    main {
+    .container {
+      background-color: rgba(255, 255, 255, 0.9);
+      margin: 50px auto;
       padding: 20px;
       max-width: 600px;
-      margin: auto;
-      background-color: rgba(255, 255, 255, 0.95);
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
     }
-
+    h1 {
+      text-align: center;
+    }
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-top: 10px;
     }
-
-    input, select, button {
+    input, select {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin-top: 5px;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1em;
     }
-
     button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
       background-color: #0078D7;
       color: white;
       border: none;
-      cursor: pointer;
-      margin-top: 20px;
+      border-radius: 5px;
+      font-size: 16px;
     }
-
     button:hover {
       background-color: #005fa3;
     }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.2em;
-      }
-
-      header img {
-        height: 50px;
-      }
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 150px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo-sitio-herradura.png" alt="Logo Sitio Herradura" />
-    <h1>Registro de Servicios - Sitio Herradura</h1>
-  </header>
-
-  <main>
-    <form id="registroForm">
-      <label for="nombre">Nombre del responsable:</label>
-      <input type="text" id="nombre" name="nombre" required />
+  <div class="container">
+    <img src="logo-sitio-herradura.png" alt="Logo Sitio Herradura" class="logo">
+    <h1>Registro de Servicios</h1>
+    <form id="formulario">
+      <label for="responsable">Responsable:</label>
+      <input type="text" id="responsable" name="responsable" required>
 
       <label for="fecha">Fecha:</label>
-      <input type="date" id="fecha" name="fecha" required />
+      <input type="date" id="fecha" name="fecha" required>
 
       <label for="asistencia">¿Asistencia registrada?</label>
       <select id="asistencia" name="asistencia" required>
-        <option value="">Selecciona una opción</option>
+        <option value="">Selecciona</option>
         <option value="sí">Sí</option>
         <option value="no">No</option>
       </select>
 
-      <label for="tipoServicio">Tipo de servicio:</label>
-      <select id="tipoServicio" name="tipoServicio" required>
-        <option value="">Selecciona el tipo</option>
+      <label for="tipo">Tipo de servicio:</label>
+      <select id="tipo" name="tipo" required>
+        <option value="">Selecciona</option>
         <option value="Mantenimiento">Mantenimiento</option>
         <option value="Supervisión">Supervisión</option>
         <option value="Atención ciudadana">Atención ciudadana</option>
@@ -109,20 +82,20 @@
       </select>
 
       <label for="observaciones">Observaciones:</label>
-      <input type="text" id="observaciones" name="observaciones" />
+      <input type="text" id="observaciones" name="observaciones">
 
-      <button type="submit">Registrar servicio</button>
+      <button type="submit">Registrar</button>
     </form>
-  </main>
+  </div>
 
   <script>
-    document.getElementById('registroForm').addEventListener('submit', function(e) {
+    document.getElementById('formulario').addEventListener('submit', function(e) {
       e.preventDefault();
       const datos = {
-        nombre: this.nombre.value,
+        responsable: this.responsable.value,
         fecha: this.fecha.value,
         asistencia: this.asistencia.value,
-        tipoServicio: this.tipoServicio.value,
+        tipo: this.tipo.value,
         observaciones: this.observaciones.value
       };
       console.log("Datos registrados:", datos);
