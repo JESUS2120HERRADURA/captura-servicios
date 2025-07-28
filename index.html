@@ -35,7 +35,7 @@
       height: 70px;
     }
 
-    .caratula, .formulario, .despedida {
+    .caratula, .formulario, .despedida, .bienvenida {
       background-color: var(--azul-fondo);
       padding: 20px;
       border-radius: 10px;
@@ -85,6 +85,11 @@
       font-size: 14px;
     }
 
+    input[readonly] {
+      background-color: #ccc;
+      color: #333;
+    }
+
     .buttons {
       display: flex;
       flex-direction: column;
@@ -113,6 +118,18 @@
     .hidden {
       display: none;
     }
+
+    .bienvenida h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .bienvenida p {
+      text-align: center;
+      font-size: 16px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -120,7 +137,7 @@
 
     <!-- Logo institucional -->
     <div class="logo">
-      <img src="logo-sitio-herradura.png" alt="Logo Sitio Herradura">
+      <img src="sitio-herradura-logo.png" alt="Logo Sitio Herradura">
     </div>
 
     <!-- Carátula -->
@@ -128,6 +145,12 @@
       <h1>Inicio de jornada</h1>
       <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
       <button onclick="iniciarJornada()">Continuar</button>
+    </div>
+
+    <!-- Bienvenida personalizada -->
+    <div id="bienvenida" class="bienvenida hidden">
+      <h1>¡Bienvenido!</h1>
+      <p id="mensajeBienvenida"></p>
     </div>
 
     <!-- Formulario principal -->
@@ -138,25 +161,25 @@
       <input type="text" id="folio" disabled>
 
       <label>Fecha</label>
-      <input type="date" id="fecha">
+      <input type="date" id="fecha" readonly>
 
       <label>Hora</label>
-      <input type="time" id="hora">
+      <input type="time" id="hora" readonly>
 
       <label>Telefonista</label>
-      <input type="text" id="telefonista">
+      <input type="text" id="telefonista" readonly required>
 
-      <label>Dirección</label>
-      <input type="text" id="direccion">
+      <label>Dirección *</label>
+      <input type="text" id="direccion" required>
 
-      <label>Destino</label>
-      <input type="text" id="destino">
+      <label>Destino *</label>
+      <input type="text" id="destino" required>
 
-      <label>Asignado a</label>
-      <input type="text" id="asignado">
+      <label>Asignado a *</label>
+      <input type="text" id="asignado" required>
 
-      <label>Tipo de servicio</label>
-      <select id="tipoServicio">
+      <label>Tipo de servicio *</label>
+      <select id="tipoServicio" required>
         <option value="">Selecciona una opción</option>
         <option>NORMAL</option>
         <option>CARRO AMPLIO</option>
@@ -194,14 +217,11 @@
 
   <script>
     let folioContador = 1;
+    let nombreUsuario = "";
 
     function generarFolio() {
       const fecha = new Date();
       const año = fecha.getFullYear();
-      const mes = fecha.getMonth();
-      if (mes === 0 && fecha.getDate() === 1 && fecha.getHours() === 0 && fecha.getMinutes() === 0) {
-        folioContador = 1;
-      }
       return `${folioContador}/${año.toString().slice(-2)}`;
     }
 
@@ -212,15 +232,37 @@
         return;
       }
 
+      nombreUsuario = nombre;
       document.getElementById('caratula').classList.add('hidden');
-      document.getElementById('formulario').classList.remove('hidden');
+      document.getElementById('mensajeBienvenida').textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
+      document.getElementById('bienvenida').classList.remove('hidden');
 
-      document.getElementById('folio').value = generarFolio();
-      document.getElementById('fecha').valueAsDate = new Date();
-      document.getElementById('hora').value = new Date().toTimeString().slice(0,5);
+      setTimeout(() => {
+        document.getElementById('bienvenida').classList.add('hidden');
+        document.getElementById('formulario').classList.remove('hidden');
+
+        document.getElementById('folio').value = generarFolio();
+        document.getElementById('fecha').valueAsDate = new Date();
+        document.getElementById('hora').value = new Date().toTimeString().slice(0,5);
+        document.getElementById('telefonista').value = nombreUsuario;
+      }, 4000); // duración del mensaje motivador
     }
 
     function guardarDatos() {
+      const campos = [
+        { id: 'direccion', nombre: 'Dirección' },
+        { id: 'destino', nombre: 'Destino' },
+        { id: 'asignado', nombre: 'Asignado a' },
+        { id: 'tipoServicio', nombre: 'Tipo de servicio' }
+      ];
+
+      let faltantes = campos.filter(c => document.getElementById(c.id).value.trim() === "");
+
+      if (faltantes.length > 0) {
+        alert("Faltan campos obligatorios:\n" + faltantes.map(f => `- ${f.nombre}`).join("\n"));
+        return;
+      }
+
       const datos = {
         folio: document.getElementById('folio').value,
         fecha: document.getElementById('fecha').value,
@@ -230,23 +272,4 @@
         destino: document.getElementById('destino').value,
         asignado: document.getElementById('asignado').value,
         tipoServicio: document.getElementById('tipoServicio').value,
-        observaciones: document.getElementById('observaciones').value
-      };
-
-      // Simulación de envío a hoja de cálculo
-      console.log("Datos enviados a la base de datos:", datos);
-      alert("Datos guardados correctamente.");
-      folioContador++;
-    }
-
-    function copiarComoImagen() {
-      alert("Función de copiar como imagen aún no implementada.");
-    }
-
-    function cerrarTurno() {
-      document.getElementById('formulario').classList.add('hidden');
-      document.getElementById('despedida').classList.remove('hidden');
-    }
-  </script>
-</body>
-</html>
+        observ
