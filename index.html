@@ -1,178 +1,258 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio de labores</title>
+  <meta charset="UTF-8">
+  <title>Captura de Servicios</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #ffffff;
-      color: #333;
+    :root {
+      --azul-fondo: #2E4A66;
+      --azul-boton: #1C3D5A;
+      --blanco: #ffffff;
     }
-    .container {
-      max-width: 400px;
-      margin: auto;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 20px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #0078D4;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #005fa3;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Inicio de labores</h1>
-    <p>Por favor regístrate para desbloquear el sistema.</p>
-    <input type="text" id="nombre" placeholder="Ingresa tu nombre" />
-    <button onclick="iniciarJornada()">Iniciar jornada</button>
-  </div>
 
-  <script>
-    function iniciarJornada() {
-      const nombre = document.getElementById('nombre').value.trim();
-      if (nombre) {
-        localStorage.setItem('nombreUsuario', nombre);
-        location.href = 'captura.html';
-      } else {
-        alert('Por favor ingresa tu nombre.');
-      }
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Captura de servicios</title>
-  <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #003366;
-      color: white;
+      font-family: Arial, sans-serif;
+      background-color: var(--azul-fondo);
+      color: var(--blanco);
+      background-image: url('marca-de-agua.png'); /* Reemplaza con tu imagen */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 400px;
+      background-attachment: fixed;
+      overflow-x: hidden;
     }
+
     .container {
-      max-width: 400px;
-      margin: auto;
-      padding: 30px 20px;
+      max-width: 800px;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 20px;
     }
-    h2, h3 {
+
+    .logo {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
+
+    .logo img {
+      height: 70px;
+    }
+
+    .bienvenida, .despedida {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+
+    .fila-horizontal {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .campo {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
     input, select, textarea {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
+
     input[disabled] {
-      background-color: #ccc;
+      background-color: #e0e0e0;
       color: #333;
     }
-    textarea {
-      height: 80px;
+
+    .asistencia {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #3a5a7a;
+      border-radius: 5px;
+      font-size: 14px;
     }
+
     .buttons {
       display: flex;
       justify-content: space-between;
+      margin-top: 30px;
+      flex-wrap: wrap;
       gap: 10px;
-      margin-top: 20px;
     }
-    button {
+
+    .buttons button {
+      background-color: var(--azul-boton);
+      color: var(--blanco);
+      border: 2px solid var(--blanco);
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
       flex: 1;
-      padding: 12px;
-      background-color: #0078D4;
-      color: white;
-      border: none;
-      border-radius: 8px;
+      min-width: 100px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .buttons button:hover {
+      background-color: #16324a;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 600px) {
+      .fila-horizontal {
+        flex-direction: column;
+      }
+    }
+
+    .caratula {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .caratula input {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      max-width: 300px;
+      margin-top: 10px;
+    }
+
+    .caratula button {
+      margin-top: 15px;
+      background-color: var(--azul-boton);
+      color: var(--blanco);
+      border: 2px solid var(--blanco);
+      padding: 10px 20px;
+      border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #005fa3;
-    }
-    .marca-agua {
-      text-align: center;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
-      margin-top: 30px;
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2 id="bienvenida">¡Bienvenido!</h2>
-    <h3>CAPTURA DE SERVICIOS</h3>
 
-    <input type="text" value="F-1714113944435" disabled />
-    <input type="date" value="2024-04-26" disabled />
-    <input type="time" value="07:00" disabled />
-
-    <input type="text" placeholder="TELEFONISTA *" value="Js" />
-    <input type="text" placeholder="DIRECCIÓN *" value="Z4" />
-    <input type="text" placeholder="DESTINO *" value="Interlomas" />
-    <input type="text" placeholder="ASIGNADO A *" value="Prueba" />
-
-    <select required>
-      <option disabled selected>Selecciona un tipo de servicio</option>
-      <option>TRASLADO MÉDICO</option>
-      <option>TRANSPORTE DE MASCOTA</option>
-      <option>RECOLECCIÓN DE DOCUMENTOS</option>
-      <option>ASISTENCIA VIAL</option>
-      <option>VIGILANCIA PREVENTIVA</option>
-      <option>ESCOLTA PERSONAL</option>
-      <option>RESGUARDO DE BIENES</option>
-      <option>RETIRO DE PERSONA</option>
-      <option>REVISIÓN DE ÁREA</option>
-      <option>APOYO EN EVENTO</option>
-    </select>
-
-    <textarea placeholder="OBSERVACIONES"></textarea>
-
-    <p>📋 Hoja de asistencia activa | Turno iniciado a las 07:00 AM</p>
-
-    <div class="buttons">
-      <button>GUARDAR</button>
-      <button>ENVIAR</button>
-      <button>FIN DE TURNO</button>
+    <!-- Carátula de inicio -->
+    <div id="caratula" class="caratula">
+      <h2>Registro de Asistencia</h2>
+      <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
+      <br>
+      <button onclick="registrarAsistencia()">Registrar Asistencia</button>
     </div>
 
-    <footer class="marca-agua">
-      <p>Sistema institucional desarrollado para Sitio Herradura. Asesoría técnica: Jesús Sánchez C.</p>
-    </footer>
+    <!-- Mensaje de bienvenida -->
+    <div id="bienvenida" class="bienvenida"></div>
+
+    <!-- Formulario principal -->
+    <div id="formulario" class="hidden">
+      <div class="logo">
+        <img src="logo-sitio-herradura.png" alt="Sitio Herradura">
+      </div>
+
+      <h1>CAPTURA DE SERVICIOS</h1>
+
+      <div class="fila-horizontal">
+        <div class="campo">
+          <label>FOLIO *</label>
+          <input type="text" name="folio" value="F-1714113944435" disabled>
+        </div>
+        <div class="campo">
+          <label>FECHA *</label>
+          <input type="date" name="fecha" value="2024-04-26" disabled>
+        </div>
+        <div class="campo">
+          <label>HORA *</label>
+          <input type="time" name="hora" value="10:12" disabled>
+        </div>
+      </div>
+
+      <label>TELEFONISTA *</label>
+      <input type="text" name="telefonista" value="Js">
+
+      <label>DIRECCIÓN *</label>
+      <input type="text" name="direccion" value="Z4">
+
+      <label>DESTINO *</label>
+      <input type="text" name="destino" value="Interlomas">
+
+      <label>ASIGNADO A *</label>
+      <input type="text" name="asignado" value="Prueba">
+
+      <label>TIPO DE SERVICIO *</label>
+      <select name="tipo_servicio">
+        <option value="">Selecciona una opción</option>
+        <option>NORMAL</option>
+        <option>CARRO AMPLIO</option>
+        <option>CARRO SIN ROTULAR</option>
+        <option>CARRO ROTULAR</option>
+        <option>CAMBIO DE LLANTA</option>
+        <option>PASAR CORRIENTE</option>
+        <option>GUÍA</option>
+        <option>MENSAJERÍA</option>
+        <option>MENSAJERÍA COMPRAS</option>
+        <option>TRANSPORTE DE MASCOTA</option>
+      </select>
+
+      <label>OBSERVACIONES</label>
+      <textarea name="observaciones" rows="3"></textarea>
+
+      <div class="asistencia">
+        📋 Hoja de asistencia activa | Turno iniciado a las 07:00 AM
+      </div>
+
+      <div class="buttons">
+        <button>GUARDAR</button>
+        <button>ENVIAR</button>
+        <button onclick="finalizarTurno()">FIN DE TURNO</button>
+      </div>
+    </div>
+
+    <!-- Mensaje de despedida -->
+    <div id="despedida" class="despedida">✅ Turno finalizado. Gracias por tu servicio.</div>
   </div>
 
   <script>
-    const nombre = localStorage.getItem('nombreUsuario');
-    if (nombre) {
-      document.getElementById('bienvenida').textContent = `¡Bienvenido, ${nombre}! Tu jornada ha comenzado.`;
+    function registrarAsistencia() {
+      const nombre = document.getElementById('nombreUsuario').value.trim();
+      if (nombre === "") {
+        alert("Por favor ingresa tu nombre.");
+        return;
+      }
+      document.getElementById('caratula').style.display = 'none';
+      document.getElementById('formulario').classList.remove('hidden');
+      document.getElementById('bienvenida').style.display = 'block';
+      document.getElementById('bienvenida').innerText = `Bienvenido, ${nombre} | Sitio Herradura`;
+    }
+
+    function finalizarTurno() {
+      document.getElementById('formulario').classList.add('hidden');
+      document.getElementById('despedida').style.display = 'block';
+      document.getElementById('caratula').style.display = 'block';
+      document.getElementById('bienvenida').style.display = 'none';
     }
   </script>
 </body>
