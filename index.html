@@ -9,11 +9,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #e5e5e5; /* Color institucional */
-      background-image: url('marca-agua.png'); /* Marca de agua */
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 300px;
+      background-color: #005fa3; /* Azul institucional */
     }
 
     .seccion {
@@ -40,28 +36,47 @@
     }
 
     textarea {
-      height: 100px;
+      height: 120px;
       resize: vertical;
     }
 
     button {
-      background-color: #0078D7;
-      color: white;
+      background-color: #ffffff;
+      color: #005fa3;
       border: none;
       cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
-      background-color: #005fa3;
+      background-color: #e0e0e0;
     }
 
     h1, h2 {
-      color: #333;
+      color: white;
     }
 
     .logo {
       width: 120px;
       margin-bottom: 20px;
+    }
+
+    #formulario {
+      background-image: url('marca-agua.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 300px;
+      background-color: #005fa3;
+    }
+
+    #formulario h2 {
+      color: white;
+    }
+
+    label {
+      color: white;
+      font-weight: bold;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -92,11 +107,18 @@
     <input type="text" id="asignado" placeholder="Asignado a">
     <select id="tipoServicio">
       <option value="">Selecciona tipo de servicio</option>
-      <option value="Supervisión">Supervisión</option>
-      <option value="Entrega de material">Entrega de material</option>
-      <option value="Revisión técnica">Revisión técnica</option>
-      <option value="Atención ciudadana">Atención ciudadana</option>
-      <option value="Otro">Otro</option>
+      <option value="Normal">Normal</option>
+      <option value="Por tiempo">Por tiempo</option>
+      <option value="Carro rotulado">Carro rotulado</option>
+      <option value="Mensajería">Mensajería</option>
+      <option value="Paquetería">Paquetería</option>
+      <option value="Mensajería compras">Mensajería compras</option>
+      <option value="Carro sin rotular">Carro sin rotular</option>
+      <option value="2 carros">2 carros</option>
+      <option value="Guía">Guía</option>
+      <option value="Cambio de llanta">Cambio de llanta</option>
+      <option value="Pasar corriente">Pasar corriente</option>
+      <option value="Transporte de mascota">Transporte de mascota</option>
     </select>
     <textarea id="observaciones" placeholder="Observaciones"></textarea>
     <button onclick="guardarDatos()">Guardar</button>
@@ -107,7 +129,7 @@
   <!-- Despedida -->
   <div id="despedida" class="seccion hidden">
     <h2>¡Gracias por tu servicio hoy!</h2>
-    <p>Tu jornada ha sido registrada correctamente.</p>
+    <p style="color: white;">Tu jornada ha sido registrada correctamente.</p>
   </div>
 
   <!-- Script -->
