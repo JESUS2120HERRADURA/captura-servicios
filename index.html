@@ -257,3 +257,99 @@
   </script>
 </body>
 </html>
+<!-- captura.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captura de servicios</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="captura">
+  <div class="container">
+    <img src="logo.png" alt="Logo institucional" class="logo" />
+    <h2>¡Bienvenido, Jesús! Tu jornada ha comenzado.</h2>
+    <h3>CAPTURA DE SERVICIOS</h3>
+
+    <input type="text" value="F-1714113944435" disabled />
+    <input type="date" value="2024-04-26" disabled />
+    <input type="time" value="10:12" disabled />
+
+    <input type="text" placeholder="TELEFONISTA *" value="Js" />
+    <input type="text" placeholder="DIRECCIÓN *" value="Z4" />
+    <input type="text" placeholder="DESTINO *" value="Interlomas" />
+    <input type="text" placeholder="ASIGNADO A *" value="Prueba" />
+
+    <select>
+      <option selected>TRANSPORTE DE MASCOTA</option>
+      <option>TRASLADO MÉDICO</option>
+      <option>RECOLECCIÓN DE DOCUMENTOS</option>
+    </select>
+
+    <textarea placeholder="OBSERVACIONES"></textarea>
+
+    <p>📋 Hoja de asistencia activa | Turno iniciado a las 07:00 AM</p>
+
+    <div class="buttons">
+      <button>GUARDAR</button>
+      <button>ENVIAR</button>
+      <button>FIN DE TURNO</button>
+    </div>
+  </div>
+</body>
+</html>
+/* styles.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.container {
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  color: #333;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #0078D4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 10px;
+  width: 60px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
