@@ -3,260 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Captura de Servicios</title>
+  <title>Registro de Servicios - Sitio Herradura</title>
   <style>
-    :root {
-      --azul-fondo: #2E4A66;
-      --azul-boton: #1C3D5A;
-      --blanco: #ffffff;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: var(--azul-fondo);
-      color: var(--blanco);
-      overflow-x: hidden;
+      background: url('marca-de-agua.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
     }
 
-    .container {
-      max-width: 420px;
-      width: 100%;
-      box-sizing: border-box;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .logo img {
-      height: 60px;
-    }
-
-    .bienvenida, .despedida {
-      text-align: center;
-      font-size: 16px;
-      margin-bottom: 20px;
-      display: none;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    .fila-horizontal {
+    header {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      align-items: center;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-bottom: 2px solid #ccc;
     }
 
-    .campo {
-      flex: 1;
-      min-width: 100px;
+    header img {
+      height: 60px;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
-      font-size: 13px;
     }
 
-    input, select, textarea {
+    input, select, button {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       margin-top: 5px;
-      border-radius: 5px;
       border: 1px solid #ccc;
-      font-size: 14px;
+      border-radius: 4px;
+      font-size: 1em;
     }
 
-    input[disabled] {
-      background-color: #e0e0e0;
-      color: #333;
-    }
-
-    .asistencia {
+    button {
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      cursor: pointer;
       margin-top: 20px;
-      padding: 10px;
-      background-color: #3a5a7a;
-      border-radius: 5px;
-      font-size: 14px;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      flex-wrap: wrap;
-      gap: 10px;
+    button:hover {
+      background-color: #005fa3;
     }
 
-    .buttons button {
-      background-color: var(--azul-boton);
-      color: var(--blanco);
-      border: 2px solid var(--blanco);
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      flex: 1;
-      min-width: 100px;
-      transition: background-color 0.3s, transform 0.2s;
-    }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.2em;
+      }
 
-    .buttons button:hover {
-      background-color: #16324a;
-      transform: scale(1.02);
-    }
-
-    .caratula {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    .caratula input {
-      padding: 10px;
-      font-size: 16px;
-      width: 80%;
-      max-width: 300px;
-      margin-top: 10px;
-    }
-
-    .caratula button {
-      margin-top: 15px;
-      background-color: var(--azul-boton);
-      color: var(--blanco);
-      border: 2px solid var(--blanco);
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.6);
-      margin-top: 40px;
+      header img {
+        height: 50px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <header>
+    <img src="logo-sitio-herradura.png" alt="Logo Sitio Herradura" />
+    <h1>Registro de Servicios - Sitio Herradura</h1>
+  </header>
 
-    <!-- Carátula de inicio -->
-    <div id="caratula" class="caratula">
-      <h2>Inicio de labores</h2>
-      <p>Por favor regístrate para desbloquear el sistema.</p>
-      <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
-      <br>
-      <button onclick="registrarAsistencia()">Iniciar jornada</button>
-    </div>
+  <main>
+    <form id="registroForm">
+      <label for="nombre">Nombre del responsable:</label>
+      <input type="text" id="nombre" name="nombre" required />
 
-    <!-- Mensaje de bienvenida -->
-    <div id="bienvenida" class="bienvenida"></div>
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" name="fecha" required />
 
-    <!-- Formulario principal -->
-    <div id="formulario" class="hidden">
-      <div class="logo">
-        <img src="logo-sitio-herradura.png" alt="Sitio Herradura">
-      </div>
-
-      <h1>CAPTURA DE SERVICIOS</h1>
-
-      <div class="fila-horizontal">
-        <div class="campo">
-          <label>FOLIO *</label>
-          <input type="text" name="folio" value="F-1714113944435" disabled>
-        </div>
-        <div class="campo">
-          <label>FECHA *</label>
-          <input type="date" name="fecha" value="2024-04-26" disabled>
-        </div>
-        <div class="campo">
-          <label>HORA *</label>
-          <input type="time" name="hora" value="10:12" disabled>
-        </div>
-      </div>
-
-      <label>TELEFONISTA *</label>
-      <input type="text" name="telefonista" value="Js">
-
-      <label>DIRECCIÓN *</label>
-      <input type="text" name="direccion" value="Z4">
-
-      <label>DESTINO *</label>
-      <input type="text" name="destino" value="Interlomas">
-
-      <label>ASIGNADO A *</label>
-      <input type="text" name="asignado" value="Prueba">
-
-      <label>TIPO DE SERVICIO *</label>
-      <select name="tipo_servicio">
+      <label for="asistencia">¿Asistencia registrada?</label>
+      <select id="asistencia" name="asistencia" required>
         <option value="">Selecciona una opción</option>
-        <option>NORMAL</option>
-        <option>CARRO AMPLIO</option>
-        <option>CARRO SIN ROTULAR</option>
-        <option>CARRO ROTULAR</option>
-        <option>CAMBIO DE LLANTA</option>
-        <option>PASAR CORRIENTE</option>
-        <option>GUÍA</option>
-        <option>MENSAJERÍA</option>
-        <option>MENSAJERÍA COMPRAS</option>
-        <option>TRANSPORTE DE MASCOTA</option>
+        <option value="sí">Sí</option>
+        <option value="no">No</option>
       </select>
 
-      <label>OBSERVACIONES</label>
-      <textarea name="observaciones" rows="3"></textarea>
+      <label for="tipoServicio">Tipo de servicio:</label>
+      <select id="tipoServicio" name="tipoServicio" required>
+        <option value="">Selecciona el tipo</option>
+        <option value="Mantenimiento">Mantenimiento</option>
+        <option value="Supervisión">Supervisión</option>
+        <option value="Atención ciudadana">Atención ciudadana</option>
+        <option value="Otro">Otro</option>
+      </select>
 
-      <div class="asistencia">
-        📋 Hoja de asistencia activa | Turno iniciado a las 07:00 AM
-      </div>
+      <label for="observaciones">Observaciones:</label>
+      <input type="text" id="observaciones" name="observaciones" />
 
-      <div class="buttons">
-        <button>GUARDAR</button>
-        <button>ENVIAR</button>
-        <button onclick="finalizarTurno()">FIN DE TURNO</button>
-      </div>
-    </div>
-
-    <!-- Mensaje de despedida -->
-    <div id="despedida" class="despedida">✅ Turno finalizado. Gracias por tu servicio.</div>
-
-    <!-- Marca de agua institucional -->
-    <footer>
-      Propiedad y diseño de JESÚS SÁNCHEZ C. con la asesoría de Microsoft Copilot
-    </footer>
-  </div>
+      <button type="submit">Registrar servicio</button>
+    </form>
+  </main>
 
   <script>
-    function registrarAsistencia() {
-      const nombre = document.getElementById('nombreUsuario').value.trim();
-      if (nombre === "") {
-        alert("Por favor ingresa tu nombre.");
-        return;
-      }
-      document.getElementById('caratula').style.display = 'none';
-      document.getElementById('formulario').classList.remove('hidden');
-      document.getElementById('bienvenida').style.display = 'block';
-      document.getElementById('bienvenida').innerText = `¡Bienvenido, ${nombre}! Tu jornada ha comenzado.`;
-
-      setTimeout(() => {
-        document.getElementById('bienvenida').style.display = 'none';
-      }, 3000);
-    }
-
-    function finalizarTurno() {
-      document.getElementById('formulario').classList.add('hidden');
-      document.getElementById('despedida').style.display = 'block';
-      document.get
+    document.getElementById('registroForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const datos = {
+        nombre: this.nombre.value,
+        fecha: this.fecha.value,
+        asistencia: this.asistencia.value,
+        tipoServicio: this.tipoServicio.value,
+        observaciones: this.observaciones.value
+      };
+      console.log("Datos registrados:", datos);
+      alert("Servicio registrado correctamente.");
+      this.reset();
+    });
+  </script>
+</body>
+</html>
