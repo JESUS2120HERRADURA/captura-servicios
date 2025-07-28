@@ -9,7 +9,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #005fa3; /* Azul institucional */
+      background-color: #005fa3;
     }
 
     .seccion {
@@ -20,6 +20,12 @@
       min-height: 100vh;
       padding: 20px;
       text-align: center;
+      background-image: url('marca-agua.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 300px;
+      background-blend-mode: lighten;
+      background-color: #005fa3;
     }
 
     .hidden {
@@ -52,31 +58,13 @@
       background-color: #e0e0e0;
     }
 
-    h1, h2 {
+    h1, h2, p, label {
       color: white;
     }
 
     .logo {
       width: 120px;
       margin-bottom: 20px;
-    }
-
-    #formulario {
-      background-image: url('marca-agua.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 300px;
-      background-color: #005fa3;
-    }
-
-    #formulario h2 {
-      color: white;
-    }
-
-    label {
-      color: white;
-      font-weight: bold;
-      margin-top: 10px;
     }
   </style>
 </head>
@@ -129,7 +117,7 @@
   <!-- Despedida -->
   <div id="despedida" class="seccion hidden">
     <h2>¡Gracias por tu servicio hoy!</h2>
-    <p style="color: white;">Tu jornada ha sido registrada correctamente.</p>
+    <p>Tu jornada ha sido registrada correctamente.</p>
   </div>
 
   <!-- Script -->
