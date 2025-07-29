@@ -9,7 +9,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 1rem;
-      background-color: #f4f4f4;
+      background-color: #0078D7; /* Fondo azul institucional */
     }
     .container {
       max-width: 600px;
@@ -139,7 +139,7 @@
         const folio = await res.text();
         document.getElementById("folio").value = folio;
       } catch (error) {
-        console.error("Error al obtener folio:", error);
+        console.warn("⚠️ No se pudo obtener el folio.");
       }
     }
 
@@ -180,35 +180,34 @@
         tipo: document.getElementById("tipo").value
       };
 
+      // 1. Guardar en base de datos (si conexión está activa)
       try {
-        // 1. Guardar en Google Sheets
-        const res = await fetch(webAppUrl, {
+        await fetch(webAppUrl, {
           method: "POST",
           body: JSON.stringify(datos),
-          headers: {
-            "Content-Type": "application/json"
-          }
+          headers: { "Content-Type": "application/json" }
         });
-
-        const respuesta = await res.text();
-        alert("✅ Servicio registrado correctamente.");
-
-        // 2. Generar copia virtual para Telegram
-        const mensajeTelegram = construirMensajeTelegram(datos);
-        prompt("📲 Copia este mensaje para pegar en Telegram:", mensajeTelegram);
-
-        // 3. Preguntar si desea limpiar el formulario
-        const limpiar = confirm("¿Deseas capturar otro servicio?");
-        if (limpiar) {
-          document.getElementById("serviceForm").reset();
-          establecerFechaHora();
-          obtenerFolio();
-        }
-
       } catch (error) {
-        console.error("Error al registrar:", error);
-        alert("❌ Error al registrar el servicio.");
+        console.warn("⚠️ No se pudo conectar con la hoja de cálculo.");
       }
+
+      // 2. Copiar mensaje en memoria virtual
+      const mensajeTelegram = construirMensajeTelegram(datos);
+      prompt("📲 Copia este mensaje para pegar en Telegram:", mensajeTelegram);
+
+      // 3. Diálogo con telefonista
+      const enviar = confirm("¿Deseas enviar este mensaje por Telegram?");
+      if (enviar) {
+        alert("✅ Pega el mensaje en Telegram y envíalo.");
+      } else {
+        alert("🔁 Oprime el botón nuevamente para limpiar y capturar otro servicio.");
+        return; // No limpia aún, espera segundo clic
+      }
+
+      // 4. Limpiar formulario para siguiente captura
+      document.getElementById("serviceForm").reset();
+      establecerFechaHora();
+      obtenerFolio();
     });
 
     window.onload = () => {
