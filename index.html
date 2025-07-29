@@ -1,70 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro Institucional</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
       margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
       background-image: url('marca_agua.png');
       background-repeat: no-repeat;
       background-position: center;
-      background-size: 300px;
+      background-size: 250px;
     }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background-color: #ffffff;
+    .contenedor {
+      max-width: 400px;
+      margin: 0 auto;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h2 {
-      color: #004080;
+    .titulo {
       text-align: center;
+      color: #004080;
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
+    .folio {
+      text-align: right;
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 10px;
     }
     label {
       display: block;
       margin-top: 15px;
+      font-weight: bold;
       color: #333;
     }
-    input, select, button {
+    input, select {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin-top: 5px;
-      border-radius: 5px;
       border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px;
       background-color: #004080;
       color: white;
+      border: none;
+      border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 20px;
     }
     button:hover {
       background-color: #003366;
     }
-    .folio {
-      font-size: 0.9em;
-      color: #666;
-      text-align: right;
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Registro de Servicio</h2>
+  <div class="contenedor">
+    <div class="titulo">Registro de Servicio</div>
     <div class="folio" id="folioDisplay">Folio: CSD-0001</div>
 
-    <label for="nombre">Nombre completo:</label>
-    <input type="text" id="nombre" required />
+    <label for="nombre">Nombre completo</label>
+    <input type="text" id="nombre" />
 
-    <label for="servicio">Tipo de servicio:</label>
+    <label for="servicio">Tipo de servicio</label>
     <select id="servicio">
       <option value="Asesoría">Asesoría</option>
       <option value="Orientación">Orientación</option>
@@ -72,7 +76,7 @@
       <option value="Otro">Otro</option>
     </select>
 
-    <label for="comentarios">Comentarios:</label>
+    <label for="comentarios">Comentarios</label>
     <input type="text" id="comentarios" />
 
     <button onclick="registrar()">Registrar</button>
@@ -106,7 +110,7 @@
         fecha
       };
 
-      // Aquí se conecta con Google Sheets (requiere tu endpoint)
+      // Conexión con Google Sheets (reemplaza con tu endpoint)
       fetch('TU_ENDPOINT_DE_GOOGLE_SHEETS', {
         method: 'POST',
         body: JSON.stringify(datos),
