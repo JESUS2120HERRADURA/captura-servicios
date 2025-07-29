@@ -2,229 +2,117 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro Institucional</title>
+  <title>Captura Institucional</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #005fa3;
-    }
-
-    .seccion {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      text-align: center;
-      background-image: url('marca-agua.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 300px;
-      background-blend-mode: lighten;
-      background-color: #005fa3;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    input, select, textarea, button {
-      margin: 10px 0;
-      padding: 10px;
-      width: 90%;
-      max-width: 500px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      height: 120px;
-      resize: vertical;
-    }
-
-    button {
-      background-color: #ffffff;
-      color: #005fa3;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #e0e0e0;
-    }
-
-    h1, h2, p, label {
-      color: white;
-    }
-
-    .logo {
-      width: 120px;
-      margin-bottom: 20px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h2 { color: #2c3e50; }
+    label { display: block; margin-top: 10px; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 20px; background-color: #2980b9; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #3498db; }
+    .seccion { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
-  <!-- Carátula -->
-  <div id="caratula" class="seccion">
-    <img src="LOGO-INSTITUCIONAL.png" alt="Logo" class="logo">
-    <h1>Inicio de Jornada</h1>
-    <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
-    <button onclick="iniciarJornada()">Continuar</button>
+  <h2>Registro de Asistencia</h2>
+  <div class="seccion">
+    <label>Nombre:</label>
+    <input type="text" id="nombre">
+
+    <label>Fecha Entrada:</label>
+    <input type="date" id="fechaEntrada">
+
+    <label>Hora Entrada:</label>
+    <input type="time" id="horaEntrada">
+
+    <label>Fecha Salida:</label>
+    <input type="date" id="fechaSalida">
+
+    <label>Hora Salida:</label>
+    <input type="time" id="horaSalida">
+
+    <button onclick="enviarAsistencia()">Registrar Asistencia</button>
   </div>
 
-  <!-- Bienvenida -->
-  <div id="bienvenida" class="seccion hidden">
-    <h2 id="mensajeBienvenida"></h2>
-  </div>
-
-  <!-- Formulario -->
-  <div id="formulario" class="seccion hidden">
-    <h2>Registro de Servicio</h2>
-    <input type="text" id="folio" readonly>
+  <h2>Captura de Servicios</h2>
+  <div class="seccion">
+    <label>Fecha:</label>
     <input type="date" id="fecha">
+
+    <label>Hora:</label>
     <input type="time" id="hora">
-    <input type="text" id="telefonista" readonly>
-    <input type="text" id="direccion" placeholder="Dirección del servicio">
-    <input type="text" id="destino" placeholder="Destino">
-    <input type="text" id="asignado" placeholder="Asignado a">
+
+    <label>Telefonista:</label>
+    <input type="text" id="telefonista">
+
+    <label>Domicilio:</label>
+    <input type="text" id="domicilio">
+
+    <label>Destino:</label>
+    <input type="text" id="destino">
+
+    <label>Asignado a:</label>
+    <input type="text" id="asignadoA">
+
+    <label>Tipo de Servicio:</label>
     <select id="tipoServicio">
-      <option value="">Selecciona tipo de servicio</option>
-      <option value="Normal">Normal</option>
-      <option value="Por tiempo">Por tiempo</option>
-      <option value="Carro rotulado">Carro rotulado</option>
-      <option value="Mensajería">Mensajería</option>
-      <option value="Paquetería">Paquetería</option>
-      <option value="Mensajería compras">Mensajería compras</option>
-      <option value="Carro sin rotular">Carro sin rotular</option>
-      <option value="2 carros">2 carros</option>
-      <option value="Guía">Guía</option>
-      <option value="Cambio de llanta">Cambio de llanta</option>
-      <option value="Pasar corriente">Pasar corriente</option>
-      <option value="Transporte de mascota">Transporte de mascota</option>
+      <option value="Traslado">Traslado</option>
+      <option value="Emergencia">Emergencia</option>
+      <option value="Consulta">Consulta</option>
+      <option value="Otro">Otro</option>
     </select>
-    <textarea id="observaciones" placeholder="Observaciones"></textarea>
-    <button onclick="guardarDatos()">Guardar</button>
-    <button onclick="copiarComoImagen()">Copiar como imagen</button>
-    <button onclick="cerrarTurno()">Cerrar turno</button>
+
+    <label>Observaciones:</label>
+    <textarea id="observaciones"></textarea>
+
+    <button onclick="enviarServicio()">Registrar Servicio</button>
   </div>
 
-  <!-- Despedida -->
-  <div id="despedida" class="seccion hidden">
-    <h2>¡Gracias por tu servicio hoy!</h2>
-    <p>Tu jornada ha sido registrada correctamente.</p>
-  </div>
-
-  <!-- Script -->
   <script>
-    let nombreUsuario = "";
-    const scriptURL = "https://script.google.com/macros/s/TU_ID_DE_SCRIPT/exec"; // Reemplaza con tu URL
+    const endpoint = "https://script.google.com/macros/s/AKfycbw5EJwqYdBnp1GL_6bTUIY_635i43PF43zf4c8ohZl8UBEH8ZYhGdfWo2mX2hN4BYvzdw/exec";
 
-    async function generarFolioDesdeSheets() {
-      try {
-        const res = await fetch(scriptURL);
-        const folio = await res.text();
-        return folio;
-      } catch (error) {
-        console.error("Error al generar folio:", error);
-        return "Error";
-      }
-    }
-
-    async function iniciarJornada() {
-      const nombre = document.getElementById('nombreUsuario').value.trim();
-      if (nombre === "") {
-        alert("Por favor ingresa tu nombre.");
-        return;
-      }
-
-      nombreUsuario = nombre;
-      document.getElementById('caratula').classList.add('hidden');
-      document.getElementById('mensajeBienvenida').textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
-      document.getElementById('bienvenida').classList.remove('hidden');
-
-      setTimeout(async () => {
-        document.getElementById('bienvenida').classList.add('hidden');
-        document.getElementById('formulario').classList.remove('hidden');
-
-        const folio = await generarFolioDesdeSheets();
-        document.getElementById('folio').value = folio;
-        document.getElementById('fecha').valueAsDate = new Date();
-        document.getElementById('hora').value = new Date().toTimeString().slice(0,5);
-        document.getElementById('telefonista').value = nombreUsuario;
-      }, 4000);
-    }
-
-    async function guardarDatos() {
-      const campos = [
-        { id: 'direccion', nombre: 'Dirección' },
-        { id: 'destino', nombre: 'Destino' },
-        { id: 'asignado', nombre: 'Asignado a' },
-        { id: 'tipoServicio', nombre: 'Tipo de servicio' }
-      ];
-
-      let faltantes = campos.filter(c => document.getElementById(c.id).value.trim() === "");
-
-      if (faltantes.length > 0) {
-        alert("Faltan campos obligatorios:\n" + faltantes.map(f => `- ${f.nombre}`).join("\n"));
-        return;
-      }
-
+    function enviarAsistencia() {
       const datos = {
-        folio: document.getElementById('folio').value,
-        fecha: document.getElementById('fecha').value,
-        hora: document.getElementById('hora').value,
-        telefonista: document.getElementById('telefonista').value,
-        direccion: document.getElementById('direccion').value,
-        destino: document.getElementById('destino').value,
-        asignado: document.getElementById('asignado').value,
-        tipoServicio: document.getElementById('tipoServicio').value,
-        observaciones: document.getElementById('observaciones').value
+        tipo: "asistencia",
+        nombre: document.getElementById("nombre").value,
+        fechaEntrada: document.getElementById("fechaEntrada").value,
+        horaEntrada: document.getElementById("horaEntrada").value,
+        fechaSalida: document.getElementById("fechaSalida").value,
+        horaSalida: document.getElementById("horaSalida").value
       };
 
-      try {
-        const res = await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify(datos),
-          headers: { "Content-Type": "application/json" }
-        });
-        const result = await res.text();
-        if (result === "OK") {
-          alert("Datos guardados correctamente.");
-        } else {
-          alert("Error al guardar datos.");
-        }
-      } catch (error) {
-        console.error("Error al guardar:", error);
-        alert("Error de conexión.");
-      }
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
     }
 
-    function copiarComoImagen() {
-      const formulario = document.getElementById('formulario');
+    function enviarServicio() {
+      const datos = {
+        tipo: "servicio",
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
+        domicilio: document.getElementById("domicilio").value,
+        destino: document.getElementById("destino").value,
+        asignadoA: document.getElementById("asignadoA").value,
+        tipoServicio: document.getElementById("tipoServicio").value,
+        observaciones: document.getElementById("observaciones").value
+      };
 
-      html2canvas(formulario).then(canvas => {
-        canvas.toBlob(blob => {
-          const item = new ClipboardItem({ "image/png": blob });
-          navigator.clipboard.write([item]).then(() => {
-            alert("Formulario copiado como imagen. Puedes pegarlo directamente en Telegram.");
-          }).catch(err => {
-            console.error("Error al copiar imagen:", err);
-            alert("No se pudo copiar la imagen. Verifica que tu navegador permita copiar imágenes.");
-          });
-        });
-      });
-    }
-
-    function cerrarTurno() {
-      document.getElementById('formulario').classList.add('hidden');
-      document.getElementById('despedida').classList.remove('hidden');
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
     }
   </script>
 
