@@ -2,25 +2,86 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Generador de mensaje para Telegram</title>
+  <title>Registro de Servicio</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input { display: block; margin-bottom: 10px; padding: 8px; width: 300px; }
-    button { padding: 10px 20px; font-size: 16px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      padding: 30px;
+      color: #333;
+    }
+
+    .form-container {
+      max-width: 500px;
+      margin: auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #005a9c;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #005a9c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004080;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Registro de Servicio</h2>
+  <div class="form-container">
+    <h2>📋 Registro de Servicio</h2>
 
-  <input id="nombre" placeholder="Nombre">
-  <input id="fecha" placeholder="Fecha">
-  <input id="hora" placeholder="Hora">
-  <input id="ubicacion" placeholder="Ubicación">
-  <input id="tipoServicio" placeholder="Tipo de servicio">
-  <input id="folio" placeholder="Folio">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" placeholder="Ej. Juan Pérez">
 
-  <button id="btnTelegram">Generar y copiar mensaje para Telegram</button>
+    <label for="fecha">Fecha</label>
+    <input id="fecha" placeholder="Ej. 2025-07-29">
+
+    <label for="hora">Hora</label>
+    <input id="hora" placeholder="Ej. 14:30">
+
+    <label for="ubicacion">Ubicación</label>
+    <input id="ubicacion" placeholder="Ej. Oficina Central">
+
+    <label for="tipoServicio">Tipo de servicio</label>
+    <input id="tipoServicio" placeholder="Ej. Mantenimiento">
+
+    <label for="folio">Folio</label>
+    <input id="folio" placeholder="Ej. 001245">
+
+    <button id="btnTelegram">Generar y copiar mensaje para Telegram</button>
+  </div>
 
   <script>
     function construirMensajeTelegram(datos) {
