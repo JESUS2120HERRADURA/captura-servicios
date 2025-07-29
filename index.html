@@ -2,152 +2,53 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Captura Institucional</title>
+  <title>Registro Institucional</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #005fa3;
-      color: white;
-    }
-
-    body::before {
-      content: "";
-      background-image: url('https://drive.google.com/uc?export=view&id=ID_DE_TU_IMAGEN');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      opacity: 0.08;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-    }
-
-    body::after {
-      content: "Propiedad y diseño de Jesús Sánchez C. con la colaboración de Microsoft Copilot";
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-30deg);
-      font-size: 2.5vw;
-      color: white;
-      opacity: 0.08;
-      white-space: nowrap;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .seccion {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .visible {
-      display: flex;
-    }
-
-    input, select, textarea, button {
-      margin: 10px 0;
-      padding: 10px;
-      width: 90%;
-      max-width: 500px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      height: 120px;
-      resize: vertical;
-    }
-
-    button {
-      background-color: #ffffff;
-      color: #005fa3;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #e0e0e0;
-    }
-
-    .logo {
-      width: 120px;
-      margin-bottom: 20px;
-    }
+    .seccion { display: none; }
+    .visible { display: block; }
+    .logo { width: 150px; margin-bottom: 20px; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    input, button { margin: 10px; padding: 10px; font-size: 16px; }
   </style>
 </head>
 <body>
 
-  <!-- Carátula -->
+  <!-- Pantalla de inicio -->
   <div id="caratula" class="seccion visible">
     <img src="LOGO-INSTITUCIONAL.png" alt="Logo" class="logo">
     <h1>Inicio de Jornada</h1>
     <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
-    <button onclick="iniciarJornada()">Continuar</button>
+    <button id="btnContinuar">Continuar</button>
   </div>
 
-  <!-- Bienvenida -->
+  <!-- Pantalla de bienvenida -->
   <div id="bienvenida" class="seccion">
     <h2 id="mensajeBienvenida"></h2>
   </div>
 
-  <!-- Formulario -->
+  <!-- Formulario principal -->
   <div id="formulario" class="seccion">
     <h2>Registro de Servicio</h2>
-    <input type="date" id="fecha">
-    <input type="time" id="hora">
-    <input type="text" id="telefonista" readonly>
-    <input type="text" id="direccion" placeholder="Dirección del servicio">
-    <input type="text" id="destino" placeholder="Destino">
-    <input type="text" id="asignado" placeholder="Asignado a">
-    <select id="tipoServicio">
-      <option value="">Selecciona tipo de servicio</option>
-      <option value="Normal">Normal</option>
-      <option value="Por tiempo">Por tiempo</option>
-      <option value="Carro rotulado">Carro rotulado</option>
-      <option value="Mensajería">Mensajería</option>
-      <option value="Paquetería">Paquetería</option>
-      <option value="Mensajería compras">Mensajería compras</option>
-      <option value="Carro sin rotular">Carro sin rotular</option>
-      <option value="2 carros">2 carros</option>
-      <option value="Guía">Guía</option>
-      <option value="Cambio de llanta">Cambio de llanta</option>
-      <option value="Pasar corriente">Pasar corriente</option>
-      <option value="Transporte de mascota">Transporte de mascota</option>
-    </select>
-    <textarea id="observaciones" placeholder="Observaciones"></textarea>
-    <button onclick="guardarServicio()">Guardar Servicio</button>
-    <button onclick="generarMensaje()">Enviar</button>
-    <button onclick="cerrarTurno()">Cerrar turno</button>
-  </div>
-
-  <!-- Despedida -->
-  <div id="despedida" class="seccion">
-    <h2>¡Gracias por tu servicio hoy!</h2>
-    <p>Tu jornada ha sido registrada correctamente.</p>
+    <label>Telefonista:</label>
+    <input type="text" id="telefonista" readonly><br>
+    <label>Fecha:</label>
+    <input type="date" id="fecha" readonly><br>
+    <label>Hora:</label>
+    <input type="time" id="hora" readonly><br>
+    <!-- Aquí puedes seguir agregando campos -->
   </div>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbz784HsQoBkzdNhvd15Hrx-sLgoilzwvB0qGTO-s7NsaefH_iV-DYamhB0bHNPGTcDGAQ/exec";
-
     let nombreUsuario = "";
     let fechaEntrada = "";
     let horaEntrada = "";
 
     function mostrar(id) {
-      document.querySelectorAll(".seccion").forEach(s => s.classList.remove("visible"));
+      document.querySelectorAll(".seccion").forEach(div => div.classList.remove("visible"));
       document.getElementById(id).classList.add("visible");
     }
+
+    document.getElementById("btnContinuar").addEventListener("click", iniciarJornada);
 
     function iniciarJornada() {
       const nombre = document.getElementById("nombreUsuario").value.trim();
@@ -171,59 +72,7 @@
         mostrar("formulario");
       }, 3000);
     }
+  </script>
 
-    function guardarServicio() {
-      const datos = {
-        tipo: "servicio",
-        fecha: document.getElementById("fecha").value,
-        hora: document.getElementById("hora").value,
-        telefonista: document.getElementById("telefonista").value,
-        domicilio: document.getElementById("direccion").value,
-        destino: document.getElementById("destino").value,
-        asignadoA: document.getElementById("asignado").value,
-        tipoServicio: document.getElementById("tipoServicio").value,
-        observaciones: document.getElementById("observaciones").value
-      };
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => alert(msg))
-      .catch(err => alert("Error: " + err));
-    }
-
-    function generarMensaje() {
-      const fecha = document.getElementById("fecha").value;
-      const hora = document.getElementById("hora").value;
-      const telefonista = document.getElementById("telefonista").value;
-      const direccion = document.getElementById("direccion").value;
-      const destino = document.getElementById("destino").value;
-      const asignado = document.getElementById("asignado").value;
-      const tipoServicio = document.getElementById("tipoServicio").value;
-      const observaciones = document.getElementById("observaciones").value;
-
-      const mensaje = `📝 *Registro de Servicio*\n\n📅 Fecha: ${fecha}\n⏰ Hora: ${hora}\n👤 Telefonista: ${telefonista}\n📍 Dirección: ${direccion}\n➡️ Destino: ${destino}\n👥 Asignado a: ${asignado}\n🚗 Tipo de servicio: ${tipoServicio}\n🗒️ Observaciones: ${observaciones}`;
-
-      navigator.clipboard.writeText(mensaje)
-        .then(() => alert("Mensaje copiado al portapapeles. Puedes pegarlo en Telegram."))
-        .catch(err => alert("Error al copiar el mensaje: " + err));
-    }
-
-    function cerrarTurno() {
-      const ahora = new Date();
-      const fechaSalida = ahora.toISOString().split("T")[0];
-      const horaSalida = ahora.toTimeString().slice(0,5);
-
-      const datos = {
-        tipo: "asistencia",
-        nombre: nombreUsuario,
-        fechaEntrada: fechaEntrada,
-        horaEntrada: horaEntrada,
-        fechaSalida: fechaSalida,
-        horaSalida: horaSalida
-      };
-
-      fetch(endpoint, {
+</body>
+</html>
