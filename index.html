@@ -31,11 +31,12 @@
       bottom: 5px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 12px;
+      font-size: 11px;
       color: white;
       opacity: 0.3;
       pointer-events: none;
       z-index: 999;
+      font-style: italic;
     }
 
     .seccion {
@@ -86,8 +87,7 @@
 </head>
 <body>
 
-  <!-- Marca de agua -->
-  <div class="marca-agua">Propiedad institucional - Uso exclusivo · Colaboración del personal</div>
+  <div class="marca-agua">Propiedad institucional · Uso exclusivo · Colaboración del personal</div>
 
   <!-- Carátula -->
   <div id="caratula" class="seccion visible">
@@ -217,8 +217,4 @@
         observaciones: document.getElementById("observaciones").value
       };
 
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      }).then(()
+      fetch(endpoint
