@@ -2,43 +2,79 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registro Institucional</title>
+  <title>Captura Institucional</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    .seccion { display: none; }
-    .visible { display: block; }
-    .logo { width: 120px; margin-bottom: 20px; }
-    input, button {
-      margin: 10px;
-      padding: 10px;
-      font-size: 16px;
-      width: 80%;
-      max-width: 400px;
-    }
-    button {
-      background-color: #004080;
+      background-color: #005fa3;
       color: white;
+    }
+
+    body::before {
+      content: "";
+      background-image: url('https://drive.google.com/uc?export=view&id=ID_DE_TU_IMAGEN'); /* ← Reemplaza con tu imagen institucional */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: 0.08;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+
+    .seccion {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .visible {
+      display: flex;
+    }
+
+    input, select, textarea, button {
+      margin: 10px 0;
+      padding: 10px;
+      width: 90%;
+      max-width: 500px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #ffffff;
+      color: #005fa3;
       border: none;
       cursor: pointer;
-    }
-    button:hover {
-      background-color: #0066cc;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
       font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla de inicio -->
+  <!-- Carátula -->
   <div id="caratula" class="seccion visible">
     <img src="LOGO-INSTITUCIONAL.png" alt="Logo" class="logo">
     <h1>Inicio de Jornada</h1>
@@ -46,47 +82,56 @@
     <button onclick="iniciarJornada()">Continuar</button>
   </div>
 
-  <!-- Pantalla de bienvenida -->
+  <!-- Bienvenida -->
   <div id="bienvenida" class="seccion">
     <h2 id="mensajeBienvenida"></h2>
   </div>
 
-  <!-- Formulario principal -->
+  <!-- Formulario -->
   <div id="formulario" class="seccion">
     <h2>Registro de Servicio</h2>
-    <label for="telefonista">Telefonista:</label>
+    <input type="date" id="fecha">
+    <input type="time" id="hora">
     <input type="text" id="telefonista" readonly>
+    <input type="text" id="direccion" placeholder="Dirección del servicio">
+    <input type="text" id="destino" placeholder="Destino">
+    <input type="text" id="asignado" placeholder="Asignado a">
+    <select id="tipoServicio">
+      <option value="">Selecciona tipo de servicio</option>
+      <option value="Normal">Normal</option>
+      <option value="Por tiempo">Por tiempo</option>
+      <option value="Carro rotulado">Carro rotulado</option>
+      <option value="Mensajería">Mensajería</option>
+      <option value="Paquetería">Paquetería</option>
+      <option value="Mensajería compras">Mensajería compras</option>
+      <option value="Carro sin rotular">Carro sin rotular</option>
+      <option value="2 carros">2 carros</option>
+      <option value="Guía">Guía</option>
+      <option value="Cambio de llanta">Cambio de llanta</option>
+      <option value="Pasar corriente">Pasar corriente</option>
+      <option value="Transporte de mascota">Transporte de mascota</option>
+    </select>
+    <textarea id="observaciones" placeholder="Observaciones"></textarea>
+    <button onclick="guardarServicio()">Guardar Servicio</button>
+    <button onclick="cerrarTurno()">Cerrar turno</button>
+  </div>
 
-    <label for="fecha">Fecha:</label>
-    <input type="text" id="fecha" readonly>
-
-    <label for="hora">Hora:</label>
-    <input type="text" id="hora" readonly>
-
-    <!-- Puedes agregar más campos aquí -->
+  <!-- Despedida -->
+  <div id="despedida" class="seccion">
+    <h2>¡Gracias por tu servicio hoy!</h2>
+    <p>Tu jornada ha sido registrada correctamente.</p>
   </div>
 
   <script>
+    const endpoint = "https://script.google.com/macros/s/AKfycbz784HsQoBkzdNhvd15Hrx-sLgoilzwvB0qGTO-s7NsaefH_iV-DYamhB0bHNPGTcDGAQ/exec";
+
+    let nombreUsuario = "";
+    let fechaEntrada = "";
+    let horaEntrada = "";
+
     function mostrar(id) {
-      document.querySelectorAll(".seccion").forEach(div => div.classList.remove("visible"));
+      document.querySelectorAll(".seccion").forEach(s => s.classList.remove("visible"));
       document.getElementById(id).classList.add("visible");
-    }
-
-    function obtenerFechaFormateada() {
-      const hoy = new Date();
-      const dia = String(hoy.getDate()).padStart(2, '0');
-      const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-      const año = hoy.getFullYear();
-      return `${dia}/${mes}/${año}`;
-    }
-
-    function obtenerHoraFormateada() {
-      const hoy = new Date();
-      return hoy.toLocaleTimeString('es-MX', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
     }
 
     function iniciarJornada() {
@@ -96,19 +141,70 @@
         return;
       }
 
-      const fecha = obtenerFechaFormateada();
-      const hora = obtenerHoraFormateada();
+      nombreUsuario = nombre;
+      const ahora = new Date();
+      fechaEntrada = ahora.toISOString().split("T")[0];
+      horaEntrada = ahora.toTimeString().slice(0,5);
 
-      document.getElementById("telefonista").value = nombre;
-      document.getElementById("fecha").value = fecha;
-      document.getElementById("hora").value = hora;
-
-      document.getElementById("mensajeBienvenida").textContent = `${nombre}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
+      document.getElementById("mensajeBienvenida").textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
       mostrar("bienvenida");
 
       setTimeout(() => {
+        document.getElementById("telefonista").value = nombreUsuario;
+        document.getElementById("fecha").value = fechaEntrada;
+        document.getElementById("hora").value = horaEntrada;
         mostrar("formulario");
       }, 3000);
+    }
+
+    function guardarServicio() {
+      const datos = {
+        tipo: "servicio",
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
+        domicilio: document.getElementById("direccion").value,
+        destino: document.getElementById("destino").value,
+        asignadoA: document.getElementById("asignado").value,
+        tipoServicio: document.getElementById("tipoServicio").value,
+        observaciones: document.getElementById("observaciones").value
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
+    }
+
+    function cerrarTurno() {
+      const ahora = new Date();
+      const fechaSalida = ahora.toISOString().split("T")[0];
+      const horaSalida = ahora.toTimeString().slice(0,5);
+
+      const datos = {
+        tipo: "asistencia",
+        nombre: nombreUsuario,
+        fechaEntrada: fechaEntrada,
+        horaEntrada: horaEntrada,
+        fechaSalida: fechaSalida,
+        horaSalida: horaSalida
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        mostrar("despedida");
+      })
+      .catch(err => alert("Error: " + err));
     }
   </script>
 
