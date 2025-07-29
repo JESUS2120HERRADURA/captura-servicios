@@ -124,7 +124,7 @@
   <!-- Script -->
   <script>
     let nombreUsuario = "";
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwnsXwA4i_yKxPFVq6M9bBBP_bArfRhILrQOD4qMErzov3WFg7oeeOOEKiVH7nf_1yrYg/exec" ; // Reemplaza con tu URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwnsXwA4i_yKxPFVq6M9bBBP_bArfRhILrQOD4qMErzov3WFg7oeeOOEKiVH7nf_1yrYg/exec";
 
     async function generarFolioDesdeSheets() {
       try {
@@ -206,27 +206,27 @@
       }
     }
 
-    function copiarComoImagen() {
+    async function copiarComoImagen() {
       const formulario = document.getElementById('formulario');
 
       html2canvas(formulario).then(canvas => {
         canvas.toBlob(blob => {
           const item = new ClipboardItem({ "image/png": blob });
           navigator.clipboard.write([item]).then(() => {
-            alert("Formulario copiado como imagen. Puedes pegarlo directamente en Telegram.");
+            const enviar = confirm("¿Deseas enviar la imagen por Telegram?");
+            if (enviar) {
+              alert("Abre Telegram y pega tu captura.");
+            }
+            limpiarFormulario(); // Limpia después de copiar
           }).catch(err => {
             console.error("Error al copiar imagen:", err);
-            alert("No se pudo copiar la imagen. Verifica que tu navegador permita copiar imágenes.");
+            alert("No se pudo copiar la imagen.");
+            limpiarFormulario(); // También limpia si falla
           });
         });
       });
     }
 
-    function cerrarTurno() {
-      document.getElementById('formulario').classList.add('hidden');
-      document.getElementById('despedida').classList.remove('hidden');
-    }
-  </script>
-
-</body>
-</html>
+    async function limpiarFormulario() {
+      document.getElementById('direccion').value = "";
+      document.getElementById('destino').value =
