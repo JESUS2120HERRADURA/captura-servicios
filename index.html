@@ -1,30 +1,61 @@
-// Función que construye el mensaje con base en los datos
-function construirMensajeTelegram(datos) {
-  // Aquí defines el formato del mensaje
-  return `📝 Registro de servicio\n👤 Nombre: ${datos.nombre}\n📅 Fecha: ${datos.fecha}\n🕒 Hora: ${datos.hora}\n📍 Ubicación: ${datos.ubicacion}\n🔧 Tipo de servicio: ${datos.tipoServicio}\n🆔 Folio: ${datos.folio}`;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de mensaje para Telegram</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { display: block; margin-bottom: 10px; padding: 8px; width: 300px; }
+    button { padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
 
-// Evento del botón
-document.getElementById("btnTelegram").addEventListener("click", async () => {
-  // 1. Obtener los datos (puedes adaptar esta parte según tu flujo)
-  const datos = {
-    nombre: document.getElementById("nombre").value,
-    fecha: document.getElementById("fecha").value,
-    hora: document.getElementById("hora").value,
-    ubicacion: document.getElementById("ubicacion").value,
-    tipoServicio: document.getElementById("tipoServicio").value,
-    folio: document.getElementById("folio").value
-  };
+  <h2>Registro de Servicio</h2>
 
-  // 2. Construir el mensaje
-  const mensajeTelegram = construirMensajeTelegram(datos);
+  <input id="nombre" placeholder="Nombre">
+  <input id="fecha" placeholder="Fecha">
+  <input id="hora" placeholder="Hora">
+  <input id="ubicacion" placeholder="Ubicación">
+  <input id="tipoServicio" placeholder="Tipo de servicio">
+  <input id="folio" placeholder="Folio">
 
-  // 3. Copiar automáticamente al portapapeles
-  try {
-    await navigator.clipboard.writeText(mensajeTelegram);
-    alert("📋 El mensaje ha sido copiado automáticamente. Puedes pegarlo en Telegram.");
-  } catch (err) {
-    console.warn("⚠️ Error al copiar:", err);
-    alert("⚠️ No se pudo copiar el mensaje. Intenta hacerlo manualmente.");
-  }
-});
+  <button id="btnTelegram">Generar y copiar mensaje para Telegram</button>
+
+  <script>
+    function construirMensajeTelegram(datos) {
+      return (
+        `📝 *Registro de servicio*\n` +
+        `👤 *Nombre:* ${datos.nombre}\n` +
+        `📅 *Fecha:* ${datos.fecha}\n` +
+        `🕒 *Hora:* ${datos.hora}\n` +
+        `📍 *Ubicación:* ${datos.ubicacion}\n` +
+        `🔧 *Tipo de servicio:* ${datos.tipoServicio}\n` +
+        `🆔 *Folio:* ${datos.folio}`
+      );
+    }
+
+    document.getElementById("btnTelegram").addEventListener("click", async () => {
+      const datos = {
+        nombre: document.getElementById("nombre").value,
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        ubicacion: document.getElementById("ubicacion").value,
+        tipoServicio: document.getElementById("tipoServicio").value,
+        folio: document.getElementById("folio").value
+      };
+
+      const mensajeTelegram = construirMensajeTelegram(datos);
+
+      try {
+        await navigator.clipboard.writeText(mensajeTelegram);
+        alert("📋 El mensaje ha sido copiado automáticamente. Puedes pegarlo en Telegram.");
+      } catch (err) {
+        console.warn("⚠️ Error al copiar:", err);
+        alert("⚠️ No se pudo copiar el mensaje. Intenta hacerlo manualmente.");
+      }
+    });
+  </script>
+
+</body>
+</html>
