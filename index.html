@@ -221,4 +221,6 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
       })
-      .then
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch
