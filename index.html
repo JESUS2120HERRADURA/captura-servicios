@@ -5,9 +5,8 @@
   <title>Captura Institucional</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
       background-color: #005fa3;
       color: white;
     }
@@ -135,4 +134,78 @@
     }
 
     function iniciarJornada() {
-      const nombre = document.getElementById("nombreUsuario").
+      const nombre = document.getElementById("nombreUsuario").value.trim();
+      if (nombre === "") {
+        alert("Por favor ingresa tu nombre.");
+        return;
+      }
+
+      nombreUsuario = nombre;
+      const ahora = new Date();
+      fechaEntrada = ahora.toISOString().split("T")[0];
+      horaEntrada = ahora.toTimeString().slice(0,5);
+
+      document.getElementById("mensajeBienvenida").textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
+      mostrar("bienvenida");
+
+      setTimeout(() => {
+        document.getElementById("telefonista").value = nombreUsuario;
+        document.getElementById("fecha").value = fechaEntrada;
+        document.getElementById("hora").value = horaEntrada;
+        mostrar("formulario");
+      }, 3000);
+    }
+
+    function guardarServicio() {
+      const datos = {
+        tipo: "servicio",
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
+        domicilio: document.getElementById("direccion").value,
+        destino: document.getElementById("destino").value,
+        asignadoA: document.getElementById("asignado").value,
+        tipoServicio: document.getElementById("tipoServicio").value,
+        observaciones: document.getElementById("observaciones").value
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
+    }
+
+    function cerrarTurno() {
+      const ahora = new Date();
+      const fechaSalida = ahora.toISOString().split("T")[0];
+      const horaSalida = ahora.toTimeString().slice(0,5);
+
+      const datos = {
+        tipo: "asistencia",
+        nombre: nombreUsuario,
+        fechaEntrada: fechaEntrada,
+        horaEntrada: horaEntrada,
+        fechaSalida: fechaSalida,
+        horaSalida: horaSalida
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        mostrar("despedida");
+      })
+      .catch(err => alert("Error: " + err));
+    }
+  </script>
+
+</body>
+</html>
