@@ -13,7 +13,7 @@
 
     body::before {
       content: "";
-      background-image: url('https://drive.google.com/uc?export=view&id=ID_DE_TU_IMAGEN'); /* ← Reemplaza con tu imagen institucional */
+      background-image: url('https://drive.google.com/uc?export=view&id=ID_DE_TU_IMAGEN');
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
@@ -24,6 +24,21 @@
       width: 100vw;
       height: 100vh;
       z-index: -1;
+    }
+
+    body::after {
+      content: "Propiedad institucional - Uso exclusivo\nColaboración del personal";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: #ffffff;
+      opacity: 0.05;
+      white-space: pre-line;
+      text-align: center;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .seccion {
@@ -112,16 +127,24 @@
       <option value="Transporte de mascota">Transporte de mascota</option>
     </select>
     <textarea id="observaciones" placeholder="Observaciones"></textarea>
+    <input type="text" id="folioGenerado" placeholder="Folio generado" readonly>
     <button onclick="guardarServicio()">Guardar Servicio</button>
     <button onclick="cerrarTurno()">Cerrar turno</button>
+    <button onclick="enviarComoImagen()">Enviar como imagen</button>
   </div>
 
   <!-- Despedida -->
   <div id="despedida" class="seccion">
     <h2>¡Gracias por tu servicio hoy!</h2>
     <p>Tu jornada ha sido registrada correctamente.</p>
+    <div style="margin-top: 20px;">
+      <p><strong>Consulta tus registros:</strong></p>
+      <a href="https://docs.google.com/spreadsheets/d/ID_ASISTENCIA/edit" target="_blank" style="color: white; text-decoration: underline;">📋 Asistencia registrada</a><br>
+      <a href="https://docs.google.com/spreadsheets/d/ID_SERVICIOS/edit" target="_blank" style="color: white; text-decoration: underline;">🚗 Servicios registrados</a>
+    </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
     const endpoint = "https://script.google.com/macros/s/AKfycbz784HsQoBkzdNhvd15Hrx-sLgoilzwvB0qGTO-s7NsaefH_iV-DYamhB0bHNPGTcDGAQ/exec";
 
@@ -158,15 +181,33 @@
     }
 
     function guardarServicio() {
+      const direccion = document.getElementById("direccion").value.trim();
+      const destino = document.getElementById("destino").value.trim();
+      const asignado = document.getElementById("asignado").value.trim();
+      const tipoServicio = document.getElementById("tipoServicio").value;
+
+      if (!direccion || !destino || !asignado || !tipoServicio) {
+        alert("Por favor completa todos los campos obligatorios.");
+        return;
+      }
+
+      const ahora = new Date();
+      const fechaFolio = ahora.toISOString().split("T")[0].replace(/-/g, "");
+      const horaFolio = ahora.toTimeString().slice(0,5).replace(":", "");
+      const aleatorio = Math.floor(Math.random() * 1000).toString().padStart(3, "0");
+      const folio = `F${fechaFolio}${horaFolio}${aleatorio}`;
+      document.getElementById("folioGenerado").value = folio;
+
       const datos = {
         tipo: "servicio",
+        folio: folio,
         fecha: document.getElementById("fecha").value,
         hora: document.getElementById("hora").value,
         telefonista: document.getElementById("telefonista").value,
-        domicilio: document.getElementById("direccion").value,
-        destino: document.getElementById("destino").value,
-        asignadoA: document.getElementById("asignado").value,
-        tipoServicio: document.getElementById("tipoServicio").value,
+        domicilio: direccion,
+        destino: destino,
+        asignadoA: asignado,
+        tipoServicio: tipoServicio,
         observaciones: document.getElementById("observaciones").value
       };
 
@@ -174,39 +215,3 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => alert(msg))
-      .catch(err => alert("Error: " + err));
-    }
-
-    function cerrarTurno() {
-      const ahora = new Date();
-      const fechaSalida = ahora.toISOString().split("T")[0];
-      const horaSalida = ahora.toTimeString().slice(0,5);
-
-      const datos = {
-        tipo: "asistencia",
-        nombre: nombreUsuario,
-        fechaEntrada: fechaEntrada,
-        horaEntrada: horaEntrada,
-        fechaSalida: fechaSalida,
-        horaSalida: horaSalida
-      };
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        mostrar("despedida");
-      })
-      .catch(err => alert("Error: " + err));
-    }
-  </script>
-
-</body>
-</html>
