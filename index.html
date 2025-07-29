@@ -4,11 +4,36 @@
   <meta charset="UTF-8">
   <title>Registro Institucional</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
     .seccion { display: none; }
     .visible { display: block; }
-    .logo { width: 150px; margin-bottom: 20px; }
-    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-    input, button { margin: 10px; padding: 10px; font-size: 16px; }
+    .logo { width: 120px; margin-bottom: 20px; }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      max-width: 400px;
+    }
+    button {
+      background-color: #004080;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0066cc;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -18,7 +43,7 @@
     <img src="LOGO-INSTITUCIONAL.png" alt="Logo" class="logo">
     <h1>Inicio de Jornada</h1>
     <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
-    <button id="btnContinuar">Continuar</button>
+    <button onclick="iniciarJornada()">Continuar</button>
   </div>
 
   <!-- Pantalla de bienvenida -->
@@ -29,26 +54,40 @@
   <!-- Formulario principal -->
   <div id="formulario" class="seccion">
     <h2>Registro de Servicio</h2>
-    <label>Telefonista:</label>
-    <input type="text" id="telefonista" readonly><br>
-    <label>Fecha:</label>
-    <input type="date" id="fecha" readonly><br>
-    <label>Hora:</label>
-    <input type="time" id="hora" readonly><br>
-    <!-- Aquí puedes seguir agregando campos -->
+    <label for="telefonista">Telefonista:</label>
+    <input type="text" id="telefonista" readonly>
+
+    <label for="fecha">Fecha:</label>
+    <input type="text" id="fecha" readonly>
+
+    <label for="hora">Hora:</label>
+    <input type="text" id="hora" readonly>
+
+    <!-- Puedes agregar más campos aquí -->
   </div>
 
   <script>
-    let nombreUsuario = "";
-    let fechaEntrada = "";
-    let horaEntrada = "";
-
     function mostrar(id) {
       document.querySelectorAll(".seccion").forEach(div => div.classList.remove("visible"));
       document.getElementById(id).classList.add("visible");
     }
 
-    document.getElementById("btnContinuar").addEventListener("click", iniciarJornada);
+    function obtenerFechaFormateada() {
+      const hoy = new Date();
+      const dia = String(hoy.getDate()).padStart(2, '0');
+      const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+      const año = hoy.getFullYear();
+      return `${dia}/${mes}/${año}`;
+    }
+
+    function obtenerHoraFormateada() {
+      const hoy = new Date();
+      return hoy.toLocaleTimeString('es-MX', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
 
     function iniciarJornada() {
       const nombre = document.getElementById("nombreUsuario").value.trim();
@@ -57,18 +96,17 @@
         return;
       }
 
-      nombreUsuario = nombre;
-      const ahora = new Date();
-      fechaEntrada = ahora.toISOString().split("T")[0];
-      horaEntrada = ahora.toTimeString().slice(0,5);
+      const fecha = obtenerFechaFormateada();
+      const hora = obtenerHoraFormateada();
 
-      document.getElementById("mensajeBienvenida").textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
+      document.getElementById("telefonista").value = nombre;
+      document.getElementById("fecha").value = fecha;
+      document.getElementById("hora").value = hora;
+
+      document.getElementById("mensajeBienvenida").textContent = `${nombre}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
       mostrar("bienvenida");
 
       setTimeout(() => {
-        document.getElementById("telefonista").value = nombreUsuario;
-        document.getElementById("fecha").value = fechaEntrada;
-        document.getElementById("hora").value = horaEntrada;
         mostrar("formulario");
       }, 3000);
     }
