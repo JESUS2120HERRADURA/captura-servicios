@@ -2,56 +2,51 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Captura de Servicios</title>
+  <title>Captura Institucional</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #003366;
-      color: white;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      background-color: #004080;
-      padding: 20px;
-      border-radius: 10px;
-      position: relative;
-    }
-    .watermark {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      font-size: 12px;
-      opacity: 0.5;
-    }
-    input, select, textarea, button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 8px;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-    }
-    button {
-      background-color: #0066cc;
-      color: white;
-      cursor: pointer;
-    }
-    button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h2 { color: #2c3e50; }
+    label { display: block; margin-top: 10px; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 20px; background-color: #2980b9; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #3498db; }
+    button:disabled { background-color: #999; cursor: not-allowed; }
+    .seccion { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
   </style>
 </head>
 <body>
-  <div class="container" id="formContainer">
-    <h2>Captura de Servicios</h2>
-    <label>Telefonista:</label>
-    <input type="text" id="telefonista" required>
 
-    <label>Folio:</label>
-    <input type="text" id="folio" readonly>
+  <h2>Registro de Asistencia</h2>
+  <div class="seccion">
+    <label>Nombre:</label>
+    <input type="text" id="nombre">
+
+    <label>Fecha Entrada:</label>
+    <input type="date" id="fechaEntrada">
+
+    <label>Hora Entrada:</label>
+    <input type="time" id="horaEntrada">
+
+    <label>Fecha Salida:</label>
+    <input type="date" id="fechaSalida">
+
+    <label>Hora Salida:</label>
+    <input type="time" id="horaSalida">
+
+    <button onclick="enviarAsistencia()">Registrar Asistencia</button>
+    <button id="btnContinuar" disabled onclick="irABienvenida()">Continuar</button>
+  </div>
+
+  <h2>Captura de Servicios</h2>
+  <div class="seccion">
+    <label>Fecha:</label>
+    <input type="date" id="fecha">
+
+    <label>Hora:</label>
+    <input type="time" id="hora">
+
+    <label>Telefonista:</label>
+    <input type="text" id="telefonista">
 
     <label>Domicilio:</label>
     <input type="text" id="domicilio">
@@ -59,96 +54,78 @@
     <label>Destino:</label>
     <input type="text" id="destino">
 
-    <label>Asignado:</label>
-    <input type="text" id="asignado">
+    <label>Asignado a:</label>
+    <input type="text" id="asignadoA">
 
-    <label>Tipo de servicio:</label>
+    <label>Tipo de Servicio:</label>
     <select id="tipoServicio">
-      <option value="">Selecciona</option>
       <option value="Traslado">Traslado</option>
       <option value="Emergencia">Emergencia</option>
-      <option value="Programado">Programado</option>
-      <!-- Agrega más según tu lista original -->
+      <option value="Consulta">Consulta</option>
+      <option value="Otro">Otro</option>
     </select>
 
     <label>Observaciones:</label>
     <textarea id="observaciones"></textarea>
 
-    <button onclick="guardarDatos()" id="btnGuardar">Guardar</button>
-    <button onclick="capturarImagen()" id="btnCaptura">Captura como imagen</button>
-    <button onclick="finDeTurno()" id="btnFin">Fin de turno</button>
-
-    <div class="watermark">© Jesús Sánchez C.</div>
+    <button onclick="enviarServicio()">Registrar Servicio</button>
   </div>
 
   <script>
-    let folioContador = 1;
-    let turnoActivo = true;
+    const endpoint = "https://script.google.com/macros/s/AKfycbw5EJwqYdBnp1GL_6bTUIY_635i43PF43zf4c8ohZl8UBEH8ZYhGdfWo2mX2hN4BYvzdw/exec";
 
-    function generarFolio() {
-      document.getElementById("folio").value = `SERV-${folioContador.toString().padStart(4, '0')}`;
+    function enviarAsistencia() {
+      const datos = {
+        tipo: "asistencia",
+        nombre: document.getElementById("nombre").value,
+        fechaEntrada: document.getElementById("fechaEntrada").value,
+        horaEntrada: document.getElementById("horaEntrada").value,
+        fechaSalida: document.getElementById("fechaSalida").value,
+        horaSalida: document.getElementById("horaSalida").value
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        document.getElementById("btnContinuar").disabled = false; // 🔓 Desbloquea el botón
+      })
+      .catch(err => alert("Error: " + err));
     }
 
-    function guardarDatos() {
-      if (!turnoActivo) return;
-      const telefonista = document.getElementById("telefonista").value;
-      const domicilio = document.getElementById("domicilio").value;
-      const destino = document.getElementById("destino").value;
-      const asignado = document.getElementById("asignado").value;
-      const tipo = document.getElementById("tipoServicio").value;
-
-      if (!telefonista || !domicilio || !destino || !asignado || !tipo) {
-        alert("Por favor, completa todos los campos obligatorios.");
-        return;
-      }
-
-      // Aquí iría la lógica para enviar a Google Sheets
-      console.log("Datos guardados:", {
-        folio: document.getElementById("folio").value,
-        telefonista, domicilio, destino, asignado, tipo,
+    function enviarServicio() {
+      const datos = {
+        tipo: "servicio",
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
+        domicilio: document.getElementById("domicilio").value,
+        destino: document.getElementById("destino").value,
+        asignadoA: document.getElementById("asignadoA").value,
+        tipoServicio: document.getElementById("tipoServicio").value,
         observaciones: document.getElementById("observaciones").value
-      });
+      };
 
-      folioContador++;
-      generarFolio();
-      limpiarCampos(false);
-      alert("Registro exitoso.");
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
     }
 
-    function capturarImagen() {
-      if (!turnoActivo) return;
-      html2canvas(document.getElementById("formContainer")).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `${document.getElementById("folio").value}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-      });
+    function irABienvenida() {
+      // Aquí se supone que ya tienes la hoja de bienvenida lista
+      // Este es solo el disparador
+      alert("Bienvenido. Puedes continuar.");
     }
-
-    function finDeTurno() {
-      turnoActivo = false;
-      const hora = new Date().toLocaleTimeString();
-      console.log(`Turno finalizado a las ${hora}`);
-      document.getElementById("btnGuardar").disabled = true;
-      document.getElementById("btnCaptura").disabled = true;
-      document.getElementById("btnFin").disabled = true;
-      alert(`Turno finalizado a las ${hora}`);
-    }
-
-    function limpiarCampos(resetTelefonista = false) {
-      if (resetTelefonista) document.getElementById("telefonista").value = "";
-      document.getElementById("domicilio").value = "";
-      document.getElementById("destino").value = "";
-      document.getElementById("asignado").value = "";
-      document.getElementById("tipoServicio").value = "";
-      document.getElementById("observaciones").value = "";
-    }
-
-    // Inicializa folio al cargar
-    window.onload = generarFolio;
   </script>
 
-  <!-- html2canvas para captura de imagen -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
