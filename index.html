@@ -2,130 +2,90 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Captura Institucional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Servicio</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
-    h2 { color: #2c3e50; }
-    label { display: block; margin-top: 10px; }
-    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 20px; background-color: #2980b9; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #3498db; }
-    button:disabled { background-color: #999; cursor: not-allowed; }
-    .seccion { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.7rem;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005ea6;
+    }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h2>Registro de Servicio</h2>
+    <form id="serviceForm">
+      <label for="fecha">FECHA *</label>
+      <input type="date" id="fecha" required>
 
-  <h2>Registro de Asistencia</h2>
-  <div class="seccion">
-    <label>Nombre:</label>
-    <input type="text" id="nombre">
+      <label for="telefonista">TELEFONISTA *</label>
+      <input type="text" id="telefonista" required>
 
-    <label>Fecha Entrada:</label>
-    <input type="date" id="fechaEntrada">
+      <label for="direccion">DIRECCIÓN *</label>
+      <input type="text" id="direccion" required>
 
-    <label>Hora Entrada:</label>
-    <input type="time" id="horaEntrada">
+      <label for="destino">DESTINO</label>
+      <input type="text" id="destino">
 
-    <label>Fecha Salida:</label>
-    <input type="date" id="fechaSalida">
+      <label for="asignado">ASIGNADOAX *</label>
+      <input type="text" id="asignado" required>
 
-    <label>Hora Salida:</label>
-    <input type="time" id="horaSalida">
+      <label for="instrucciones">INSTRUCCIONES ESPECIALES</label>
+      <textarea id="instrucciones" rows="3"></textarea>
 
-    <button onclick="enviarAsistencia()">Registrar Asistencia</button>
-    <button id="btnContinuar" disabled onclick="irABienvenida()">Continuar</button>
+      <label for="telefono">TELÉFONO</label>
+      <input type="tel" id="telefono">
+
+      <label for="tipo">TIPO DE SERVICIO</label>
+      <select id="tipo">
+        <option value="">Selecciona</option>
+        <option value="PASAR CORRIENTE">PASAR CORRIENTE</option>
+        <option value="TRASLADO">TRASLADO</option>
+        <option value="ASISTENCIA MECÁNICA">ASISTENCIA MECÁNICA</option>
+      </select>
+
+      <button type="submit">Registrar Servicio</button>
+    </form>
   </div>
-
-  <h2>Captura de Servicios</h2>
-  <div class="seccion">
-    <label>Fecha:</label>
-    <input type="date" id="fecha">
-
-    <label>Hora:</label>
-    <input type="time" id="hora">
-
-    <label>Telefonista:</label>
-    <input type="text" id="telefonista">
-
-    <label>Domicilio:</label>
-    <input type="text" id="domicilio">
-
-    <label>Destino:</label>
-    <input type="text" id="destino">
-
-    <label>Asignado a:</label>
-    <input type="text" id="asignadoA">
-
-    <label>Tipo de Servicio:</label>
-    <select id="tipoServicio">
-      <option value="Traslado">Traslado</option>
-      <option value="Emergencia">Emergencia</option>
-      <option value="Consulta">Consulta</option>
-      <option value="Otro">Otro</option>
-    </select>
-
-    <label>Observaciones:</label>
-    <textarea id="observaciones"></textarea>
-
-    <button onclick="enviarServicio()">Registrar Servicio</button>
-  </div>
-
-  <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbw5EJwqYdBnp1GL_6bTUIY_635i43PF43zf4c8ohZl8UBEH8ZYhGdfWo2mX2hN4BYvzdw/exec";
-
-    function enviarAsistencia() {
-      const datos = {
-        tipo: "asistencia",
-        nombre: document.getElementById("nombre").value,
-        fechaEntrada: document.getElementById("fechaEntrada").value,
-        horaEntrada: document.getElementById("horaEntrada").value,
-        fechaSalida: document.getElementById("fechaSalida").value,
-        horaSalida: document.getElementById("horaSalida").value
-      };
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        document.getElementById("btnContinuar").disabled = false; // 🔓 Desbloquea el botón
-      })
-      .catch(err => alert("Error: " + err));
-    }
-
-    function enviarServicio() {
-      const datos = {
-        tipo: "servicio",
-        fecha: document.getElementById("fecha").value,
-        hora: document.getElementById("hora").value,
-        telefonista: document.getElementById("telefonista").value,
-        domicilio: document.getElementById("domicilio").value,
-        destino: document.getElementById("destino").value,
-        asignadoA: document.getElementById("asignadoA").value,
-        tipoServicio: document.getElementById("tipoServicio").value,
-        observaciones: document.getElementById("observaciones").value
-      };
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => alert(msg))
-      .catch(err => alert("Error: " + err));
-    }
-
-    function irABienvenida() {
-      // Aquí se supone que ya tienes la hoja de bienvenida lista
-      // Este es solo el disparador
-      alert("Bienvenido. Puedes continuar.");
-    }
-  </script>
-
 </body>
 </html>
