@@ -3,139 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Captura de Servicios - Sitio Herradura</title>
+  <title>Tarifa de Destinos - Sitio Herradura</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      background: #f4f4f4;
+      margin: 0;
       padding: 20px;
     }
-    h1 {
+    header {
       text-align: center;
       margin-bottom: 20px;
     }
-    form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 600px;
-      margin: auto;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input, select {
+    input[type="text"] {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      font-size: 16px;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-    button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      background: #0078D4;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    .tarifa-card {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .success {
-      color: green;
-      text-align: center;
-      margin-top: 15px;
+    .tarifa-card h3 {
+      margin: 0 0 10px;
+      color: #333;
     }
-    .error {
-      color: red;
+    .tarifa-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .tarifa-card li {
+      margin-bottom: 5px;
+    }
+    .no-result {
       text-align: center;
-      margin-top: 15px;
+      color: #888;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <h1>Captura de Servicios</h1>
+  <header>
+    <h1>Tarifa de Destinos</h1>
+    <p>Sitio Herradura</p>
+  </header>
 
-  <form id="formulario">
-    <label for="folio">Folio</label>
-    <input type="text" id="folio" name="folio" readonly />
+  <input type="text" id="buscador" placeholder="Buscar destino..." />
 
-    <label for="responsable">Responsable</label>
-    <input type="text" id="responsable" name="responsable" required />
-
-    <label for="tipo">Tipo de servicio</label>
-    <select id="tipo" name="tipo" required>
-      <option value="">Selecciona una opción</option>
-      <option value="Traslado">Traslado</option>
-      <option value="Apoyo operativo">Apoyo operativo</option>
-      <option value="Supervisión">Supervisión</option>
-      <option value="Otro">Otro</option>
-    </select>
-
-    <label for="fecha">Fecha</label>
-    <input type="text" id="fecha" name="fecha" readonly />
-
-    <label for="hora">Hora</label>
-    <input type="text" id="hora" name="hora" readonly />
-
-    <button type="submit">Registrar servicio</button>
-    <div id="mensaje"></div>
-  </form>
+  <div id="resultados"></div>
 
   <script>
-    const folioInput = document.getElementById("folio");
-    const fechaInput = document.getElementById("fecha");
-    const horaInput = document.getElementById("hora");
-    const formulario = document.getElementById("formulario");
-    const mensaje = document.getElementById("mensaje");
+    const destinos = [
+      {
+        destino: "20 de Noviembre por Eduardo Molina",
+        tarifa_general: "$340.00",
+        tarifa_nocturna: "No disponible",
+        tarifa_tdc: "$357.00"
+      },
+      {
+        destino: "5 de Mayo (hospital infantil de legaría)",
+        tarifa_general: "$160.00",
+        tarifa_nocturna: "$192.00",
+        tarifa_tdc: "$168.00"
+      },
+      {
+        destino: "Academia de Policía",
+        tarifa_general: "$350.00",
+        tarifa_nocturna: "No disponible",
+        tarifa_tdc: "$367.50"
+      },
+      {
+        destino: "Academia de Policía VIA SANTA FE",
+        tarifa_general: "$340.00",
+        tarifa_nocturna: "No disponible",
+        tarifa_tdc: "$357.00"
+      }
+    ];
 
-    function generarFolio() {
-      const ahora = new Date();
-      const año = ahora.getFullYear().toString().slice(-2);
-      const mes = String(ahora.getMonth() + 1).padStart(2, "0");
-      const dia = String(ahora.getDate()).padStart(2, "0");
-      const hora = String(ahora.getHours()).padStart(2, "0");
-      const min = String(ahora.getMinutes()).padStart(2, "0");
-      return `SH-${año}${mes}${dia}-${hora}${min}`;
+    const buscador = document.getElementById("buscador");
+    const resultados = document.getElementById("resultados");
+
+    function normalizar(texto) {
+      return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function actualizarFechaHora() {
-      const ahora = new Date();
-      fechaInput.value = ahora.toLocaleDateString("es-MX");
-      horaInput.value = ahora.toLocaleTimeString("es-MX");
-    }
+    function buscarDestinos() {
+      const termino = normalizar(buscador.value.trim());
+      resultados.innerHTML = "";
 
-    folioInput.value = generarFolio();
-    actualizarFechaHora();
+      if (!termino) return;
 
-    formulario.addEventListener("submit", function (e) {
-      e.preventDefault();
+      const encontrados = destinos.filter(d =>
+        normalizar(d.destino).includes(termino)
+      );
 
-      const datos = {
-        folio: folioInput.value,
-        responsable: formulario.responsable.value.trim(),
-        tipo: formulario.tipo.value,
-        fecha: fechaInput.value,
-        hora: horaInput.value
-      };
-
-      if (!datos.responsable || !datos.tipo) {
-        mensaje.textContent = "Todos los campos son obligatorios.";
-        mensaje.className = "error";
+      if (encontrados.length === 0) {
+        resultados.innerHTML = `<p class="no-result">No se encontró ningún destino con "${buscador.value}"</p>`;
+        // Aquí podrías agregar la lógica para registrar el término no encontrado
         return;
       }
 
-      // Aquí puedes conectar con Google Sheets usando fetch a tu endpoint
-      console.log("Datos enviados:", datos);
-      mensaje.textContent = "Servicio registrado correctamente.";
-      mensaje.className = "success";
+      encontrados.forEach(d => {
+        const card = document.createElement("div");
+        card.className = "tarifa-card";
+        card.innerHTML = `
+          <h3>${d.destino}</h3>
+          <ul>
+            <li><strong>Tarifa general:</strong> ${d.tarifa_general}</li>
+            <li><strong>Tarifa nocturna:</strong> ${d.tarifa_nocturna}</li>
+            <li><strong>Tarifa TDC:</strong> ${d.tarifa_tdc}</li>
+          </ul>
+        `;
+        resultados.appendChild(card);
+      });
+    }
 
-      formulario.reset();
-      folioInput.value = generarFolio();
-      actualizarFechaHora();
-    });
+    buscador.addEventListener("input", buscarDestinos);
   </script>
 </body>
 </html>
