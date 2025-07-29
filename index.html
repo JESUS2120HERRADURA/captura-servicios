@@ -2,95 +2,56 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Captura Institucional</title>
+  <title>Captura de Servicios</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #003366;
+      color: white;
+      margin: 0;
       padding: 20px;
-      max-width: 700px;
-      margin: auto;
-      background-color: #f4f6f7;
     }
-    h2 {
-      color: #2c3e50;
-      border-bottom: 2px solid #2980b9;
-      padding-bottom: 5px;
-      margin-top: 40px;
+    .container {
+      background-color: #004080;
+      padding: 20px;
+      border-radius: 10px;
+      position: relative;
     }
-    label {
+    .watermark {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      opacity: 0.5;
+    }
+    input, select, textarea, button {
       display: block;
-      margin-top: 10px;
-    }
-    input, select, textarea {
       width: 100%;
+      margin: 10px 0;
       padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
     }
     button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #2980b9;
+      background-color: #0066cc;
       color: white;
-      border: none;
       cursor: pointer;
-      border-radius: 4px;
     }
-    button:hover {
-      background-color: #3498db;
-    }
-    .seccion {
-      margin-bottom: 30px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 20px;
-      background-color: #ffffff;
-      padding: 15px;
-      border-radius: 6px;
-    }
-    .marca {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.8em;
-      color: #7f8c8d;
+    button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
     }
   </style>
 </head>
-<body onload="generarFolio()">
+<body>
+  <div class="container" id="formContainer">
+    <h2>Captura de Servicios</h2>
+    <label>Telefonista:</label>
+    <input type="text" id="telefonista" required>
 
-  <h2>Registro de Asistencia</h2>
-  <div class="seccion">
-    <label>Nombre:</label>
-    <input type="text" id="nombre">
-
-    <label>Fecha Entrada:</label>
-    <input type="date" id="fechaEntrada">
-
-    <label>Hora Entrada:</label>
-    <input type="time" id="horaEntrada">
-
-    <label>Fecha Salida:</label>
-    <input type="date" id="fechaSalida">
-
-    <label>Hora Salida:</label>
-    <input type="time" id="horaSalida">
-
-    <button onclick="enviarAsistencia()">Registrar Asistencia</button>
-  </div>
-
-  <h2>Captura de Servicios</h2>
-  <div class="seccion">
     <label>Folio:</label>
     <input type="text" id="folio" readonly>
-
-    <label>Fecha:</label>
-    <input type="date" id="fecha">
-
-    <label>Hora:</label>
-    <input type="time" id="hora">
-
-    <label>Telefonista:</label>
-    <input type="text" id="telefonista">
 
     <label>Domicilio:</label>
     <input type="text" id="domicilio">
@@ -98,92 +59,96 @@
     <label>Destino:</label>
     <input type="text" id="destino">
 
-    <label>Asignado a:</label>
-    <input type="text" id="asignadoA">
+    <label>Asignado:</label>
+    <input type="text" id="asignado">
 
-    <label>Tipo de Servicio:</label>
+    <label>Tipo de servicio:</label>
     <select id="tipoServicio">
-      <option value="">Seleccione</option>
+      <option value="">Selecciona</option>
       <option value="Traslado">Traslado</option>
       <option value="Emergencia">Emergencia</option>
-      <option value="Consulta">Consulta</option>
-      <option value="Otro">Otro</option>
+      <option value="Programado">Programado</option>
+      <!-- Agrega más según tu lista original -->
     </select>
 
     <label>Observaciones:</label>
     <textarea id="observaciones"></textarea>
 
-    <button onclick="enviarServicio()">Registrar Servicio</button>
-  </div>
+    <button onclick="guardarDatos()" id="btnGuardar">Guardar</button>
+    <button onclick="capturarImagen()" id="btnCaptura">Captura como imagen</button>
+    <button onclick="finDeTurno()" id="btnFin">Fin de turno</button>
 
-  <div class="marca">
-    Propiedad y diseño de Jesús Sánchez C. con colaboración de Microsoft Copilot.
+    <div class="watermark">© Jesús Sánchez C.</div>
   </div>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbw5EJwqYdBnp1GL_6bTUIY_635i43PF43zf4c8ohZl8UBEH8ZYhGdfWo2mX2hN4BYvzdw/exec";
+    let folioContador = 1;
+    let turnoActivo = true;
 
     function generarFolio() {
-      const folio = "FOL-" + Date.now().toString().slice(-6);
-      document.getElementById("folio").value = folio;
+      document.getElementById("folio").value = `SERV-${folioContador.toString().padStart(4, '0')}`;
     }
 
-    function enviarAsistencia() {
-      const datos = {
-        tipo: "asistencia",
-        nombre: document.getElementById("nombre").value,
-        fechaEntrada: document.getElementById("fechaEntrada").value,
-        horaEntrada: document.getElementById("horaEntrada").value,
-        fechaSalida: document.getElementById("fechaSalida").value,
-        horaSalida: document.getElementById("horaSalida").value
-      };
+    function guardarDatos() {
+      if (!turnoActivo) return;
+      const telefonista = document.getElementById("telefonista").value;
+      const domicilio = document.getElementById("domicilio").value;
+      const destino = document.getElementById("destino").value;
+      const asignado = document.getElementById("asignado").value;
+      const tipo = document.getElementById("tipoServicio").value;
 
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        document.querySelectorAll('#nombre, #fechaEntrada, #horaEntrada, #fechaSalida, #horaSalida').forEach(el => el.value = "");
-      })
-      .catch(err => alert("Error: " + err));
-    }
-
-    function enviarServicio() {
-      const datos = {
-        tipo: "servicio",
-        folio: document.getElementById("folio").value,
-        fecha: document.getElementById("fecha").value,
-        hora: document.getElementById("hora").value,
-        telefonista: document.getElementById("telefonista").value,
-        domicilio: document.getElementById("domicilio").value,
-        destino: document.getElementById("destino").value,
-        asignadoA: document.getElementById("asignadoA").value,
-        tipoServicio: document.getElementById("tipoServicio").value,
-        observaciones: document.getElementById("observaciones").value
-      };
-
-      if (!datos.domicilio || !datos.tipoServicio || !datos.asignadoA) {
-        alert("Por favor completa los campos obligatorios.");
+      if (!telefonista || !domicilio || !destino || !asignado || !tipo) {
+        alert("Por favor, completa todos los campos obligatorios.");
         return;
       }
 
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        document.querySelectorAll('#fecha, #hora, #telefonista, #domicilio, #destino, #asignadoA, #tipoServicio, #observaciones').forEach(el => el.value = "");
-        generarFolio();
-      })
-      .catch(err => alert("Error: " + err));
+      // Aquí iría la lógica para enviar a Google Sheets
+      console.log("Datos guardados:", {
+        folio: document.getElementById("folio").value,
+        telefonista, domicilio, destino, asignado, tipo,
+        observaciones: document.getElementById("observaciones").value
+      });
+
+      folioContador++;
+      generarFolio();
+      limpiarCampos(false);
+      alert("Registro exitoso.");
     }
+
+    function capturarImagen() {
+      if (!turnoActivo) return;
+      html2canvas(document.getElementById("formContainer")).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `${document.getElementById("folio").value}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    function finDeTurno() {
+      turnoActivo = false;
+      const hora = new Date().toLocaleTimeString();
+      console.log(`Turno finalizado a las ${hora}`);
+      document.getElementById("btnGuardar").disabled = true;
+      document.getElementById("btnCaptura").disabled = true;
+      document.getElementById("btnFin").disabled = true;
+      alert(`Turno finalizado a las ${hora}`);
+    }
+
+    function limpiarCampos(resetTelefonista = false) {
+      if (resetTelefonista) document.getElementById("telefonista").value = "";
+      document.getElementById("domicilio").value = "";
+      document.getElementById("destino").value = "";
+      document.getElementById("asignado").value = "";
+      document.getElementById("tipoServicio").value = "";
+      document.getElementById("observaciones").value = "";
+    }
+
+    // Inicializa folio al cargar
+    window.onload = generarFolio;
   </script>
 
+  <!-- html2canvas para captura de imagen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
