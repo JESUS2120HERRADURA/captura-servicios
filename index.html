@@ -3,139 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro Institucional</title>
+  <title>Registro de Servicio</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #fff;
-      background-image: url('marca_agua.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 250px;
+      margin: 0;
+      padding: 1rem;
+      background-color: #f4f4f4;
     }
-    .contenedor {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .titulo {
+    h2 {
       text-align: center;
-      color: #004080;
-      font-size: 1.4em;
-      margin-bottom: 10px;
-    }
-    .folio {
-      text-align: right;
-      font-size: 0.9em;
-      color: #555;
-      margin-bottom: 10px;
+      margin-bottom: 1rem;
     }
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 1rem;
       font-weight: bold;
-      color: #333;
     }
-    input, select {
+    input, select, textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 4px;
     }
     button {
+      margin-top: 1.5rem;
       width: 100%;
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #004080;
+      padding: 0.7rem;
+      background-color: #0078D7;
       color: white;
       border: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 4px;
+      font-size: 1rem;
       cursor: pointer;
     }
     button:hover {
-      background-color: #003366;
+      background-color: #005ea6;
     }
   </style>
 </head>
 <body>
-  <div class="contenedor">
-    <div class="titulo">Registro de Servicio</div>
-    <div class="folio" id="folioDisplay">Folio: CSD-0001</div>
+  <div class="container">
+    <h2>Registro de Servicio</h2>
+    <form id="serviceForm">
+      <label for="fecha">FECHA *</label>
+      <input type="date" id="fecha" required>
 
-    <label for="nombre">Nombre completo</label>
-    <input type="text" id="nombre" />
+      <label for="telefonista">TELEFONISTA *</label>
+      <input type="text" id="telefonista" required>
 
-    <label for="servicio">Tipo de servicio</label>
-    <select id="servicio">
-      <option value="Asesoría">Asesoría</option>
-      <option value="Orientación">Orientación</option>
-      <option value="Seguimiento">Seguimiento</option>
-      <option value="Otro">Otro</option>
-    </select>
+      <label for="direccion">DIRECCIÓN *</label>
+      <input type="text" id="direccion" required>
 
-    <label for="comentarios">Comentarios</label>
-    <input type="text" id="comentarios" />
+      <label for="destino">DESTINO</label>
+      <input type="text" id="destino">
 
-    <button onclick="registrar()">Registrar</button>
+      <label for="asignado">ASIGNADOAX *</label>
+      <input type="text" id="asignado" required>
+
+      <label for="instrucciones">INSTRUCCIONES ESPECIALES</label>
+      <textarea id="instrucciones" rows="3"></textarea>
+
+      <label for="telefono">TELÉFONO</label>
+      <input type="tel" id="telefono">
+
+      <label for="tipo">TIPO DE SERVICIO</label>
+      <select id="tipo">
+        <option value="">Selecciona</option>
+        <option value="PASAR CORRIENTE">PASAR CORRIENTE</option>
+        <option value="TRASLADO">TRASLADO</option>
+        <option value="ASISTENCIA MECÁNICA">ASISTENCIA MECÁNICA</option>
+      </select>
+
+      <button type="submit">Registrar Servicio</button>
+    </form>
   </div>
-
-  <script>
-    let folioActual = 1;
-
-    function actualizarFolio() {
-      const folio = `CSD-${folioActual.toString().padStart(4, '0')}`;
-      document.getElementById('folioDisplay').textContent = `Folio: ${folio}`;
-    }
-
-    function registrar() {
-      const nombre = document.getElementById('nombre').value.trim();
-      const servicio = document.getElementById('servicio').value;
-      const comentarios = document.getElementById('comentarios').value.trim();
-      const folio = `CSD-${folioActual.toString().padStart(4, '0')}`;
-      const fecha = new Date().toLocaleString();
-
-      if (!nombre) {
-        alert("Por favor ingresa el nombre.");
-        return;
-      }
-
-      const datos = {
-        folio,
-        nombre,
-        servicio,
-        comentarios,
-        fecha
-      };
-
-      // Conexión con Google Sheets (reemplaza con tu endpoint)
-      fetch('TU_ENDPOINT_DE_GOOGLE_SHEETS', {
-        method: 'POST',
-        body: JSON.stringify(datos),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => {
-        if (res.ok) {
-          alert("Registro exitoso.");
-          folioActual++;
-          actualizarFolio();
-          document.getElementById('nombre').value = '';
-          document.getElementById('comentarios').value = '';
-        } else {
-          alert("Error al registrar.");
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Error de conexión.");
-      });
-    }
-
-    actualizarFolio();
-  </script>
 </body>
 </html>
