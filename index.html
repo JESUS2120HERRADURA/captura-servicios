@@ -28,12 +28,14 @@
 
     .marca-agua {
       position: fixed;
-      bottom: 5px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
       font-size: 11px;
       color: white;
       opacity: 0.3;
+      padding: 5px 0;
       pointer-events: none;
       z-index: 999;
       font-style: italic;
@@ -161,8 +163,7 @@
     }
 
     function iniciarJornada() {
-      const nombreInput = document.getElementById("nombreUsuario");
-      const nombre = nombreInput.value.trim();
+      const nombre = document.getElementById("nombreUsuario").value.trim();
       if (nombre === "") {
         alert("Por favor ingresa tu nombre.");
         return;
@@ -217,4 +218,11 @@
         observaciones: document.getElementById("observaciones").value
       };
 
-      fetch(endpoint
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert
