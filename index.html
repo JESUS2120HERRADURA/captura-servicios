@@ -67,6 +67,7 @@
       margin-bottom: 20px;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -122,16 +123,21 @@
 
   <!-- Script -->
   <script>
-    let folioContador = 1;
     let nombreUsuario = "";
+    const scriptURL = "https://script.google.com/macros/s/TU_ID_DE_SCRIPT/exec"; // Reemplaza con tu URL
 
-    function generarFolio() {
-      const fecha = new Date();
-      const año = fecha.getFullYear();
-      return `${folioContador}/${año.toString().slice(-2)}`;
+    async function generarFolioDesdeSheets() {
+      try {
+        const res = await fetch(scriptURL);
+        const folio = await res.text();
+        return folio;
+      } catch (error) {
+        console.error("Error al generar folio:", error);
+        return "Error";
+      }
     }
 
-    function iniciarJornada() {
+    async function iniciarJornada() {
       const nombre = document.getElementById('nombreUsuario').value.trim();
       if (nombre === "") {
         alert("Por favor ingresa tu nombre.");
@@ -143,18 +149,19 @@
       document.getElementById('mensajeBienvenida').textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
       document.getElementById('bienvenida').classList.remove('hidden');
 
-      setTimeout(() => {
+      setTimeout(async () => {
         document.getElementById('bienvenida').classList.add('hidden');
         document.getElementById('formulario').classList.remove('hidden');
 
-        document.getElementById('folio').value = generarFolio();
+        const folio = await generarFolioDesdeSheets();
+        document.getElementById('folio').value = folio;
         document.getElementById('fecha').valueAsDate = new Date();
         document.getElementById('hora').value = new Date().toTimeString().slice(0,5);
         document.getElementById('telefonista').value = nombreUsuario;
       }, 4000);
     }
 
-    function guardarDatos() {
+    async function guardarDatos() {
       const campos = [
         { id: 'direccion', nombre: 'Dirección' },
         { id: 'destino', nombre: 'Destino' },
@@ -181,13 +188,38 @@
         observaciones: document.getElementById('observaciones').value
       };
 
-      console.log("Datos enviados a la base de datos:", datos);
-      alert("Datos guardados correctamente.");
-      folioContador++;
+      try {
+        const res = await fetch(scriptURL, {
+          method: "POST",
+          body: JSON.stringify(datos),
+          headers: { "Content-Type": "application/json" }
+        });
+        const result = await res.text();
+        if (result === "OK") {
+          alert("Datos guardados correctamente.");
+        } else {
+          alert("Error al guardar datos.");
+        }
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        alert("Error de conexión.");
+      }
     }
 
     function copiarComoImagen() {
-      alert("Función de copiar como imagen aún no implementada.");
+      const formulario = document.getElementById('formulario');
+
+      html2canvas(formulario).then(canvas => {
+        canvas.toBlob(blob => {
+          const item = new ClipboardItem({ "image/png": blob });
+          navigator.clipboard.write([item]).then(() => {
+            alert("Formulario copiado como imagen. Puedes pegarlo directamente en Telegram.");
+          }).catch(err => {
+            console.error("Error al copiar imagen:", err);
+            alert("No se pudo copiar la imagen. Verifica que tu navegador permita copiar imágenes.");
+          });
+        });
+      });
     }
 
     function cerrarTurno() {
