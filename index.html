@@ -131,4 +131,90 @@
   </div>
 
   <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbyXaFGzYJAhF3L_5ZeXvC9t3
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbyXaFGzYJAhF3L_5ZeXvC9t3T7QOI1EmHdca5F-ssdYFhM0kaFW4ceFvz5185NWV8vBSw/exec";
+
+    async function obtenerFolio() {
+      try {
+        const res = await fetch(webAppUrl);
+        const folio = await res.text();
+        document.getElementById("folio").value = folio;
+      } catch (error) {
+        console.error("Error al obtener folio:", error);
+      }
+    }
+
+    function establecerFechaHora() {
+      const ahora = new Date();
+      const fecha = ahora.toLocaleDateString('es-MX');
+      const hora = ahora.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('fecha').value = fecha;
+      document.getElementById('hora').value = hora;
+    }
+
+    function construirMensajeTelegram(datos) {
+      return `📋 *Registro de Servicio*\n` +
+             `🆔 Folio: ${datos.folio}\n` +
+             `📅 Fecha: ${datos.fecha} 🕒 Hora: ${datos.hora}\n` +
+             `👤 Telefonista: ${datos.telefonista}\n` +
+             `📍 Dirección: ${datos.direccion}\n` +
+             `➡️ Destino: ${datos.destino || "N/A"}\n` +
+             `🧑‍🔧 AsignadoAX: ${datos.asignado}\n` +
+             `📝 Instrucciones: ${datos.instrucciones || "Ninguna"}\n` +
+             `📞 Teléfono: ${datos.telefono || "N/A"}\n` +
+             `🚗 Tipo de servicio: ${datos.tipo}`;
+    }
+
+    document.getElementById("serviceForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const datos = {
+        folio: document.getElementById("folio").value,
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
+        direccion: document.getElementById("direccion").value,
+        destino: document.getElementById("destino").value,
+        asignado: document.getElementById("asignado").value,
+        instrucciones: document.getElementById("instrucciones").value,
+        telefono: document.getElementById("telefono").value,
+        tipo: document.getElementById("tipo").value
+      };
+
+      try {
+        // 1. Guardar en Google Sheets
+        const res = await fetch(webAppUrl, {
+          method: "POST",
+          body: JSON.stringify(datos),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+
+        const respuesta = await res.text();
+        alert("✅ Servicio registrado correctamente.");
+
+        // 2. Generar copia virtual para Telegram
+        const mensajeTelegram = construirMensajeTelegram(datos);
+        prompt("📲 Copia este mensaje para pegar en Telegram:", mensajeTelegram);
+
+        // 3. Preguntar si desea limpiar el formulario
+        const limpiar = confirm("¿Deseas capturar otro servicio?");
+        if (limpiar) {
+          document.getElementById("serviceForm").reset();
+          establecerFechaHora();
+          obtenerFolio();
+        }
+
+      } catch (error) {
+        console.error("Error al registrar:", error);
+        alert("❌ Error al registrar el servicio.");
+      }
+    });
+
+    window.onload = () => {
+      establecerFechaHora();
+      obtenerFolio();
+    };
+  </script>
+</body>
+</html>
