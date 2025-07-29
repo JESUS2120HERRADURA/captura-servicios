@@ -89,7 +89,9 @@
 </head>
 <body>
 
-  <div class="marca-agua">Propiedad institucional · Uso exclusivo · Colaboración del personal</div>
+  <div class="marca-agua">
+    Propiedad y diseño de Jesús Sánchez C. con la colaboración de Microsoft Copilot
+  </div>
 
   <!-- Carátula -->
   <div id="caratula" class="seccion visible">
@@ -150,10 +152,6 @@
   <script>
     const endpoint = "https://script.google.com/macros/s/AKfycbz784HsQoBkzdNhvd15Hrx-sLgoilzwvB0qGTO-s7NsaefH_iV-DYamhB0bHNPGTcDGAQ/exec";
 
-    let nombreUsuario = "";
-    let fechaEntrada = "";
-    let horaEntrada = "";
-
     function mostrar(id) {
       document.querySelectorAll(".seccion").forEach(s => s.classList.remove("visible"));
       const seccion = document.getElementById(id);
@@ -169,20 +167,20 @@
         return;
       }
 
-      nombreUsuario = nombre;
       const ahora = new Date();
-      fechaEntrada = ahora.toISOString().split("T")[0];
-      horaEntrada = ahora.toTimeString().slice(0,5);
+      const fechaEntrada = ahora.toISOString().split("T")[0];
+      const horaEntrada = ahora.toTimeString().slice(0,5);
+
+      document.getElementById("telefonista").value = nombre;
+      document.getElementById("fecha").value = fechaEntrada;
+      document.getElementById("hora").value = horaEntrada;
 
       document.getElementById("mensajeBienvenida").textContent =
-        `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
+        `${nombre}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
 
       mostrar("bienvenida");
 
       setTimeout(() => {
-        document.getElementById("telefonista").value = nombreUsuario;
-        document.getElementById("fecha").value = fechaEntrada;
-        document.getElementById("hora").value = horaEntrada;
         mostrar("formulario");
       }, 3000);
     }
@@ -223,6 +221,4 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
       })
-      .then(res => res.text())
-      .then(msg => alert(msg))
-      .catch(err => alert
+      .then
