@@ -12,18 +12,33 @@
     }
 
     body::before {
-  content: "Propiedad y diseño de Jesús Sánchez C. con la colaboración de Microsoft Copilot";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-30deg);
-  font-size: 2.5vw;
-  color: white;
-  opacity: 0.08;
-  white-space: nowrap;
-  z-index: -1;
-  pointer-events: none;
-}
+      content: "";
+      background-image: url('https://drive.google.com/uc?export=view&id=ID_DE_TU_IMAGEN'); /* ← Reemplaza con tu imagen institucional si deseas */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: 0.08;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+
+    body::after {
+      content: "Propiedad y diseño de Jesús Sánchez C. con la colaboración de Microsoft Copilot";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 2.5vw;
+      color: white;
+      opacity: 0.08;
+      white-space: nowrap;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     .seccion {
       display: none;
@@ -112,6 +127,7 @@
     </select>
     <textarea id="observaciones" placeholder="Observaciones"></textarea>
     <button onclick="guardarServicio()">Guardar Servicio</button>
+    <button onclick="generarMensaje()">Enviar</button>
     <button onclick="cerrarTurno()">Cerrar turno</button>
   </div>
 
@@ -179,6 +195,23 @@
       .catch(err => alert("Error: " + err));
     }
 
+    function generarMensaje() {
+      const fecha = document.getElementById("fecha").value;
+      const hora = document.getElementById("hora").value;
+      const telefonista = document.getElementById("telefonista").value;
+      const direccion = document.getElementById("direccion").value;
+      const destino = document.getElementById("destino").value;
+      const asignado = document.getElementById("asignado").value;
+      const tipoServicio = document.getElementById("tipoServicio").value;
+      const observaciones = document.getElementById("observaciones").value;
+
+      const mensaje = `📝 *Registro de Servicio*\n\n📅 Fecha: ${fecha}\n⏰ Hora: ${hora}\n👤 Telefonista: ${telefonista}\n📍 Dirección: ${direccion}\n➡️ Destino: ${destino}\n👥 Asignado a: ${asignado}\n🚗 Tipo de servicio: ${tipoServicio}\n🗒️ Observaciones: ${observaciones}`;
+
+      navigator.clipboard.writeText(mensaje)
+        .then(() => alert("Mensaje copiado al portapapeles. Puedes pegarlo en Telegram."))
+        .catch(err => alert("Error al copiar el mensaje: " + err));
+    }
+
     function cerrarTurno() {
       const ahora = new Date();
       const fechaSalida = ahora.toISOString().split("T")[0];
@@ -194,18 +227,4 @@
       };
 
       fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        mostrar("despedida");
-      })
-      .catch(err => alert("Error: " + err));
-    }
-  </script>
-
-</body>
-</html>
+       
