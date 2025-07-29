@@ -2,34 +2,43 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro Institucional</title>
+  <title>Captura Institucional</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #005fa3;
+      color: white;
+    }
+
+    body::before {
+      content: "";
+      background-image: url('URL_DE_LA_MARCA_DE_AGUA'); /* ← Reemplaza con tu imagen */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: 0.08;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
     }
 
     .seccion {
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
       text-align: center;
-      background-image: url('marca-agua.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 300px;
-      background-blend-mode: lighten;
-      background-color: #005fa3;
     }
 
-    .hidden {
-      display: none;
+    .visible {
+      display: flex;
     }
 
     input, select, textarea, button {
@@ -58,10 +67,6 @@
       background-color: #e0e0e0;
     }
 
-    h1, h2, p, label {
-      color: white;
-    }
-
     .logo {
       width: 120px;
       margin-bottom: 20px;
@@ -71,7 +76,7 @@
 <body>
 
   <!-- Carátula -->
-  <div id="caratula" class="seccion">
+  <div id="caratula" class="seccion visible">
     <img src="LOGO-INSTITUCIONAL.png" alt="Logo" class="logo">
     <h1>Inicio de Jornada</h1>
     <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
@@ -79,14 +84,13 @@
   </div>
 
   <!-- Bienvenida -->
-  <div id="bienvenida" class="seccion hidden">
+  <div id="bienvenida" class="seccion">
     <h2 id="mensajeBienvenida"></h2>
   </div>
 
   <!-- Formulario -->
-  <div id="formulario" class="seccion hidden">
+  <div id="formulario" class="seccion">
     <h2>Registro de Servicio</h2>
-    <input type="text" id="folio" readonly>
     <input type="date" id="fecha">
     <input type="time" id="hora">
     <input type="text" id="telefonista" readonly>
@@ -109,92 +113,26 @@
       <option value="Transporte de mascota">Transporte de mascota</option>
     </select>
     <textarea id="observaciones" placeholder="Observaciones"></textarea>
-    <button onclick="guardarDatos()">Guardar</button>
-    <button onclick="copiarComoImagen()">Copiar como imagen</button>
+    <button onclick="guardarServicio()">Guardar Servicio</button>
     <button onclick="cerrarTurno()">Cerrar turno</button>
   </div>
 
   <!-- Despedida -->
-  <div id="despedida" class="seccion hidden">
+  <div id="despedida" class="seccion">
     <h2>¡Gracias por tu servicio hoy!</h2>
     <p>Tu jornada ha sido registrada correctamente.</p>
   </div>
 
-  <!-- Script -->
   <script>
-    let folioContador = 1;
+    const endpoint = "https://script.google.com/macros/s/AKfycbw5EJwqYdBnp1GL_6bTUIY_635i43PF43zf4c8ohZl8UBEH8ZYhGdfWo2mX2hN4BYvzdw/exec";
     let nombreUsuario = "";
+    let fechaEntrada = "";
+    let horaEntrada = "";
 
-    function generarFolio() {
-      const fecha = new Date();
-      const año = fecha.getFullYear();
-      return `${folioContador}/${año.toString().slice(-2)}`;
+    function mostrar(id) {
+      document.querySelectorAll(".seccion").forEach(s => s.classList.remove("visible"));
+      document.getElementById(id).classList.add("visible");
     }
 
     function iniciarJornada() {
-      const nombre = document.getElementById('nombreUsuario').value.trim();
-      if (nombre === "") {
-        alert("Por favor ingresa tu nombre.");
-        return;
-      }
-
-      nombreUsuario = nombre;
-      document.getElementById('caratula').classList.add('hidden');
-      document.getElementById('mensajeBienvenida').textContent = `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
-      document.getElementById('bienvenida').classList.remove('hidden');
-
-      setTimeout(() => {
-        document.getElementById('bienvenida').classList.add('hidden');
-        document.getElementById('formulario').classList.remove('hidden');
-
-        document.getElementById('folio').value = generarFolio();
-        document.getElementById('fecha').valueAsDate = new Date();
-        document.getElementById('hora').value = new Date().toTimeString().slice(0,5);
-        document.getElementById('telefonista').value = nombreUsuario;
-      }, 4000);
-    }
-
-    function guardarDatos() {
-      const campos = [
-        { id: 'direccion', nombre: 'Dirección' },
-        { id: 'destino', nombre: 'Destino' },
-        { id: 'asignado', nombre: 'Asignado a' },
-        { id: 'tipoServicio', nombre: 'Tipo de servicio' }
-      ];
-
-      let faltantes = campos.filter(c => document.getElementById(c.id).value.trim() === "");
-
-      if (faltantes.length > 0) {
-        alert("Faltan campos obligatorios:\n" + faltantes.map(f => `- ${f.nombre}`).join("\n"));
-        return;
-      }
-
-      const datos = {
-        folio: document.getElementById('folio').value,
-        fecha: document.getElementById('fecha').value,
-        hora: document.getElementById('hora').value,
-        telefonista: document.getElementById('telefonista').value,
-        direccion: document.getElementById('direccion').value,
-        destino: document.getElementById('destino').value,
-        asignado: document.getElementById('asignado').value,
-        tipoServicio: document.getElementById('tipoServicio').value,
-        observaciones: document.getElementById('observaciones').value
-      };
-
-      console.log("Datos enviados a la base de datos:", datos);
-      alert("Datos guardados correctamente.");
-      folioContador++;
-    }
-
-    function copiarComoImagen() {
-      alert("Función de copiar como imagen aún no implementada.");
-    }
-
-    function cerrarTurno() {
-      document.getElementById('formulario').classList.add('hidden');
-      document.getElementById('despedida').classList.remove('hidden');
-    }
-  </script>
-
-</body>
-</html>
+      const nombre = document.getElementById("nombreUsuario").
