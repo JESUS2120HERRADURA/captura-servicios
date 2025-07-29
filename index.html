@@ -26,19 +26,16 @@
       z-index: -1;
     }
 
-    body::after {
-      content: "Propiedad institucional - Uso exclusivo\nColaboración del personal";
+    .marca-agua {
       position: fixed;
-      top: 50%;
+      bottom: 5px;
       left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      color: #ffffff;
-      opacity: 0.05;
-      white-space: pre-line;
-      text-align: center;
-      z-index: -1;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: white;
+      opacity: 0.3;
       pointer-events: none;
+      z-index: 999;
     }
 
     .seccion {
@@ -88,3 +85,140 @@
   </style>
 </head>
 <body>
+
+  <!-- Marca de agua -->
+  <div class="marca-agua">Propiedad institucional - Uso exclusivo · Colaboración del personal</div>
+
+  <!-- Carátula -->
+  <div id="caratula" class="seccion visible">
+    <img src="LOGO-INSTITUCIONAL.png" alt="Logo" class="logo">
+    <h1>Inicio de Jornada</h1>
+    <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
+    <button onclick="iniciarJornada()">Continuar</button>
+  </div>
+
+  <!-- Bienvenida -->
+  <div id="bienvenida" class="seccion">
+    <h2 id="mensajeBienvenida"></h2>
+  </div>
+
+  <!-- Formulario -->
+  <div id="formulario" class="seccion">
+    <h2>Registro de Servicio</h2>
+    <input type="date" id="fecha">
+    <input type="time" id="hora">
+    <input type="text" id="telefonista" readonly>
+    <input type="text" id="direccion" placeholder="Dirección del servicio">
+    <input type="text" id="destino" placeholder="Destino">
+    <input type="text" id="asignado" placeholder="Asignado a">
+    <select id="tipoServicio">
+      <option value="">Selecciona tipo de servicio</option>
+      <option value="Normal">Normal</option>
+      <option value="Por tiempo">Por tiempo</option>
+      <option value="Carro rotulado">Carro rotulado</option>
+      <option value="Mensajería">Mensajería</option>
+      <option value="Paquetería">Paquetería</option>
+      <option value="Mensajería compras">Mensajería compras</option>
+      <option value="Carro sin rotular">Carro sin rotular</option>
+      <option value="2 carros">2 carros</option>
+      <option value="Guía">Guía</option>
+      <option value="Cambio de llanta">Cambio de llanta</option>
+      <option value="Pasar corriente">Pasar corriente</option>
+      <option value="Transporte de mascota">Transporte de mascota</option>
+    </select>
+    <textarea id="observaciones" placeholder="Observaciones"></textarea>
+    <input type="text" id="folioGenerado" placeholder="Folio generado" readonly>
+    <button onclick="guardarServicio()">Guardar Servicio</button>
+    <button onclick="cerrarTurno()">Cerrar turno</button>
+    <button onclick="enviarComoImagen()">Enviar como imagen</button>
+  </div>
+
+  <!-- Despedida -->
+  <div id="despedida" class="seccion">
+    <h2>¡Gracias por tu servicio hoy!</h2>
+    <p>Tu jornada ha sido registrada correctamente.</p>
+    <div style="margin-top: 20px;">
+      <p><strong>Consulta tus registros:</strong></p>
+      <a href="https://docs.google.com/spreadsheets/d/ID_ASISTENCIA/edit" target="_blank" style="color: white; text-decoration: underline;">📋 Asistencia registrada</a><br>
+      <a href="https://docs.google.com/spreadsheets/d/ID_SERVICIOS/edit" target="_blank" style="color: white; text-decoration: underline;">🚗 Servicios registrados</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    const endpoint = "https://script.google.com/macros/s/AKfycbz784HsQoBkzdNhvd15Hrx-sLgoilzwvB0qGTO-s7NsaefH_iV-DYamhB0bHNPGTcDGAQ/exec";
+
+    let nombreUsuario = "";
+    let fechaEntrada = "";
+    let horaEntrada = "";
+
+    function mostrar(id) {
+      document.querySelectorAll(".seccion").forEach(s => s.classList.remove("visible"));
+      const seccion = document.getElementById(id);
+      if (seccion) {
+        seccion.classList.add("visible");
+      }
+    }
+
+    function iniciarJornada() {
+      const nombreInput = document.getElementById("nombreUsuario");
+      const nombre = nombreInput.value.trim();
+      if (nombre === "") {
+        alert("Por favor ingresa tu nombre.");
+        return;
+      }
+
+      nombreUsuario = nombre;
+      const ahora = new Date();
+      fechaEntrada = ahora.toISOString().split("T")[0];
+      horaEntrada = ahora.toTimeString().slice(0,5);
+
+      document.getElementById("mensajeBienvenida").textContent =
+        `${nombreUsuario}, gracias por tu compromiso. ¡Vamos a dar lo mejor hoy!`;
+
+      mostrar("bienvenida");
+
+      setTimeout(() => {
+        document.getElementById("telefonista").value = nombreUsuario;
+        document.getElementById("fecha").value = fechaEntrada;
+        document.getElementById("hora").value = horaEntrada;
+        mostrar("formulario");
+      }, 3000);
+    }
+
+    function guardarServicio() {
+      const direccion = document.getElementById("direccion").value.trim();
+      const destino = document.getElementById("destino").value.trim();
+      const asignado = document.getElementById("asignado").value.trim();
+      const tipoServicio = document.getElementById("tipoServicio").value;
+
+      if (!direccion || !destino || !asignado || !tipoServicio) {
+        alert("Por favor completa todos los campos obligatorios.");
+        return;
+      }
+
+      const ahora = new Date();
+      const fechaFolio = ahora.toISOString().split("T")[0].replace(/-/g, "");
+      const horaFolio = ahora.toTimeString().slice(0,5).replace(":", "");
+      const aleatorio = Math.floor(Math.random() * 1000).toString().padStart(3, "0");
+      const folio = `F${fechaFolio}${horaFolio}${aleatorio}`;
+      document.getElementById("folioGenerado").value = folio;
+
+      const datos = {
+        tipo: "servicio",
+        folio: folio,
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        telefonista: document.getElementById("telefonista").value,
+        domicilio: direccion,
+        destino: destino,
+        asignadoA: asignado,
+        tipoServicio: tipoServicio,
+        observaciones: document.getElementById("observaciones").value
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      }).then(()
