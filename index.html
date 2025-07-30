@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro de Servicio</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -19,30 +16,26 @@
       align-items: flex-start;
       min-height: 100vh;
     }
-
     .container {
       width: 100%;
       max-width: 600px;
       margin: 2rem;
-      background-color: #0078D7; /* Azul institucional sólido */
+      background-color: #0078D7;
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       color: white;
     }
-
     h2 {
       text-align: center;
       margin-bottom: 1.5rem;
       color: white;
     }
-
     label {
       display: block;
       margin-top: 1rem;
       font-weight: bold;
     }
-
     input, select, textarea {
       width: 100%;
       padding: 0.6rem;
@@ -53,20 +46,16 @@
       color: #333;
       font-size: 1rem;
     }
-
     input[readonly] {
       background-color: #e9e9e9;
     }
-
     .row {
       display: flex;
       gap: 1rem;
     }
-
     .row > div {
       flex: 1;
     }
-
     button {
       margin-top: 2rem;
       width: 100%;
@@ -79,11 +68,9 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #e6e6e6;
     }
-
     .watermark {
       margin-top: 2rem;
       text-align: center;
@@ -207,29 +194,33 @@
       try {
         const res = await fetch(webAppUrl, {
           method: "POST",
-          body: JSON.stringify(datos),
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          body: JSON.stringify(datos)
         });
 
         const respuesta = await res.text();
-        alert("✅ Servicio registrado correctamente.");
+        if (respuesta.trim() === "OK") {
+          alert("✅ Servicio registrado correctamente.");
 
-        const mensajeTelegram = construirMensajeTelegram(datos);
-        try {
-          await navigator.clipboard.writeText(mensajeTelegram);
-          alert("📋 El mensaje ha sido copiado automáticamente. Puedes pegarlo en Telegram.");
-        } catch (err) {
-          console.warn("⚠️ Error al copiar:", err);
-          alert("⚠️ No se pudo copiar el mensaje. Intenta hacerlo manualmente.");
-        }
+          const mensajeTelegram = construirMensajeTelegram(datos);
+          try {
+            await navigator.clipboard.writeText(mensajeTelegram);
+            alert("📋 El mensaje ha sido copiado automáticamente. Puedes pegarlo en Telegram.");
+          } catch (err) {
+            console.warn("⚠️ Error al copiar:", err);
+            alert("⚠️ No se pudo copiar el mensaje. Intenta hacerlo manualmente.");
+          }
 
-        const limpiar = confirm("¿Deseas capturar otro servicio?");
-        if (limpiar) {
-          document.getElementById("serviceForm").reset();
-          establecerFechaHora();
-          obtenerFolio();
+          const limpiar = confirm("¿Deseas capturar otro servicio?");
+          if (limpiar) {
+            document.getElementById("serviceForm").reset();
+            establecerFechaHora();
+            obtenerFolio();
+          }
+        } else {
+          throw new Error("Respuesta inesperada del servidor: " + respuesta);
         }
 
       } catch (error) {
