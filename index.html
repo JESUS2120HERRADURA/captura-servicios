@@ -137,7 +137,8 @@
   </div>
 
   <script>
-    const webAppUrl "=https://script.google.com/macros/s/AKfycbyVuta60lMcL9THJKfghkX8JLIfHTCvOxpLq51ni42avtAaRDwCpZ3sJJgtbyzKyqKocw/exec" ; // URL de tu Google Apps Script
+    // URL de tu Google Apps Script (confirmada en el chat)
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxTiIsxhcCbtCFjvptIlQd2617UYZv9iHVA-8uVUIM4aTxmG108e_mVsHWFn-NE6C_iDQ/exec"; 
 
     let formState = 'initial'; // 'initial' (registrar) o 'readyForNew' (limpiar)
     let savedTelegramMessage = ''; // Para guardar el mensaje de Telegram temporalmente
@@ -248,7 +249,19 @@
               // Pregunta si va a pegar en Telegram
               const pegarEnTelegram = confirm("¿Deseas copiar el mensaje para Telegram?");
               if (pegarEnTelegram) {
-                  prompt("📲 Copia este mensaje para pegar en Telegram (puedes pegarlo manualmente):", savedTelegramMessage);
+                  // Utiliza la API de Clipboard (si está disponible y segura)
+                  if (navigator.clipboard && navigator.clipboard.writeText) {
+                      try {
+                          await navigator.clipboard.writeText(savedTelegramMessage);
+                          alert("📲 Mensaje copiado al portapapeles. Ahora puedes pegarlo en Telegram.");
+                      } catch (err) {
+                          // Fallback si la copia automática falla o no hay permisos
+                          prompt("📲 No se pudo copiar automáticamente. Por favor, copia este mensaje manualmente para Telegram:", savedTelegramMessage);
+                      }
+                  } else {
+                      // Fallback para navegadores sin API de Clipboard (o contexto inseguro)
+                      prompt("📲 No se pudo copiar automáticamente. Por favor, copia este mensaje manualmente para Telegram:", savedTelegramMessage);
+                  }
               } else {
                   alert("No se copiará el mensaje. Puedes continuar.");
               }
