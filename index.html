@@ -1,238 +1,52 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro de Servicio</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-    .container {
-      width: 100%;
-      max-width: 600px;
-      margin: 2rem;
-      background-color: #0078D7;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      color: white;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: white;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.3rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background-color: white;
-      color: #333;
-      font-size: 1rem;
-    }
-    input[readonly] {
-      background-color: #e9e9e9;
-    }
-    .row {
-      display: flex;
-      gap: 1rem;
-    }
-    .row > div {
-      flex: 1;
-    }
-    button {
-      margin-top: 2rem;
-      width: 100%;
-      padding: 0.8rem;
-      background-color: white;
-      color: #0078D7;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e6e6e6;
-    }
-    .watermark {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 0.8rem;
-      color: #cce0ff;
-      font-style: italic;
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Registro de Servicio</h2>
-    <form id="serviceForm">
-      <label for="folio">FOLIO</label>
-      <input type="text" id="folio" readonly>
+  <form id="formulario">
+    <input type="text" name="folio" placeholder="Folio" required><br>
+    <input type="date" name="fecha" required><br>
+    <input type="time" name="hora" required><br>
+    <input type="text" name="telefonista" placeholder="Telefonista" required><br>
+    <input type="text" name="direccion" placeholder="Dirección" required><br>
+    <input type="text" name="destino" placeholder="Destino" required><br>
+    <input type="text" name="asignado" placeholder="Asignado" required><br>
+    <input type="text" name="instrucciones" placeholder="Instrucciones"><br>
+    <input type="text" name="telefono" placeholder="Teléfono"><br>
+    <input type="text" name="tipo" placeholder="Tipo de servicio"><br>
+    <button type="submit">Registrar</button>
+  </form>
 
-      <div class="row">
-        <div>
-          <label for="fecha">FECHA *</label>
-          <input type="text" id="fecha" readonly>
-        </div>
-        <div>
-          <label for="hora">HORA *</label>
-          <input type="text" id="hora" readonly>
-        </div>
-      </div>
-
-      <label for="telefonista">TELEFONISTA *</label>
-      <input type="text" id="telefonista" required>
-
-      <label for="direccion">DIRECCIÓN *</label>
-      <input type="text" id="direccion" required>
-
-      <label for="destino">DESTINO</label>
-      <input type="text" id="destino">
-
-      <label for="asignado">ASIGNADOAX *</label>
-      <input type="text" id="asignado" required>
-
-      <label for="instrucciones">INSTRUCCIONES ESPECIALES</label>
-      <textarea id="instrucciones" rows="3"></textarea>
-
-      <label for="telefono">TELÉFONO</label>
-      <input type="tel" id="telefono">
-
-      <label for="tipo">TIPO DE SERVICIO</label>
-      <select id="tipo">
-        <option value="">Selecciona</option>
-        <option>Carro amplio</option>
-        <option>2 carros</option>
-        <option>No Tsuru</option>
-        <option>Tsuru</option>
-        <option>Carro sin rotular</option>
-        <option>Pasar corriente</option>
-        <option>Cambio de llanta</option>
-        <option>Mensajería</option>
-        <option>Mensajería compras</option>
-        <option>Paquetería</option>
-        <option>Guía</option>
-        <option>Transporte de mascota</option>
-        <option>Ida y vuelta</option>
-      </select>
-
-      <button type="submit">Registrar Servicio</button>
-    </form>
-    <div class="watermark">
-      Propiedad y diseño de Jesús Sánchez con la colaboración de Microsoft Copilot
-    </div>
-  </div>
+  <p id="respuesta"></p>
 
   <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbyXaFGzYJAhF3L_5ZeXvC9t3T7QOI1EmHdca5F-ssdYFhM0kaFW4ceFvz5185NWV8vBSw/exec";
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbx_kkgCxuK-kvYS5Wo17jRDTFm03ntc7nMRCiKgkRW1wi1rOy2rnTDuG4jIKTkT4HHuPA/exec";
 
-    async function obtenerFolio() {
-      try {
-        const res = await fetch(webAppUrl);
-        const folio = await res.text();
-        document.getElementById("folio").value = folio;
-      } catch (error) {
-        console.error("Error al obtener folio:", error);
-      }
-    }
-
-    function establecerFechaHora() {
-      const ahora = new Date();
-      const fecha = ahora.toLocaleDateString('es-MX');
-      const hora = ahora.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('fecha').value = fecha;
-      document.getElementById('hora').value = hora;
-    }
-
-    function construirMensajeTelegram(datos) {
-      return `📋 *Registro de Servicio*\n` +
-             `🆔 Folio: ${datos.folio}\n` +
-             `📅 Fecha: ${datos.fecha} 🕒 Hora: ${datos.hora}\n` +
-             `👤 Telefonista: ${datos.telefonista}\n` +
-             `📍 Dirección: ${datos.direccion}\n` +
-             `➡️ Destino: ${datos.destino || "N/A"}\n` +
-             `🧑‍🔧 AsignadoAX: ${datos.asignado}\n` +
-             `📝 Instrucciones: ${datos.instrucciones || "Ninguna"}\n` +
-             `📞 Teléfono: ${datos.telefono || "N/A"}\n` +
-             `🚗 Tipo de servicio: ${datos.tipo}`;
-    }
-
-    document.getElementById("serviceForm").addEventListener("submit", async function(e) {
+    document.getElementById("formulario").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const datos = {
-        folio: document.getElementById("folio").value,
-        fecha: document.getElementById("fecha").value,
-        hora: document.getElementById("hora").value,
-        telefonista: document.getElementById("telefonista").value,
-        direccion: document.getElementById("direccion").value,
-        destino: document.getElementById("destino").value,
-        asignado: document.getElementById("asignado").value,
-        instrucciones: document.getElementById("instrucciones").value,
-        telefono: document.getElementById("telefono").value,
-        tipo: document.getElementById("tipo").value
-      };
+      const formData = new FormData(e.target);
+      const datos = Object.fromEntries(formData.entries());
 
-      try {
-        const res = await fetch(webAppUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(datos)
-        });
-
-        const respuesta = await res.text();
-        if (respuesta.trim() === "OK") {
-          alert("✅ Servicio registrado correctamente.");
-
-          const mensajeTelegram = construirMensajeTelegram(datos);
-          try {
-            await navigator.clipboard.writeText(mensajeTelegram);
-            alert("📋 El mensaje ha sido copiado automáticamente. Puedes pegarlo en Telegram.");
-          } catch (err) {
-            console.warn("⚠️ Error al copiar:", err);
-            alert("⚠️ No se pudo copiar el mensaje. Intenta hacerlo manualmente.");
-          }
-
-          const limpiar = confirm("¿Deseas capturar otro servicio?");
-          if (limpiar) {
-            document.getElementById("serviceForm").reset();
-            establecerFechaHora();
-            obtenerFolio();
-          }
-        } else {
-          throw new Error("Respuesta inesperada del servidor: " + respuesta);
+      fetch(webAppUrl, {
+        method: "POST",
+        body: JSON.stringify(datos),
+        headers: {
+          "Content-Type": "application/json"
         }
-
-      } catch (error) {
-        console.error("Error al registrar:", error);
-        alert("❌ Error al registrar el servicio.");
-      }
+      })
+      .then(res => res.text())
+      .then(texto => {
+        document.getElementById("respuesta").textContent = texto === "OK" 
+          ? "✅ Servicio registrado correctamente" 
+          : "❌ Error al registrar el servicio: " + texto;
+      })
+      .catch(error => {
+        document.getElementById("respuesta").textContent = "❌ Error de conexión: " + error;
+      });
     });
-
-    window.onload = () => {
-      establecerFechaHora();
-      obtenerFolio();
-    };
   </script>
 </body>
 </html>
