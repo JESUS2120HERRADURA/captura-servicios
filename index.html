@@ -2,145 +2,291 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro de Servicio</title>
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #e6f0ff;
       margin: 0;
-      padding: 20px;
+      padding: 1rem;
+      /* Color relajante: Azul claro suave */
+      background-color: #e0f2f7; 
     }
-    .form-container {
-      background-color: #0074D9;
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
+    .container {
       max-width: 600px;
       margin: auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
     }
-    .form-group {
-      margin-bottom: 15px;
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
     }
     label {
       display: block;
+      margin-top: 1rem;
       font-weight: bold;
-      margin-bottom: 5px;
     }
-    input, select {
+    input, select, textarea {
       width: 100%;
-      padding: 8px;
-      border: none;
-      border-radius: 5px;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
-    .inline-group {
+    input[readonly] {
+      background-color: #e9e9e9;
+    }
+    .row {
       display: flex;
-      gap: 10px;
+      gap: 1rem;
     }
-    .inline-group input {
+    .row > div {
       flex: 1;
     }
     button {
-      background-color: #0056b3;
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.7rem;
+      background-color: #0078D7;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
+      font-size: 1rem;
       cursor: pointer;
-      font-weight: bold;
     }
     button:hover {
-      background-color: #003d80;
+      background-color: #005ea6;
+    }
+    button:disabled { /* Estilo para botón deshabilitado */
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+    .watermark {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #999;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
+  <div class="container">
     <h2>Registro de Servicio</h2>
     <form id="serviceForm">
-      <div class="form-group">
-        <label for="folio">Folio</label>
-        <input type="text" id="folio" name="folio" readonly>
-      </div>
+      <label for="folio">FOLIO</label>
+      <input type="text" id="folio" readonly>
 
-      <div class="form-group inline-group">
+      <div class="row">
         <div>
-          <label for="fecha">Fecha</label>
-          <input type="date" id="fecha" name="fecha" required>
+          <label for="fecha">FECHA *</label>
+          <input type="text" id="fecha" readonly>
         </div>
         <div>
-          <label for="hora">Hora</label>
-          <input type="time" id="hora" name="hora" required>
+          <label for="hora">HORA *</label>
+          <input type="text" id="hora" readonly>
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="servicio">Tipo de Servicio</label>
-        <select id="servicio" name="servicio" required>
-          <option value="">Seleccione una opción</option>
-          <option value="Atención médica">Atención médica</option>
-          <option value="Orientación psicológica">Orientación psicológica</option>
-          <option value="Asesoría legal">Asesoría legal</option>
-          <option value="Otro">Otro</option>
-        </select>
-      </div>
+      <label for="telefonista">TELEFONISTA *</label>
+      <input type="text" id="telefonista" required>
 
-      <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <input type="text" id="descripcion" name="descripcion" required>
-      </div>
+      <label for="direccion">DIRECCIÓN *</label>
+      <input type="text" id="direccion" required>
 
-      <button type="submit">Registrar</button>
+      <label for="destino">DESTINO</label>
+      <input type="text" id="destino">
+
+      <label for="asignado">ASIGNADOAX *</label>
+      <input type="text" id="asignado" required>
+
+      <label for="instrucciones">INSTRUCCIONES ESPECIALES</label>
+      <textarea id="instrucciones" rows="3"></textarea>
+
+      <label for="telefono">TELÉFONO</label>
+      <input type="tel" id="telefono">
+
+      <label for="tipo">TIPO DE SERVICIO</label>
+      <select id="tipo">
+        <option value="">Selecciona</option>
+        <option>Carro amplio</option>
+        <option>2 carros</option>
+        <option>No Tsuru</option>
+        <option>Tsuru</option>
+        <option>Carro sin rotular</option>
+        <option>Pasar corriente</option>
+        <option>Cambio de llanta</option>
+        <option>Mensajería</option>
+        <option>Mensajería compras</option>
+        <option>Paquetería</option>
+        <option>Guía</option>
+        <option>Transporte de mascota</option>
+        <option>Ida y vuelta</option>
+      </select>
+
+      <button type="submit" id="submitButton">Registrar Servicio</button>
     </form>
+    <div class="watermark">
+      Propiedad y diseño de Jesús Sánchez con la colaboración de Microsoft Copilot
+    </div>
   </div>
 
   <script>
-    // Generar folio automático
-    function generarFolio() {
-      const fecha = new Date();
-      const folio = 'F' + fecha.getFullYear().toString().slice(-2) +
-                    (fecha.getMonth() + 1).toString().padStart(2, '0') +
-                    fecha.getDate().toString().padStart(2, '0') +
-                    fecha.getHours().toString().padStart(2, '0') +
-                    fecha.getMinutes().toString().padStart(2, '0') +
-                    fecha.getSeconds().toString().padStart(2, '0');
-      document.getElementById('folio').value = folio;
-    }
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxTiIsxhcCbtCFjvptIlQd2617UYZv9iHVA-8uVUIM4aTxmG108e_mVsHWFn-NE6C_iDQ/exec"; // URL de tu Google Apps Script
 
-    // Asignar fecha y hora actuales
-    function asignarFechaHora() {
-      const ahora = new Date();
-      document.getElementById('fecha').value = ahora.toISOString().split('T')[0];
-      document.getElementById('hora').value = ahora.toTimeString().slice(0,5);
-    }
+    let formState = 'initial'; // 'initial' (registrar) o 'readyForNew' (limpiar)
+    let savedTelegramMessage = ''; // Para guardar el mensaje de Telegram temporalmente
 
-    // Inicializar formulario
-    window.onload = function() {
-      generarFolio();
-      asignarFechaHora();
-    };
-
-    // Validación y envío
-    document.getElementById('serviceForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const folio = document.getElementById('folio').value;
-      const fecha = document.getElementById('fecha').value;
-      const hora = document.getElementById('hora').value;
-      const servicio = document.getElementById('servicio').value;
-      const descripcion = document.getElementById('descripcion').value;
-
-      if (!fecha || !hora || !servicio || !descripcion) {
-        alert('Por favor, complete todos los campos obligatorios.');
-        return;
+    // Función para obtener el folio del Google Apps Script
+    async function obtenerFolio() {
+      try {
+        const res = await fetch(webAppUrl);
+        const folio = await res.text();
+        document.getElementById("folio").value = folio;
+      } catch (error) {
+        console.error("Error al obtener folio:", error);
+        // Si hay error, asigna un folio temporal o un mensaje de error
+        document.getElementById("folio").value = "ERROR_FOLIO"; 
       }
+    }
 
-      const mensaje = `📝 Registro de Servicio\nFolio: ${folio}\nFecha: ${fecha}\nHora: ${hora}\nServicio: ${servicio}\nDescripción: ${descripcion}`;
-      console.log(mensaje); // Aquí puedes integrar el envío a Telegram
+    // Función para establecer la fecha y hora actuales
+    function establecerFechaHora() {
+      const ahora = new Date();
+      const fecha = ahora.toLocaleDateString('es-MX', {day: '2-digit', month: '2-digit', year: 'numeric'}); // Formato DD/MM/AAAA
+      const hora = ahora.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('fecha').value = fecha;
+      document.getElementById('hora').value = hora;
+    }
 
-      alert('Registro enviado correctamente.');
-      this.reset();
-      generarFolio();
-      asignarFechaHora();
+    // Función para construir el mensaje de Telegram
+    function construirMensajeTelegram(datos) {
+      return `📋 *Registro de Servicio*\n` +
+                 `🆔 Folio: ${datos.folio}\n` +
+                 `📅 Fecha: ${datos.fecha} 🕒 Hora: ${datos.hora}\n` +
+                 `👤 Telefonista: ${datos.telefonista}\n` +
+                 `📍 Dirección: ${datos.direccion}\n` +
+                 `➡️ Destino: ${datos.destino || "N/A"}\n` +
+                 `🧑‍🔧 AsignadoAX: ${datos.asignado}\n` +
+                 `📝 Instrucciones: ${datos.instrucciones || "Ninguna"}\n` +
+                 `📞 Teléfono: ${datos.telefono || "N/A"}\n` +
+                 `🚗 Tipo de servicio: ${datos.tipo}`;
+    }
+
+    // Función para deshabilitar o habilitar el formulario
+    function toggleFormInputs(disable) {
+        const inputs = document.querySelectorAll('#serviceForm input, #serviceForm select, #serviceForm textarea');
+        inputs.forEach(input => {
+            // No deshabilitar los campos auto-generados que son readonly
+            if (input.id !== 'folio' && input.id !== 'fecha' && input.id !== 'hora') { 
+                input.disabled = disable;
+            }
+        });
+    }
+
+    // Event Listener para el botón de envío
+    document.getElementById("serviceForm").addEventListener("submit", async function(e) {
+      e.preventDefault(); // Evita el envío por defecto del formulario
+
+      const submitButton = document.getElementById("submitButton");
+
+      if (formState === 'initial') { // Primera pulsación: Guardar y mostrar Telegram
+        // Validar campos requeridos antes de enviar
+        const requiredInputs = document.querySelectorAll('#telefonista, #direccion, #asignado');
+        let allFieldsFilled = true;
+        requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFieldsFilled = false;
+                input.style.borderColor = 'red'; // Marca el campo vacío
+            } else {
+                input.style.borderColor = '#ccc'; // Restaura el borde
+            }
+        });
+
+        if (!allFieldsFilled) {
+            alert("Por favor, rellena todos los campos obligatorios (*).");
+            return; // Detiene la ejecución si faltan campos
+        }
+
+        submitButton.disabled = true; // Deshabilita el botón para evitar múltiples envíos
+        submitButton.textContent = "Registrando...";
+
+        const datos = {
+          folio: document.getElementById("folio").value,
+          fecha: document.getElementById("fecha").value,
+          hora: document.getElementById("hora").value,
+          telefonista: document.getElementById("telefonista").value,
+          direccion: document.getElementById("direccion").value,
+          destino: document.getElementById("destino").value,
+          asignado: document.getElementById("asignado").value,
+          instrucciones: document.getElementById("instrucciones").value,
+          telefono: document.getElementById("telefono").value,
+          tipo: document.getElementById("tipo").value
+        };
+
+        try {
+          // 1. Guardar en Google Sheets
+          const res = await fetch(webAppUrl, {
+            method: "POST",
+            body: JSON.stringify(datos),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+
+          const respuesta = await res.text();
+          if (respuesta.includes("Datos guardados exitosamente")) {
+              alert("✅ Servicio registrado correctamente.");
+              savedTelegramMessage = construirMensajeTelegram(datos); // Guarda el mensaje
+              toggleFormInputs(true); // Deshabilita los campos para evitar edición
+
+              // Pregunta si va a pegar en Telegram
+              const pegarEnTelegram = confirm("¿Deseas copiar el mensaje para Telegram?");
+              if (pegarEnTelegram) {
+                  prompt("📲 Copia este mensaje para pegar en Telegram (puedes pegarlo manualmente):", savedTelegramMessage);
+              } else {
+                  alert("No se copiará el mensaje. Puedes continuar.");
+              }
+
+              alert("Por favor, pulsa 'Limpiar Formulario' para la siguiente captura.");
+              submitButton.textContent = "Limpiar Formulario";
+              formState = 'readyForNew';
+              submitButton.disabled = false; // Habilita el botón para la siguiente acción
+
+          } else {
+              alert("❌ Error al registrar el servicio: " + respuesta + "\nPor favor, verifica la consola para más detalles.");
+              submitButton.textContent = "Registrar Servicio";
+              submitButton.disabled = false; // Habilita el botón si hubo error
+          }
+
+        } catch (error) {
+          console.error("Error al registrar:", error);
+          alert("❌ Error al registrar el servicio. Revisa la consola para más detalles.");
+          submitButton.textContent = "Registrar Servicio";
+          submitButton.disabled = false; // Habilita el botón si hubo error
+        }
+
+      } else if (formState === 'readyForNew') { // Segunda pulsación: Limpiar el formulario
+        document.getElementById("serviceForm").reset();
+        establecerFechaHora();
+        obtenerFolio();
+        toggleFormInputs(false); // Habilita los campos nuevamente
+        submitButton.textContent = "Registrar Servicio";
+        formState = 'initial';
+        savedTelegramMessage = ''; // Limpia el mensaje guardado
+      }
     });
+
+    // Se ejecuta cuando la página se carga
+    window.onload = () => {
+      establecerFechaHora();
+      obtenerFolio();
+    };
   </script>
 </body>
 </html>
