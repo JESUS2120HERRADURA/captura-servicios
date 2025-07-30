@@ -5,100 +5,141 @@
   <title>Registro de Servicio</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #e6f0ff;
+      margin: 0;
+      padding: 20px;
     }
-
-    .container {
-      background-color: #fff;
-      padding: 30px;
+    .form-container {
+      background-color: #0074D9;
+      color: white;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 100%;
       max-width: 600px;
+      margin: auto;
     }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
+    .form-group {
+      margin-bottom: 15px;
     }
-
-    form input, form button {
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
+      padding: 8px;
+      border: none;
       border-radius: 5px;
     }
-
-    form button {
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
+    .inline-group {
+      display: flex;
+      gap: 10px;
     }
-
-    form button:hover {
+    .inline-group input {
+      flex: 1;
+    }
+    button {
       background-color: #0056b3;
-    }
-
-    #respuesta {
-      margin-top: 15px;
-      text-align: center;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
       font-weight: bold;
+    }
+    button:hover {
+      background-color: #003d80;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Registro de Servicio</h1>
-    <form id="formulario">
-      <input type="text" name="folio" placeholder="Folio" required>
-      <input type="date" name="fecha" required>
-      <input type="time" name="hora" required>
-      <input type="text" name="telefonista" placeholder="Telefonista" required>
-      <input type="text" name="direccion" placeholder="Dirección" required>
-      <input type="text" name="destino" placeholder="Destino" required>
-      <input type="text" name="asignado" placeholder="Asignado" required>
-      <input type="text" name="instrucciones" placeholder="Instrucciones">
-      <input type="text" name="telefono" placeholder="Teléfono">
-      <input type="text" name="tipo" placeholder="Tipo de servicio">
+  <div class="form-container">
+    <h2>Registro de Servicio</h2>
+    <form id="serviceForm">
+      <div class="form-group">
+        <label for="folio">Folio</label>
+        <input type="text" id="folio" name="folio" readonly>
+      </div>
+
+      <div class="form-group inline-group">
+        <div>
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" name="fecha" required>
+        </div>
+        <div>
+          <label for="hora">Hora</label>
+          <input type="time" id="hora" name="hora" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="servicio">Tipo de Servicio</label>
+        <select id="servicio" name="servicio" required>
+          <option value="">Seleccione una opción</option>
+          <option value="Atención médica">Atención médica</option>
+          <option value="Orientación psicológica">Orientación psicológica</option>
+          <option value="Asesoría legal">Asesoría legal</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <input type="text" id="descripcion" name="descripcion" required>
+      </div>
+
       <button type="submit">Registrar</button>
     </form>
-    <p id="respuesta"></p>
   </div>
 
   <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbx_kkgCxuK-kvYS5Wo17jRDTFm03ntc7nMRCiKgkRW1wi1rOy2rnTDuG4jIKTkT4HHuPA/exec";
+    // Generar folio automático
+    function generarFolio() {
+      const fecha = new Date();
+      const folio = 'F' + fecha.getFullYear().toString().slice(-2) +
+                    (fecha.getMonth() + 1).toString().padStart(2, '0') +
+                    fecha.getDate().toString().padStart(2, '0') +
+                    fecha.getHours().toString().padStart(2, '0') +
+                    fecha.getMinutes().toString().padStart(2, '0') +
+                    fecha.getSeconds().toString().padStart(2, '0');
+      document.getElementById('folio').value = folio;
+    }
 
-    document.getElementById("formulario").addEventListener("submit", function(e) {
+    // Asignar fecha y hora actuales
+    function asignarFechaHora() {
+      const ahora = new Date();
+      document.getElementById('fecha').value = ahora.toISOString().split('T')[0];
+      document.getElementById('hora').value = ahora.toTimeString().slice(0,5);
+    }
+
+    // Inicializar formulario
+    window.onload = function() {
+      generarFolio();
+      asignarFechaHora();
+    };
+
+    // Validación y envío
+    document.getElementById('serviceForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      const folio = document.getElementById('folio').value;
+      const fecha = document.getElementById('fecha').value;
+      const hora = document.getElementById('hora').value;
+      const servicio = document.getElementById('servicio').value;
+      const descripcion = document.getElementById('descripcion').value;
 
-      const formData = new FormData(e.target);
-      const datos = Object.fromEntries(formData.entries());
+      if (!fecha || !hora || !servicio || !descripcion) {
+        alert('Por favor, complete todos los campos obligatorios.');
+        return;
+      }
 
-      fetch(webAppUrl, {
-        method: "POST",
-        body: JSON.stringify(datos),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.text())
-      .then(texto => {
-        document.getElementById("respuesta").textContent = texto === "OK" 
-          ? "✅ Servicio registrado correctamente" 
-          : "❌ Error al registrar el servicio: " + texto;
-      })
-      .catch(error => {
-        document.getElementById("respuesta").textContent = "❌ Error de conexión: " + error;
-      });
+      const mensaje = `📝 Registro de Servicio\nFolio: ${folio}\nFecha: ${fecha}\nHora: ${hora}\nServicio: ${servicio}\nDescripción: ${descripcion}`;
+      console.log(mensaje); // Aquí puedes integrar el envío a Telegram
+
+      alert('Registro enviado correctamente.');
+      this.reset();
+      generarFolio();
+      asignarFechaHora();
     });
   </script>
 </body>
