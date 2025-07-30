@@ -1,25 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Registro de Servicio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form input, form button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    #respuesta {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <form id="formulario">
-    <input type="text" name="folio" placeholder="Folio" required><br>
-    <input type="date" name="fecha" required><br>
-    <input type="time" name="hora" required><br>
-    <input type="text" name="telefonista" placeholder="Telefonista" required><br>
-    <input type="text" name="direccion" placeholder="Dirección" required><br>
-    <input type="text" name="destino" placeholder="Destino" required><br>
-    <input type="text" name="asignado" placeholder="Asignado" required><br>
-    <input type="text" name="instrucciones" placeholder="Instrucciones"><br>
-    <input type="text" name="telefono" placeholder="Teléfono"><br>
-    <input type="text" name="tipo" placeholder="Tipo de servicio"><br>
-    <button type="submit">Registrar</button>
-  </form>
-
-  <p id="respuesta"></p>
+  <div class="container">
+    <h1>Registro de Servicio</h1>
+    <form id="formulario">
+      <input type="text" name="folio" placeholder="Folio" required>
+      <input type="date" name="fecha" required>
+      <input type="time" name="hora" required>
+      <input type="text" name="telefonista" placeholder="Telefonista" required>
+      <input type="text" name="direccion" placeholder="Dirección" required>
+      <input type="text" name="destino" placeholder="Destino" required>
+      <input type="text" name="asignado" placeholder="Asignado" required>
+      <input type="text" name="instrucciones" placeholder="Instrucciones">
+      <input type="text" name="telefono" placeholder="Teléfono">
+      <input type="text" name="tipo" placeholder="Tipo de servicio">
+      <button type="submit">Registrar</button>
+    </form>
+    <p id="respuesta"></p>
+  </div>
 
   <script>
     const webAppUrl = "https://script.google.com/macros/s/AKfycbx_kkgCxuK-kvYS5Wo17jRDTFm03ntc7nMRCiKgkRW1wi1rOy2rnTDuG4jIKTkT4HHuPA/exec";
